@@ -1,86 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.android.nusevents.MainActivity"
     >
 
     <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-
-        tools:layout_editor_absoluteY="0dp"
-        tools:layout_editor_absoluteX="0dp">
-
-
-    <ImageView
-        android:id="@+id/nushome"
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="370dp"
-        android:layout_weight="1"
-        android:src="@drawable/homescreen"
-        android:scaleType="centerCrop"
-        android:layout_marginTop="50dp"
-        />
+        android:layout_height="match_parent"
 
-        <Button
-            android:id="@+id/button"
+        android:id="@+id/relativeLayout">
+
+
+        <ImageView
+            android:id="@+id/nushome"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="CREATE AN EVENT"
-            android:layout_centerHorizontal="true"
-            android:layout_above="@+id/buttontwo"
-            android:layout_marginTop="10dp"
+            android:layout_height="370dp"
 
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:background="#ffffff"
-            android:textColor="#000000"
+            android:src="@drawable/homescreen"
+            android:scaleType="centerCrop"
+            android:foregroundGravity="top"
+
             />
 
         <Button
             android:id="@+id/buttontwo"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="VIEW EVENTS"
+            android:layout_height="56dp"
+            android:text="VIEW EVENTS @NUS"
             android:layout_centerHorizontal="true"
             android:background="#ffffff"
-            android:layout_above="@+id/buttonthree"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:textColor="#000000"
+            android:textColor="@color/colorPrimary"
+            android:backgroundTint="@color/colorPrimaryDark"
+            android:layout_below="@+id/nushome"
             />
 
         <Button
             android:id="@+id/buttonthree"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="EVENTS INTERESTED IN"
-            android:layout_alignParentBottom="true"
+            android:layout_height="56dp"
+            android:text="YOUR BOOKMARKED EVENTS"
             android:background="#ffffff"
-            android:layout_below="@+id/button2"
             android:textSize="20sp"
             android:textStyle="bold"
 
-            android:textColor="#000000"
+            android:textColor="@color/colorPrimary"
+            android:backgroundTint="@color/colorPrimaryDark"
 
 
-            />
+            android:layout_below="@+id/buttontwo"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
 
 
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?attr/colorPrimary"
-            android:minHeight="?attr/actionBarSize"
-            android:theme="?attr/actionBarTheme"
-            android:layout_centerHorizontal="true" />
 
 
     </RelativeLayout>
-</android.support.constraint.ConstraintLayout>
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="center_vertical|left"
+        android:contentDescription="Add New Event"
+        android:elevation="20dp"
+        android:src="@android:drawable/ic_input_add"
+        app:fabSize="normal"
+        app:layout_anchor="@+id/relativeLayout"
+        app:layout_anchorGravity="bottom|right"
+        android:layout_marginBottom="8dp"
+        android:layout_marginRight="8dp"
+        android:clickable="true"
+
+
+        />
+</android.support.design.widget.CoordinatorLayout>
