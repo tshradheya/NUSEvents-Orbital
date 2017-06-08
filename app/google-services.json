@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "70375178822",
+    "firebase_url": "https://nusevents-c0ce3.firebaseio.com",
+    "project_id": "nusevents-c0ce3",
+    "storage_bucket": "nusevents-c0ce3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:70375178822:android:afd887273f9a6975",
+        "android_client_info": {
+          "package_name": "com.example.android.nusevents"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "70375178822-u7ej456si11piupo77u039ershmta1b9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCnTXT6cuIyIVBO-QL4FeSoN30opZdtSCk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
