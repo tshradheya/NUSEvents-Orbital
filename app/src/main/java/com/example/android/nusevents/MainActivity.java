@@ -18,11 +18,12 @@ import java.util.Arrays;
 
 import static bolts.AppLinkNavigation.NavigationResult.APP;
 
+
 public class MainActivity extends AppCompatActivity {
 
     public static final int RC_SIGN_IN=1;
 
-
+    private  static int check = 1;
 
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
@@ -44,7 +45,9 @@ public class MainActivity extends AppCompatActivity {
                 FirebaseUser user= firebaseAuth.getCurrentUser();
                 if(user!=null){
                     //signed in
+                    check++;
                     String username=user.getDisplayName();
+                    if(check==2)
                     Toast.makeText(MainActivity.this,"Hello "+username+"! You are now Signed In. Welcome to NUS Events APP!",Toast.LENGTH_SHORT).show();
                 }
                 else{
@@ -76,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(requestCode==RC_SIGN_IN) {
             if (responseCode == RESULT_OK) {
-                Toast.makeText(this, "Signed In!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "Signed In!", Toast.LENGTH_SHORT).show();
             } else if (responseCode == RESULT_CANCELED) {
                 Toast.makeText(this, "Sign In Failed!", Toast.LENGTH_SHORT).show();
                 finish();
@@ -104,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
@@ -114,16 +118,19 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        if(item.getItemId() == R.id.settings )
+        if(item.getItemId() == R.id.aboutUs )
         {
-
+            Intent i = new Intent(this,About_Us.class);
+            startActivity(i);
         }
 
         if(item.getItemId()==R.id.signOut)
         {
+            check = 1;
         FirebaseAuth.getInstance().signOut();
             return true;
         }
         return true;
     }
+
 }
