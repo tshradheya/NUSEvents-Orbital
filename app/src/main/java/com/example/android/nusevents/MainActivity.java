@@ -15,9 +15,12 @@ import android.widget.Toast;
 import android.app.AlertDialog;
 
 import com.example.android.nusevents.model.EventInfo;
+import com.firebase.client.Firebase;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Arrays;
 
@@ -31,6 +34,12 @@ public class MainActivity extends AppCompatActivity {
 
     private  static int check = 1;
     public EventInfo object;
+    private FirebaseDatabase userDatabase;
+    private DatabaseReference userDatabaseReference;
+
+
+
+
 
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
@@ -41,6 +50,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mFirebaseAuth= FirebaseAuth.getInstance();
+
+        userDatabase=FirebaseDatabase.getInstance();
+        userDatabaseReference=userDatabase.getReference().child("users");
+
 
 
 
@@ -56,6 +69,14 @@ public class MainActivity extends AppCompatActivity {
                     String username=user.getDisplayName();
                     if(check==2)
                     Toast.makeText(MainActivity.this,"Hello "+username+"! You are now Signed In. Welcome to NUS Events APP!",Toast.LENGTH_SHORT).show();
+
+
+                    User appUser=new User();
+                    appUser.setName(user.getDisplayName());
+                    appUser.setEmail(user.getEmail());
+                    appUser.setUid(user.getUid());
+                    writeNewUser(appUser);
+
                 }
                 else{
                     //signed out
@@ -68,6 +89,8 @@ public class MainActivity extends AppCompatActivity {
                                     .build(),
                             RC_SIGN_IN);
                    // object = new EventInfo();
+
+
 
                 }
 
@@ -89,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
             if (responseCode == RESULT_OK) {
                 //Toast.makeText(this, "Signed In!", Toast.LENGTH_SHORT).show();
             } else if (responseCode == RESULT_CANCELED) {
-                Toast.makeText(this, "Sign In Failed!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Thanks!", Toast.LENGTH_SHORT).show();
                 finish();
             }
         }
@@ -166,6 +189,12 @@ public class MainActivity extends AppCompatActivity {
 
 
         }
+    }
+
+    public void writeNewUser(User appUser)
+    {
+        userDatabaseReference.push().setValue(appUser);
+
     }
 
 }
