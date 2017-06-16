@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.android.nusevents.Details">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter Event Name"
+            android:inputType="textCapWords"
+            android:id="@+id/event_name"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Organized by"
+            android:id="@+id/organize"
+            android:inputType="textCapWords"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="About the Event"
+            android:id="@+id/about_event"
+            android:inputType="textCapWords"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Time of Event in 24-hour format"
+            android:id="@+id/time_event"
+            android:inputType="textCapWords"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Location of Event"
+            android:id="@+id/location"
+            android:inputType="textCapWords"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SUBMIT REQUEST"
+            android:textStyle="bold"
+            android:layout_margin="100dp"
+            android:id="@+id/sendButton"
+            />
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>
