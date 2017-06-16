@@ -1,6 +1,8 @@
 package com.example.android.nusevents;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,8 +10,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
+import android.app.AlertDialog;
 
+import com.example.android.nusevents.model.EventInfo;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -17,6 +22,7 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.Arrays;
 
 import static bolts.AppLinkNavigation.NavigationResult.APP;
+import static com.example.android.nusevents.model.EventInfo.isAdmin;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -24,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int RC_SIGN_IN=1;
 
     private  static int check = 1;
+    public EventInfo object;
 
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
@@ -60,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
                                     .setProviders(Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build()))
                                     .build(),
                             RC_SIGN_IN);
+                   // object = new EventInfo();
 
                 }
 
@@ -131,6 +139,33 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return true;
+    }
+    public void viewList(View view) {
+
+        AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
+        if (isAdmin == false)
+        {
+
+        myAlert.setMessage("Contact the admins to get authenticated!")
+                .setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .create();
+        myAlert.show();
+    }
+    else
+        {
+            Intent i =new Intent(this,Details.class);
+            startActivity(i);
+
+
+
+
+
+        }
     }
 
 }
