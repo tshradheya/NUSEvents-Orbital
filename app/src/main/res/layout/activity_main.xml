@@ -30,6 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:text="VIEW EVENTS @NUS"
+
             android:layout_centerHorizontal="true"
             android:background="#ffffff"
             android:textSize="20sp"
@@ -77,6 +78,7 @@
         android:layout_marginBottom="8dp"
         android:layout_marginRight="8dp"
         android:clickable="true"
+        android:onClick="viewList"
 
 
         />
