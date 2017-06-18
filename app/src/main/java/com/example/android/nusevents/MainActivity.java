@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 import android.app.AlertDialog;
 
@@ -31,6 +32,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.Arrays;
 
+import static android.view.View.Z;
 import static android.webkit.ConsoleMessage.MessageLevel.LOG;
 import static bolts.AppLinkNavigation.NavigationResult.APP;
 import static com.example.android.nusevents.model.EventInfo.isAdmin;
@@ -50,10 +52,13 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
 
 
        // userDatabase = FirebaseDatabase.getInstance();
@@ -169,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
     public void viewList(View view) {
 
         AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
-        if (isAdmin == false) {
+        if (isAdmin == true) {
 
             myAlert.setMessage("Contact the admins to get authenticated!")
                     .setPositiveButton("Continue", new DialogInterface.OnClickListener() {
@@ -185,6 +190,11 @@ public class MainActivity extends AppCompatActivity {
             startActivity(i);
 
         }
+    }
+    public void DisplayList(View view)
+    {
+        Intent i = new Intent(this,DisplayEventList.class);
+        startActivity(i);
     }
 
 

@@ -18,20 +18,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
-        <activity android:name=".MainActivity"
-
-            />
-
+        <activity android:name=".MainActivity" />
         <activity
             android:name=".About_Us"
             android:label="About Us" />
         <activity
             android:name=".admin"
-            android:label="Admin Details"
-            />
-        <activity android:name=".Details"></activity>
+            android:label="Admin Details" />
+        <activity android:name=".Details" />
+        <activity android:name=".DisplayEventList"
+            android:label="List of Events You might be interested in!">
+
+        </activity>
     </application>
 
 </manifest>

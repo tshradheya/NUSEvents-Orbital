@@ -57,7 +57,4 @@ public class admin extends AppCompatActivity {
             startActivity(emailIntent);
         }
     }
-
-
-
 }
