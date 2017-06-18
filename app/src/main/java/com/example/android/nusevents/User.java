@@ -14,64 +14,49 @@ public class User {
     public String uid;
 
 
-
-    public User()
-    {
-        isAdministrator=false;
+    public User() {
+        isAdministrator = false;
     }
 
-    public User(String name,String email)
-    {
-        this.name=name;
-        this.email=email;
-        isAdministrator=false;
+    public User(String name, String email,String uid) {
+        this.name = name;
+        this.email = email;
+        isAdministrator = false;
+        this.uid = uid;
 
     }
 
 
-    public String getName()
-    {
+    public String getName() {
         return name;
-
     }
 
-    public String getEmail()
-    {
-        return  email;
-
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public boolean isAdmin()
-    {
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public boolean isAdministrator() {
         return isAdministrator;
-
     }
 
-    public String getUid()
-    {
+    public void setAdministrator(boolean administrator) {
+        isAdministrator = administrator;
+    }
+
+    public String getUid() {
         return uid;
     }
 
-    public void setName(String name)
-    {
-        this.name=name;
+    public void setUid(String uid) {
+        this.uid = uid;
     }
-
-    public void setEmail(String email)
-    {
-        this.email=email;
-
-    }
-
-    public void setUid(String uid)
-    {
-        this.uid=uid;
-
-    }
-
-    public void setAdministrator(boolean val)
-    {
-        isAdministrator=val;
-    }
-
 }
+

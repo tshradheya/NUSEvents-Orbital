@@ -1,7 +1,11 @@
 package com.example.android.nusevents;
 
+import android.content.Intent;
+import android.net.Uri;
+import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 public class admin extends AppCompatActivity {
@@ -22,6 +26,8 @@ public class admin extends AppCompatActivity {
         displayAdminInfo(message);
         displayAdminInfo2(message2);
 
+
+
     }
 
     public void displayAdminInfo(String message)
@@ -34,4 +40,24 @@ public class admin extends AppCompatActivity {
         TextView view = (TextView)findViewById(R.id.ad1);
         view.setText(message);
     }
+
+
+    public void sendEmail(View view)
+    {
+
+        String emailAddress="nusevent16@gmail.com";
+
+        Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+        emailIntent.setData(Uri.parse("mailto:"));
+        emailIntent.putExtra(Intent.EXTRA_EMAIL,emailAddress);
+        emailIntent.putExtra(Intent.EXTRA_CC,"tshrdheya@gmail.com");
+        emailIntent.putExtra(Intent.EXTRA_CC,"ronaklakhotia999@gmail.com");
+
+        if(emailIntent.resolveActivity(getPackageManager())!=null) {
+            startActivity(emailIntent);
+        }
+    }
+
+
+
 }
