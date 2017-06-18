@@ -34,4 +34,7 @@ public class About_Us extends AppCompatActivity {
         startActivity(i);
     }
 
+
+
+
 }

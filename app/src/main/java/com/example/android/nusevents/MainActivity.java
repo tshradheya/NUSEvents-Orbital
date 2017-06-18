@@ -1,5 +1,7 @@
 package com.example.android.nusevents;
 
+import android.content.Intent;
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
@@ -7,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -19,48 +22,50 @@ import com.firebase.client.Firebase;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Arrays;
 
+import static android.webkit.ConsoleMessage.MessageLevel.LOG;
 import static bolts.AppLinkNavigation.NavigationResult.APP;
 import static com.example.android.nusevents.model.EventInfo.isAdmin;
+import static junit.runner.Version.id;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final int RC_SIGN_IN=1;
+    public static final int RC_SIGN_IN = 1;
 
-    private  static int check = 1;
+    private static int check = 1;
+
     public EventInfo object;
-    private FirebaseDatabase userDatabase;
-    private DatabaseReference userDatabaseReference;
 
 
+    private ChildEventListener mChildEventListener;
 
 
-
-    private FirebaseAuth mFirebaseAuth;
-    private FirebaseAuth.AuthStateListener mAuthStateListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mFirebaseAuth= FirebaseAuth.getInstance();
 
-        userDatabase=FirebaseDatabase.getInstance();
-        userDatabaseReference=userDatabase.getReference().child("users");
-
+       // userDatabase = FirebaseDatabase.getInstance();
+       // userDatabaseReference = userDatabase.getReference().child("User");
 
 
 
 
-        mAuthStateListener=new FirebaseAuth.AuthStateListener() {
+
+        /*mAuthStateListener=new FirebaseAuth.AuthStateListener() {
             @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+            public void onAuthStateChanged(@NonNull final FirebaseAuth firebaseAuth) {
 
                 FirebaseUser user= firebaseAuth.getCurrentUser();
                 if(user!=null){
@@ -71,11 +76,7 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this,"Hello "+username+"! You are now Signed In. Welcome to NUS Events APP!",Toast.LENGTH_SHORT).show();
 
 
-                    User appUser=new User();
-                    appUser.setName(user.getDisplayName());
-                    appUser.setEmail(user.getEmail());
-                    appUser.setUid(user.getUid());
-                    writeNewUser(appUser);
+
 
                 }
                 else{
@@ -100,7 +101,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
     }
 
     @Override
@@ -118,83 +118,75 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-
-    @Override
-    protected void onResume()
-    {
-        super.onResume();
-
-        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
+*/
     }
-
-
-    @Override
-    protected void onPause()
-    {
-        super.onPause();
-
-        mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
-    }
-
-
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.my_menu,menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        if(item.getItemId() == R.id.aboutUs )
+        @Override
+        protected void onResume ()
         {
-            Intent i = new Intent(this,About_Us.class);
-            startActivity(i);
+            super.onResume();
+
         }
 
-        if(item.getItemId()==R.id.signOut)
+
+        @Override
+        protected void onPause ()
         {
-            check = 1;
-        FirebaseAuth.getInstance().signOut();
+            super.onPause();
+
+            // mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
+        }
+
+
+        @Override
+        public boolean onCreateOptionsMenu (Menu menu){
+            MenuInflater menuInflater = getMenuInflater();
+            menuInflater.inflate(R.menu.my_menu, menu);
             return true;
         }
-        return true;
-    }
+
+        @Override
+        public boolean onOptionsItemSelected (MenuItem item){
+
+            if (item.getItemId() == R.id.aboutUs) {
+                Intent i = new Intent(this, About_Us.class);
+                startActivity(i);
+            }
+
+            if (item.getItemId() == R.id.signOut) {
+                check = 1;
+
+                EmailPasswordActivity.signOut();
+                finish();
+
+                Intent intent = new Intent(this, EmailPasswordActivity.class);
+                startActivity(intent);
+
+                return true;
+            }
+            return true;
+        }
+
     public void viewList(View view) {
 
         AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
-        if (isAdmin == false)
-        {
+        if (isAdmin == false) {
 
-        myAlert.setMessage("Contact the admins to get authenticated!")
-                .setPositiveButton("Continue", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
-                .create();
-        myAlert.show();
-    }
-    else
-        {
-            Intent i =new Intent(this,Details.class);
+            myAlert.setMessage("Contact the admins to get authenticated!")
+                    .setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .create();
+            myAlert.show();
+        } else {
+            Intent i = new Intent(this, Details.class);
             startActivity(i);
-
-
-
-
 
         }
     }
 
-    public void writeNewUser(User appUser)
-    {
-        userDatabaseReference.push().setValue(appUser);
-
-    }
 
 }
+
