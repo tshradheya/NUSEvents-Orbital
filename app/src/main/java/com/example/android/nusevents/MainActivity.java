@@ -35,6 +35,7 @@ import java.util.Arrays;
 import static android.view.View.Z;
 import static android.webkit.ConsoleMessage.MessageLevel.LOG;
 import static bolts.AppLinkNavigation.NavigationResult.APP;
+import static com.example.android.nusevents.User.isAdministrator;
 import static com.example.android.nusevents.model.EventInfo.isAdmin;
 import static junit.runner.Version.id;
 
@@ -174,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
     public void viewList(View view) {
 
         AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
-        if (isAdmin == true) {
+        if (isAdministrator == false) {
 
             myAlert.setMessage("Contact the admins to get authenticated!")
                     .setPositiveButton("Continue", new DialogInterface.OnClickListener() {

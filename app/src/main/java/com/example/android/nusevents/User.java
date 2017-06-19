@@ -10,7 +10,7 @@ public class User {
 
     public String name;
     public String email;
-    public boolean isAdministrator;
+    public static boolean isAdministrator;
     public String uid;
 
 
