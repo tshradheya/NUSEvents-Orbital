@@ -47,7 +47,7 @@ public class EmailPasswordActivity extends AppCompatActivity implements
     private DatabaseReference userDatabaseReference;
 
     // [START declare_auth]
-    private static FirebaseAuth mAuth;
+    public static FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
 
     // [END declare_auth]
@@ -172,7 +172,7 @@ public class EmailPasswordActivity extends AppCompatActivity implements
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
 
-                            User currUser= new User(user.getEmail(),user.getDisplayName(),user.getUid());
+                            User currUser= new User(user.getEmail(),user.getUid());
                             userDatabaseReference.push().setValue(currUser);
 
 
@@ -215,7 +215,6 @@ public class EmailPasswordActivity extends AppCompatActivity implements
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-
 
 
                         } else {

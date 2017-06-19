@@ -32,11 +32,11 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.Arrays;
 
-import static android.view.View.Z;
+
 import static android.webkit.ConsoleMessage.MessageLevel.LOG;
 import static bolts.AppLinkNavigation.NavigationResult.APP;
-import static com.example.android.nusevents.User.isAdministrator;
-import static com.example.android.nusevents.model.EventInfo.isAdmin;
+import static com.example.android.nusevents.EmailPasswordActivity.mAuth;
+import static com.example.android.nusevents.R.id.event;
 import static junit.runner.Version.id;
 
 
@@ -48,10 +48,13 @@ public class MainActivity extends AppCompatActivity {
 
     public EventInfo object;
 
+    private static String currUid;
 
+private boolean checkAdmin = false;
     private ChildEventListener mChildEventListener;
 
-
+    private FirebaseDatabase userDatabase;
+    private DatabaseReference userDatabaseReference;
 
 
     @Override
@@ -60,7 +63,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-
+        userDatabase = FirebaseDatabase.getInstance();
+        userDatabaseReference = userDatabase.getReference().child("User");
 
        // userDatabase = FirebaseDatabase.getInstance();
        // userDatabaseReference = userDatabase.getReference().child("User");
@@ -69,7 +73,10 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        /*mAuthStateListener=new FirebaseAuth.AuthStateListener() {
+        /*
+        import static android.view.View.Z;
+
+        mAuthStateListener=new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull final FirebaseAuth firebaseAuth) {
 
@@ -126,6 +133,9 @@ public class MainActivity extends AppCompatActivity {
     }
 */
     }
+
+
+
         @Override
         protected void onResume ()
         {
@@ -175,13 +185,49 @@ public class MainActivity extends AppCompatActivity {
     public void viewList(View view) {
 
         AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
-        if (isAdministrator == false) {
+
+        userDatabase = FirebaseDatabase.getInstance();
+        userDatabaseReference = userDatabase.getReference().child("User");
+
+
+        FirebaseUser currUser= mAuth.getCurrentUser();
+        currUid=currUser.getUid();
+
+        userDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot eventsnap: dataSnapshot.getChildren())  {
+                    User user = eventsnap.getValue(User.class);
+
+                    if(currUid.equals(user.getUid())) {
+
+                        checkAdmin = user.getAdmin();
+                    }
+
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+        if (!checkAdmin) {
 
             myAlert.setMessage("Contact the admins to get authenticated!")
                     .setPositiveButton("Continue", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
+
+                            Intent i = new Intent(MainActivity.this,admin.class);
+                            startActivity(i);
+
                         }
                     })
                     .create();
@@ -192,6 +238,9 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
+
+
+
     public void DisplayList(View view)
     {
         Intent i = new Intent(this,DisplayEventList.class);

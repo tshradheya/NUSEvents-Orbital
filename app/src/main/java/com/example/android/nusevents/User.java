@@ -9,19 +9,17 @@ import static com.example.android.nusevents.model.EventInfo.isAdmin;
 public class User {
 
     public String name;
-    public String email;
-    public static boolean isAdministrator;
+    public boolean admin;
     public String uid;
 
 
     public User() {
-        isAdministrator = false;
+        admin = false;
     }
 
-    public User(String name, String email,String uid) {
+    public User(String name,String uid) {
         this.name = name;
-        this.email = email;
-        isAdministrator = false;
+        admin = false;
         this.uid = uid;
 
     }
@@ -35,20 +33,12 @@ public class User {
         this.name = name;
     }
 
-    public String getEmail() {
-        return email;
+    public boolean getAdmin() {
+        return admin;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public boolean isAdministrator() {
-        return isAdministrator;
-    }
-
-    public void setAdministrator(boolean administrator) {
-        isAdministrator = administrator;
+    public void setAdmin(boolean admin) {
+        this.admin=admin;
     }
 
     public String getUid() {
@@ -59,4 +49,5 @@ public class User {
         this.uid = uid;
     }
 }
+
 
