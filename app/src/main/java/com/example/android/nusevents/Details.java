@@ -21,7 +21,7 @@ public class Details extends AppCompatActivity {
     private DatabaseReference mEventInfo;
     private Button mSendButton;
     EditText nameField,organizeField,eventField,timeField,locField;
-    String name,organize,event,time,location;
+    String name,organize,event,time,location,id;
     final Boolean access=false;
 
     @Override
@@ -54,8 +54,10 @@ public class Details extends AppCompatActivity {
                 locField = (EditText)findViewById(R.id.location);
                 location = locField.getText().toString();
 
-                EventInfo object = new EventInfo(name,time,location,event,organize,access);
-                mEventInfo.push().setValue(object);
+                 id = mEventInfo.push().getKey();
+
+                EventInfo object = new EventInfo(name,time,location,event,organize,access,id);
+                mEventInfo.setValue(object);
                 nameField.setText("");
                 organizeField.setText("");
                 eventField.setText("");

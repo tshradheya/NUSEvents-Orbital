@@ -10,7 +10,7 @@ public class EventInfo {
     private String info;
     public static boolean isAdmin;
     private String owner;
-
+    private String id;
 public EventInfo()
 {
     name="";
@@ -19,8 +19,9 @@ public EventInfo()
     info="...";
     isAdmin=false;
     owner="";
+    id="";
 }
-public EventInfo(String a,String b,String c,String d,String e,boolean f)
+public EventInfo(String a,String b,String c,String d,String e,boolean f,String id)
 {
     name=a;
     time=b;
@@ -28,6 +29,7 @@ public EventInfo(String a,String b,String c,String d,String e,boolean f)
     info=d;
     owner=e;
     isAdmin=f;
+    this.id = id;
 }
 public String getName()
 {
@@ -51,5 +53,9 @@ public String getOwner()
     return owner;
 }
 public boolean getisAdmin(){return isAdmin;}
+    public String getId()
+    {
+        return id;
+    }
 
 }
