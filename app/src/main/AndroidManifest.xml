@@ -26,10 +26,13 @@
             android:name=".admin"
             android:label="Admin Details" />
         <activity android:name=".Details" />
-        <activity
-            android:name=".DisplayEventList"
-            android:label="List of Events" />
+
+       
         <activity android:name=".model.ActiveListDetailsActivity"></activity>
+        <activity android:name=".DisplayEventList"
+            android:label="Current Happenings!">
+
+        </activity>
     </application>
 
 </manifest>

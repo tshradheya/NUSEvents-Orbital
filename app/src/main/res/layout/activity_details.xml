@@ -36,7 +36,7 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Time of Event in 24-hour format"
+            android:hint="Time of Event in 24-hour format(HH:MM)"
             android:id="@+id/time_event"
             android:inputType="textCapWords"/>
         <EditText
