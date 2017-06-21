@@ -29,6 +29,10 @@
 
        
         <activity android:name=".model.ActiveListDetailsActivity"></activity>
+
+        <activity android:name=".model.UserDetails"></activity>
+
+
         <activity android:name=".DisplayEventList"
             android:label="Current Happenings!">
 

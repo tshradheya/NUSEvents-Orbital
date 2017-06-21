@@ -18,6 +18,7 @@ import android.app.ProgressDialog;
 
 
 import com.example.android.nusevents.R;
+import com.example.android.nusevents.model.UserDetails;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -41,6 +42,8 @@ public class EmailPasswordActivity extends AppCompatActivity implements
     private TextView mDetailTextView;
     private EditText mEmailField;
     private EditText mPasswordField;
+
+
 
 
     private FirebaseDatabase userDatabase;
@@ -100,7 +103,7 @@ public class EmailPasswordActivity extends AppCompatActivity implements
                     //signed in
 
                     String username=mAuth.getCurrentUser().getEmail();
-                    Toast.makeText(EmailPasswordActivity.this,"Hello "+username+"! You are now Signed In. Welcome to NUS Events APP!",Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(EmailPasswordActivity.this,"Hello "+username+"! You are now Signed In. Welcome to NUS Events APP!",Toast.LENGTH_SHORT).show();
 
                     finish();
 
@@ -126,6 +129,9 @@ public class EmailPasswordActivity extends AppCompatActivity implements
         startActivity(intent2);
 
     }
+
+
+
     // [START on_start_check_user]
     @Override
     public void onStart() {
@@ -170,10 +176,17 @@ public class EmailPasswordActivity extends AppCompatActivity implements
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
+
+                            progressDialog.hide();
+
                             FirebaseUser user = mAuth.getCurrentUser();
 
-                            User currUser= new User(user.getEmail(),user.getUid());
-                            userDatabaseReference.push().setValue(currUser);
+                            Intent i= new Intent(EmailPasswordActivity.this, UserDetails.class);
+                            startActivity(i);
+
+
+                            UserDetails.addIntoDatabase(userDatabaseReference,user.getEmail(),user.getUid());
+
 
 
 
@@ -189,18 +202,23 @@ public class EmailPasswordActivity extends AppCompatActivity implements
 
                         // [START_EXCLUDE]
                       //  hideProgressDialog();
-                        progressDialog.hide();
+
                         // [END_EXCLUDE]
                     }
                 });
         // [END create_user_with_email]
     }
 
+
+
+
     private void signIn(String email, String password) {
         Log.d(TAG, "signIn:" + email);
         if (!validateForm()) {
             return;
         }
+
+
 
        // showProgressDialog();
         pDialog.setMessage("Signing In ...");

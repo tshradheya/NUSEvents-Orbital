@@ -8,6 +8,8 @@ import static com.example.android.nusevents.model.EventInfo.isAdmin;
 
 public class User {
 
+    public String displayName;
+    public String username;
     public String name;
     public boolean admin;
     public String uid;
@@ -17,7 +19,9 @@ public class User {
         admin = false;
     }
 
-    public User(String name,String uid) {
+    public User(String name,String uid,String displayName,String username) {
+        this.displayName=displayName;
+        this.username=username;
         this.name = name;
         admin = false;
         this.uid = uid;
@@ -48,6 +52,23 @@ public class User {
     public void setUid(String uid) {
         this.uid = uid;
     }
+
+    public String getDisplayName(){return displayName; }
+
+    public void setDisplayName(String displayName){
+        this.displayName=displayName;
+
+    }
+
+    public String getUsername(){return username; }
+
+    public void setUsername(String username){
+        this.username=username;
+
+    }
+
+
+
 }
 
 
