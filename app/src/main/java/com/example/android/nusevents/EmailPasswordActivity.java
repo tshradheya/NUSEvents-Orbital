@@ -266,9 +266,12 @@ public class EmailPasswordActivity extends AppCompatActivity implements
         mAuth.signOut();
     }
 
-    private void sendEmailVerification() {
+
+
+
+    public void sendEmailVerification() {
         // Disable button
-        findViewById(R.id.verify_email_button).setEnabled(false);
+        //findViewById(R.id.verify_email_button).setEnabled(false);
 
         // Send verification email
         // [START send_email_verification]
@@ -279,7 +282,7 @@ public class EmailPasswordActivity extends AppCompatActivity implements
                     public void onComplete(@NonNull Task<Void> task) {
                         // [START_EXCLUDE]
                         // Re-enable button
-                        findViewById(R.id.verify_email_button).setEnabled(true);
+                        //findViewById(R.id.verify_email_button).setEnabled(true);
 
                         if (task.isSuccessful()) {
                             Toast.makeText(EmailPasswordActivity.this,

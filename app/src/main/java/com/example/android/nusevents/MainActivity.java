@@ -163,6 +163,12 @@ private boolean checkAdmin = false;
         @Override
         public boolean onOptionsItemSelected (MenuItem item){
 
+            if(item.getItemId()==R.id.settings)
+            {
+                Intent i = new Intent(this, SettingsActivity.class);
+                startActivity(i);
+            }
+
             if (item.getItemId() == R.id.aboutUs) {
                 Intent i = new Intent(this, About_Us.class);
                 startActivity(i);

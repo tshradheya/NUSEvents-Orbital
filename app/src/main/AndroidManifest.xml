@@ -30,7 +30,12 @@
        
         <activity android:name=".model.ActiveListDetailsActivity"></activity>
 
-        <activity android:name=".model.UserDetails"></activity>
+        <activity android:name=".model.UserDetails"></activity>'
+
+
+        <activity android:name=".SettingsActivity"></activity>
+
+        <activity android:name=".EmailVerification"></activity>
 
 
         <activity android:name=".DisplayEventList"
