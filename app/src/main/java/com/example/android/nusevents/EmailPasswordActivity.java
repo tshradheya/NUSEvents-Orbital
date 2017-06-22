@@ -103,16 +103,12 @@ public class EmailPasswordActivity extends AppCompatActivity implements
                     //signed in
 
                     String username=mAuth.getCurrentUser().getEmail();
-                   // Toast.makeText(EmailPasswordActivity.this,"Hello "+username+"! You are now Signed In. Welcome to NUS Events APP!",Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(EmailPasswordActivity.this,"Hello "+username+"! You are now Signed In. Welcome to NUS Events APP!",Toast.LENGTH_SHORT).show();
 
-                    finish();
+
 
                     goToMainActivity();
-
-                }
-                else{
-                    //signed out
-                    // object = new EventInfo();
+                    finish();
 
                 }
 
@@ -378,3 +374,4 @@ public class EmailPasswordActivity extends AppCompatActivity implements
         mAuth.removeAuthStateListener(mAuthStateListener);
     }
 }
+

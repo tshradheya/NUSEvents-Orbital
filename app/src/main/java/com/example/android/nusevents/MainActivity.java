@@ -36,7 +36,9 @@ import java.util.Arrays;
 import static android.webkit.ConsoleMessage.MessageLevel.LOG;
 import static bolts.AppLinkNavigation.NavigationResult.APP;
 import static com.example.android.nusevents.EmailPasswordActivity.mAuth;
+import static com.example.android.nusevents.R.id.display_name;
 import static com.example.android.nusevents.R.id.event;
+import static com.example.android.nusevents.model.UserDetails.username;
 import static junit.runner.Version.id;
 
 
@@ -49,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
     public EventInfo object;
 
     private static String currUid;
+
+    public String d_name;
 
 private boolean checkAdmin = false;
     private ChildEventListener mChildEventListener;
@@ -63,8 +67,46 @@ private boolean checkAdmin = false;
         setContentView(R.layout.activity_main);
 
 
+
+
+
+
+
+        FirebaseUser currUser= mAuth.getCurrentUser();
+        currUid=currUser.getUid();
+
         userDatabase = FirebaseDatabase.getInstance();
         userDatabaseReference = userDatabase.getReference().child("User");
+
+
+        userDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot eventsnap: dataSnapshot.getChildren())  {
+                    User user = eventsnap.getValue(User.class);
+
+                    if(currUid.equals(user.getUid())) {
+
+                        d_name=user.getDisplayName();
+                        Toast.makeText(MainActivity.this,"Hello "+d_name+"! You are now Signed In. Welcome to NUS Events APP!",Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+        //Toast.makeText(MainActivity.this,"Hello "+d_name+"! You are now Signed In. Welcome to NUS Events APP!",Toast.LENGTH_SHORT).show();
+
+
 
        // userDatabase = FirebaseDatabase.getInstance();
        // userDatabaseReference = userDatabase.getReference().child("User");
