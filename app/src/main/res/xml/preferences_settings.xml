@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="User Details"
+>
+
+
+        <Preference
+
+            android:title="Request Admin Rights">
+
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:targetPackage="com.example.android.nusevents"
+                android:targetClass="com.example.android.nusevents.admin"
+
+            />
+        </Preference>
+
+
+
+        <Preference
+            android:title="Verify Email " >
+
+
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:targetPackage="com.example.android.nusevents"
+                android:targetClass="com.example.android.nusevents.EmailVerification"
+
+                />
+        </Preference>
+        <Preference
+            android:title="Reset Password"  >
+
+
+
+            <intent android:action="android.intent.action.VIEW"
+                android:data="mailto:nusevent16@gmail.com"/>
+
+                />
+        </Preference>
+    </PreferenceCategory>
+
+
+    <PreferenceCategory
+        android:title="Official Details"
+
+
+        >
+
+
+        <Preference
+            android:title="Visit NUS website"
+
+            >
+
+
+            <intent android:action="android.intent.action.VIEW"
+                android:data="http://www.nus.edu.sg" />
+        </Preference>
+
+
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
