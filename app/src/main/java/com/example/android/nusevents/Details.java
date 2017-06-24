@@ -56,8 +56,12 @@ public class Details extends AppCompatActivity {
 
                  id = mEventInfo.push().getKey();
 
+
+
                 EventInfo object = new EventInfo(name,time,location,event,organize,access,id);
-                mEventInfo.setValue(object);
+
+                mEventInfo.push().setValue(object);
+                //mEventInfo.setValue(object);
                 nameField.setText("");
                 organizeField.setText("");
                 eventField.setText("");
