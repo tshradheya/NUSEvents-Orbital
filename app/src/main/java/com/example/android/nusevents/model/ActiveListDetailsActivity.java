@@ -9,6 +9,11 @@ import android.widget.TextView;
 import com.example.android.nusevents.DisplayEventList;
 import com.example.android.nusevents.R;
 
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class ActiveListDetailsActivity extends AppCompatActivity {
 
     private ListView mListView;
@@ -27,13 +32,23 @@ public class ActiveListDetailsActivity extends AppCompatActivity {
         getmTextViewLocation = (TextView) findViewById(R.id.about_loc_event);
 
 
+        String dAndT="";;
         Intent i =getIntent();
         String id = i.getStringExtra(DisplayEventList.event_id);
         String name = i.getStringExtra(DisplayEventList.event_name);
-        String time = i.getStringExtra(DisplayEventList.event_time);
+        long time = i.getLongExtra(DisplayEventList.event_time,0);
         String loc = i.getStringExtra(DisplayEventList.event_loc);
         String owner = i.getStringExtra(DisplayEventList.event_own);
         String info = i.getStringExtra(DisplayEventList.event_info);
+
+        try{
+            DateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+            Date netDate = (new Date(time));
+            dAndT=sdf.format(netDate);
+        }
+        catch(Exception ex){
+
+        }
 
 
 
@@ -42,6 +57,6 @@ public class ActiveListDetailsActivity extends AppCompatActivity {
         mTextViewListOwner.setText(owner);
         mTextViewInfo.setText(info);
         getmTextViewLocation.setText(loc);
-        getmTextViewTime.setText(time);
+        getmTextViewTime.setText(dAndT);
     }
 }

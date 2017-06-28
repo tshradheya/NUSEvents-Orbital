@@ -6,36 +6,40 @@ package com.example.android.nusevents.model;
 
 public class EventInfo {
     private String name;
-    private String time,location;
+    private String location;
+    private long time;
     private String info;
-    public static boolean isAdmin;
+    public String userCreated;
     private String owner;
     private String id;
+
+
+
 public EventInfo()
 {
     name="";
-    time="00:00";
+    time=0;
     location="random";
     info="...";
-    isAdmin=false;
-    owner="";
+    userCreated="";
+        owner="";
     id="";
 }
-public EventInfo(String a,String b,String c,String d,String e,boolean f,String id)
+public EventInfo(String a,long b,String c,String d,String e,String f,String id)
 {
     name=a;
     time=b;
     location=c;
     info=d;
     owner=e;
-    isAdmin=f;
+    userCreated=f;
     this.id = id;
 }
 public String getName()
 {
     return name;
 }
-public String getTime()
+public long getTime()
 {
     return time;
 }
@@ -52,7 +56,7 @@ public String getOwner()
 {
     return owner;
 }
-public boolean getisAdmin(){return isAdmin;}
+public String getUserCreated(){return userCreated;}
     public String getId()
     {
         return id;

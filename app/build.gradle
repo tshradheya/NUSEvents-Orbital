@@ -42,8 +42,11 @@ dependencies {
     compile 'com.google.firebase:firebase-database:11.0.0'
     compile 'com.firebaseui:firebase-ui-auth:1.2.0'
     compile 'com.google.android.gms:play-services:11.0.0'
+    compile 'com.android.support:support-v4:25.3.1'
     testCompile 'junit:junit:4.12'
 }
+
+
 
 
 
