@@ -26,6 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import static android.R.attr.data;
 import static android.R.attr.elegantTextHeight;
 import static android.R.attr.y;
 
@@ -105,13 +106,16 @@ timeButton=(Button)findViewById(R.id.timepicker);
                 FirebaseUser currUser= mAuth.getCurrentUser();
 
 
+                DatabaseReference mypostref = mEventInfo.push();
+
+                id=mypostref.getKey();
 
 
                 String currUid=currUser.getUid();
 
                 EventInfo object = new EventInfo(name,eventDateLong,location,event,organize,currUid,id);
 
-                mEventInfo.push().setValue(object);
+                mypostref.setValue(object);
                 //mEventInfo.setValue(object);
                 nameField.setText("");
                 organizeField.setText("");

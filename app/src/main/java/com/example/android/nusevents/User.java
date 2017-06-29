@@ -1,6 +1,5 @@
 package com.example.android.nusevents;
 
-import static com.example.android.nusevents.model.EventInfo.isAdmin;
 
 /**
  * Created by Admin on 16-Jun-17.

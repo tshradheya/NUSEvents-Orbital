@@ -35,8 +35,43 @@ public class DisplayEventList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_event_list);
+
+
         mFireBaseDataBase=FirebaseDatabase.getInstance();
         mEventInfo=mFireBaseDataBase.getReference().child("Events");
+
+
+
+
+        mEventInfo.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot eventsnap: dataSnapshot.getChildren())  {
+                    EventInfo temp= eventsnap.getValue(EventInfo.class);
+
+                    if(temp.getTime()<System.currentTimeMillis()) {
+
+                        mEventInfo.child(temp.getId()).removeValue();
+                    }
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+
+
+
+
+
 
         listViewEvents = (ListView) findViewById(R.id.list);
         eventlist = new ArrayList<>();
