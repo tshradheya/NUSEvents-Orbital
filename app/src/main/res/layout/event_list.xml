@@ -82,6 +82,12 @@
         android:id="@+id/about_loc_event"
         android:paddingBottom="16dp"/>
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="EDIT DETAILS"
+        android:id="@+id/detaillist"/>
+
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

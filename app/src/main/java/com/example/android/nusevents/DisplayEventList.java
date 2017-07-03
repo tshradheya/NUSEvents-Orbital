@@ -1,14 +1,21 @@
 package com.example.android.nusevents;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.android.nusevents.model.ActiveListDetailsActivity;
 import com.example.android.nusevents.model.EventInfo;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,7 +37,7 @@ public class DisplayEventList extends AppCompatActivity {
     public static final String event_loc="location";
     public static final String event_time="time";
     public static final String event_info="About";
-
+    public static final String event_userid="lol";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +47,11 @@ public class DisplayEventList extends AppCompatActivity {
         mFireBaseDataBase=FirebaseDatabase.getInstance();
         mEventInfo=mFireBaseDataBase.getReference().child("Events");
 
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currUser= mAuth.getCurrentUser();
+        final String userid = currUser.getUid();
 
+       final AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
 
 
         mEventInfo.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -81,6 +92,8 @@ public class DisplayEventList extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 EventInfo mevents = eventlist.get(position);
+
+
                 Intent i = new Intent(getApplicationContext(),ActiveListDetailsActivity.class);
                 i.putExtra(event_id,mevents.getId());
                 i.putExtra(event_name,mevents.getName());
@@ -88,9 +101,13 @@ public class DisplayEventList extends AppCompatActivity {
                 i.putExtra(event_loc,mevents.getLocation());
                 i.putExtra(event_own,mevents.getOwner());
                 i.putExtra(event_time,mevents.getTime());
+                i.putExtra(event_userid,mevents.getUserCreated());
                 startActivity(i);
             }
         });
+
+
+
     }
 
     @Override
@@ -137,6 +154,7 @@ public class DisplayEventList extends AppCompatActivity {
 
 
     }
+
 
 
 
