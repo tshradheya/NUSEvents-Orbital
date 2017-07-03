@@ -23,15 +23,21 @@ public class About_Us extends AppCompatActivity {
         display(message);
     }
 
+
     public void display(String message)
+
     {
         TextView view = (TextView)findViewById(R.id.about);
         view.setText(message);
     }
+
     public void aboutAdmins(View view) {
+
 
         Intent i = new Intent(this,admin.class);
         startActivity(i);
+
+
     }
 
 
