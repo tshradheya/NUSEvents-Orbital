@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter New Event Name"
+        android:inputType="textCapWords"
+        android:id="@+id/event_nameUpdate"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Change Organized by"
+        android:id="@+id/organizeUpdate"
+        android:inputType="textCapWords"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Edit Information About the Event"
+        android:id="@+id/about_eventUpdate"
+        android:inputType="textMultiLine" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Change Location of Event"
+        android:id="@+id/locationUpdate"
+        android:inputType="textCapWords"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Change Event Date"
+        android:onClick="showDatePickerDialog"
+        android:background="@color/colorPrimary"
+
+        android:id="@+id/datepickerUpdate"
+        android:layout_marginBottom="8dp"
+        android:textColor="@color/authui_colorPrimaryDark"
+
+        />
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Change Event Time"
+        android:onClick="showTimePickerDialog"
+        android:id="@+id/timepickerUpdate"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/authui_colorPrimaryDark"
+
+        />
+
+    <!--   <EditText
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:hint="Time of Event in 24-hour format(HH:MM)"
+           android:id="@+id/time_event"
+           android:inputType="textCapWords"/>
+
+           -->
+
+
+    <Button
+        android:id="@+id/sendButtonUpdate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="SUBMIT REQUEST"
+
+        android:textColor="@color/authui_colorPrimaryDark"
+        android:background="@color/colorPrimary"
+        android:layout_marginTop="10dp"
+        android:textStyle="bold" />
+
+</LinearLayout>
+

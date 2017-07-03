@@ -89,7 +89,7 @@ public class ActiveListDetailsActivity extends AppCompatActivity {
                 if(usercreate.equals(currUid))
                 {
 
-                    showUpdateDialog(id,name,loc,info,"12/10/1997","14:30",owner,usercreate);
+                    showUpdateDialog(id,usercreate);
                 }
                 else
                 {
