@@ -108,6 +108,20 @@ public class DisplayEventList extends AppCompatActivity {
                     eventlist.add(event);
                 }
 
+                for(int i=0;i<eventlist.size();i++)
+                {
+                    for(int j=1;j<eventlist.size();j++)
+                    {
+                        if(eventlist.get(j-1).getTime()>eventlist.get(j).getTime())
+                        {
+                            EventInfo temp=eventlist.get(j-1);
+                            eventlist.set(j-1,eventlist.get(j));
+                            eventlist.set(j,temp);
+
+                        }
+                    }
+                }
+
                 EventsList adapter = new EventsList(DisplayEventList.this,eventlist);
                 listViewEvents.setAdapter(adapter);
             }
