@@ -38,7 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Change Event Date"
-        android:onClick="showDatePickerDialog"
+        android:onClick="showDateDialog"
         android:background="@color/colorPrimary"
 
         android:id="@+id/datepickerUpdate"
@@ -52,7 +52,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Change Event Time"
-        android:onClick="showTimePickerDialog"
+        android:onClick="showTimeDialog"
         android:id="@+id/timepickerUpdate"
         android:background="@color/colorPrimary"
         android:textColor="@color/authui_colorPrimaryDark"
@@ -71,12 +71,13 @@
 
     <Button
         android:id="@+id/sendButtonUpdate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="SUBMIT REQUEST"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:text="SAVE"
 
-        android:textColor="@color/authui_colorPrimaryDark"
-        android:background="@color/colorPrimary"
+        android:background="@drawable/submit"
+        android:layout_marginLeft="135dp"
+
         android:layout_marginTop="10dp"
         android:textStyle="bold" />
 
