@@ -154,9 +154,9 @@ public class ActiveListDetailsActivity extends AppCompatActivity {
     {
         DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReference("Events").child(id);
         EventInfo event = new EventInfo(name,time,loc,info,owner,user,id);
-        databaseReference.setValue(event);
-        Intent i = new Intent(this,MainActivity.class);
-        startActivity(i);
+        databaseReference.setValue(event);// Intent i = new Intent(this,MainActivity.class);
+        //startActivity(i);
+        finish();
         Toast.makeText(this,"Event Updated Successfully!",Toast.LENGTH_LONG).show();
         return true;
     }
