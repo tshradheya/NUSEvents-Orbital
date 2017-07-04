@@ -122,6 +122,8 @@ timeButton=(Button)findViewById(R.id.timepicker);
                 eventField.setText("");
                 //timeField.setText("");
                 locField.setText("");
+                dateButton.setText("Enter Date");
+                timeButton.setText("Enter Time");
                 displaymessage();
 
 

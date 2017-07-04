@@ -32,7 +32,8 @@
             android:layout_height="wrap_content"
             android:hint="About the Event"
             android:id="@+id/about_event"
-            android:inputType="textMultiLine" />
+            android:inputType="textMultiLine"
+            />
 
     <EditText
         android:layout_width="match_parent"

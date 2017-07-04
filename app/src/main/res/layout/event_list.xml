@@ -83,21 +83,15 @@
         android:paddingBottom="16dp"/>
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
         android:text="EDIT"
-        android:layout_marginLeft="100dp"
+        android:layout_marginStart="135dp"
         android:id="@+id/detaillist"
+        android:visibility="invisible"
         android:background="@drawable/document_edit_flat"
         />
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/main_list"
-        android:paddingBottom="16dp">
-
-    </ListView>
 
 
 

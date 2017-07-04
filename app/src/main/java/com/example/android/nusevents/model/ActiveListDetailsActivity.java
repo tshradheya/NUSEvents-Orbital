@@ -51,6 +51,9 @@ public class ActiveListDetailsActivity extends FragmentActivity {
 
     View dialogview;
 
+    String name="",dAndT="",loc="",owner="",info="";
+
+
 
 
     @Override
@@ -66,7 +69,7 @@ public class ActiveListDetailsActivity extends FragmentActivity {
         //dateUpdate=(Button)dialogview.findViewById(R.id.datepickerUpdate);
         //timeUpdate =(Button)dialogview.findViewById(R.id.timepickerUpdate);
 
-        mListView = (ListView) findViewById(R.id.main_list);
+        //mListView = (ListView) findViewById(R.id.main_list);
         //mTextViewListName = (TextView) findViewById(R.id.about);
         mTextViewListOwner = (TextView) findViewById(R.id.organize_by);
         mTextViewInfo = (TextView) findViewById(R.id.about_the_event);
@@ -74,14 +77,14 @@ public class ActiveListDetailsActivity extends FragmentActivity {
         getmTextViewLocation = (TextView) findViewById(R.id.about_loc_event);
 
 
-        String dAndT="";
+        dAndT="";
         Intent i =getIntent();
         final  String id = i.getStringExtra(DisplayEventList.event_id);
-        final  String name = i.getStringExtra(DisplayEventList.event_name);
+        name = i.getStringExtra(DisplayEventList.event_name);
         final long time = i.getLongExtra(DisplayEventList.event_time,0);
-        final String loc = i.getStringExtra(DisplayEventList.event_loc);
-        final String owner = i.getStringExtra(DisplayEventList.event_own);
-        final String info = i.getStringExtra(DisplayEventList.event_info);
+        loc = i.getStringExtra(DisplayEventList.event_loc);
+        owner = i.getStringExtra(DisplayEventList.event_own);
+        info = i.getStringExtra(DisplayEventList.event_info);
         final String usercreate = i.getStringExtra(DisplayEventList.event_userid);
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -110,6 +113,13 @@ public class ActiveListDetailsActivity extends FragmentActivity {
         getmTextViewTime.setText(dAndT);
 
         final Button button = (Button)findViewById(R.id.detaillist);
+
+        if(usercreate.equals(currUid))
+        {
+            button.setVisibility(View.VISIBLE);
+        }
+
+
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -158,6 +168,12 @@ public class ActiveListDetailsActivity extends FragmentActivity {
         final EditText editTextloc = (EditText)dialogview.findViewById(R.id.locationUpdate);
         final EditText editTextown = (EditText)dialogview.findViewById(R.id.organizeUpdate);
 
+
+        editTextname.setText(name);
+        editTextinfo.setText(info);
+        editTextloc.setText(loc);
+        editTextown.setText(owner);
+
         dateUpdate=(Button)dialogview.findViewById(R.id.datepickerUpdate);
         timeUpdate =(Button)dialogview.findViewById(R.id.timepickerUpdate);
 
@@ -196,7 +212,6 @@ public class ActiveListDetailsActivity extends FragmentActivity {
                 }
 
                 catch (ParseException e){
-
                 }
 
                 updatedetails(eventid,newname,newloc,newown,newinfo,eventDateLong,userid);
