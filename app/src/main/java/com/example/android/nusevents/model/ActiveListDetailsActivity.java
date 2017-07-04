@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -22,10 +23,14 @@ import com.example.android.nusevents.MainActivity;
 import com.example.android.nusevents.R;
 import com.example.android.nusevents.TimePickerFragment;
 import com.example.android.nusevents.TimePickerUpdateFragment;
+import com.example.android.nusevents.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 
 import java.text.DateFormat;
@@ -33,6 +38,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static android.R.attr.id;
+import static android.R.attr.key;
 import static com.example.android.nusevents.Details.dateButton;
 import static com.example.android.nusevents.Details.timeButton;
 
@@ -41,6 +48,8 @@ public class ActiveListDetailsActivity extends FragmentActivity {
     private ListView mListView;
     private TextView mTextViewListName, mTextViewListOwner;
     private TextView mTextViewInfo,getmTextViewTime,getmTextViewLocation;
+
+    private CheckBox mBookmark;
 
     public static Button dateUpdate;
     public static Button timeUpdate;
@@ -51,7 +60,12 @@ public class ActiveListDetailsActivity extends FragmentActivity {
 
     View dialogview;
 
-    String name="",dAndT="",loc="",owner="",info="";
+    long time;
+    String name="",dAndT="",loc="",owner="",info="",usercreate="",id="";
+
+
+    private FirebaseDatabase bookmarkDatabase;
+    private DatabaseReference bookmarkDatabaseReference;
 
 
 
@@ -76,22 +90,74 @@ public class ActiveListDetailsActivity extends FragmentActivity {
         getmTextViewTime = (TextView) findViewById(R.id.about_time);
         getmTextViewLocation = (TextView) findViewById(R.id.about_loc_event);
 
+        mBookmark=(CheckBox)findViewById(R.id.checkBox);
+
+        bookmarkDatabase=FirebaseDatabase.getInstance();
+        bookmarkDatabaseReference=bookmarkDatabase.getReference().child("Bookmark");
+
+        FirebaseAuth mAuth=FirebaseAuth.getInstance();
+        FirebaseUser currUser=mAuth.getCurrentUser();
+
+        String currid=currUser.getUid();
+
+
+        DatabaseReference bookmarkUserReference=bookmarkDatabaseReference.child(currid);
+
+        if(bookmarkUserReference!=null) {
+
+
+            bookmarkUserReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    for (DataSnapshot eventsnap : dataSnapshot.getChildren()) {
+
+                        EventInfo obj=eventsnap.getValue(EventInfo.class);
+
+                        String temp=obj.getId();
+
+                        if(temp.equals(id))
+                        {
+                            mBookmark.setChecked(true);
+                        }
+
+                    }
+
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+
+        else
+        {
+            mBookmark.setChecked(false);
+        }
+
+
+
+
+
 
         dAndT="";
         Intent i =getIntent();
-        final  String id = i.getStringExtra(DisplayEventList.event_id);
+        id = i.getStringExtra(DisplayEventList.event_id);
         name = i.getStringExtra(DisplayEventList.event_name);
-        final long time = i.getLongExtra(DisplayEventList.event_time,0);
+        time = i.getLongExtra(DisplayEventList.event_time,0);
         loc = i.getStringExtra(DisplayEventList.event_loc);
         owner = i.getStringExtra(DisplayEventList.event_own);
         info = i.getStringExtra(DisplayEventList.event_info);
-        final String usercreate = i.getStringExtra(DisplayEventList.event_userid);
+        usercreate = i.getStringExtra(DisplayEventList.event_userid);
 
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        FirebaseUser currUser= mAuth.getCurrentUser();
+        FirebaseAuth Auth = FirebaseAuth.getInstance();
+        FirebaseUser curr= Auth.getCurrentUser();
         final AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
 
-        final String currUid=currUser.getUid();
+        final String currUid=curr.getUid();
 
 
         try{
@@ -277,6 +343,79 @@ public class ActiveListDetailsActivity extends FragmentActivity {
 
         }
     }
+
+
+    public void bookmarkEvent(View view){
+
+        boolean checked= ((CheckBox)view).isChecked();
+
+
+        if(checked)
+        {
+
+            ((CheckBox)view).setChecked(true);
+
+            FirebaseAuth mAuth=FirebaseAuth.getInstance();
+            FirebaseUser currUser=mAuth.getCurrentUser();
+
+            String currUid=currUser.getUid();
+
+            DatabaseReference bookmarkUserReference=bookmarkDatabaseReference.child(currUid);
+
+
+
+            EventInfo obj=new EventInfo(name,time,loc,info,owner,usercreate,id);
+
+            bookmarkUserReference.push().setValue(obj);
+
+
+        }
+
+        else{
+
+            ((CheckBox)view).setChecked(false);
+
+            FirebaseAuth mAuth=FirebaseAuth.getInstance();
+            FirebaseUser currUser=mAuth.getCurrentUser();
+
+            String currUid=currUser.getUid();
+
+            final DatabaseReference bookmarkUserReference=bookmarkDatabaseReference.child(currUid);
+
+
+            bookmarkUserReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    for (DataSnapshot eventsnap: dataSnapshot.getChildren())  {
+
+                        EventInfo obj=eventsnap.getValue(EventInfo.class);
+
+
+                        if(obj.getId().equals(id)) {
+                            bookmarkUserReference.child(eventsnap.getKey()).removeValue();
+                        }
+
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+
+
+
+
+        }
+
+    }
+
+
+
 
 
 }
