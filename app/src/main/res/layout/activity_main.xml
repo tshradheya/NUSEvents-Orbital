@@ -50,7 +50,7 @@
             android:background="#ffffff"
             android:textSize="20sp"
             android:textStyle="bold"
-
+            android:onClick="DisplayBookmarked"
             android:textColor="@color/colorPrimary"
             android:backgroundTint="@color/colorPrimaryDark"
 
