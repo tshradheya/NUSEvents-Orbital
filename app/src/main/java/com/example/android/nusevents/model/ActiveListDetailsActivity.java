@@ -42,6 +42,7 @@ import static android.R.attr.id;
 import static android.R.attr.key;
 import static com.example.android.nusevents.Details.dateButton;
 import static com.example.android.nusevents.Details.timeButton;
+import static com.example.android.nusevents.R.id.event;
 
 public class ActiveListDetailsActivity extends FragmentActivity {
 
@@ -287,10 +288,35 @@ public class ActiveListDetailsActivity extends FragmentActivity {
         });
 
     }
-    private boolean updatedetails(String id,String name,String loc,String owner,String info,long time,String user)
+    private boolean updatedetails(final String id,String name,String loc,String owner,String info,long time,String user)
     {
         DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReference("Events").child(id);
-        EventInfo event = new EventInfo(name,time,loc,info,owner,user,id);
+       final DatabaseReference mdatabaseReference= FirebaseDatabase.getInstance().getReference("Bookmark").child(user);
+        final EventInfo event = new EventInfo(name,time,loc,info,owner,user,id);
+
+        mdatabaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for(DataSnapshot eventsnap: dataSnapshot.getChildren())
+                {
+                    EventInfo event1 = eventsnap.getValue(EventInfo.class);
+                    if(event1.getId().equals(id)) {
+                        mdatabaseReference.child(eventsnap.getKey()).setValue(event);
+                        break;
+                    }
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
         databaseReference.setValue(event);// Intent i = new Intent(this,MainActivity.class);
         //startActivity(i);
         finish();
@@ -365,6 +391,8 @@ public class ActiveListDetailsActivity extends FragmentActivity {
 
 
             EventInfo obj=new EventInfo(name,time,loc,info,owner,usercreate,id);
+          //  String temp2 = obj.getId();
+           // DatabaseReference bookmarkUserReference=bookmarkDatabaseReference.child(currUid).child(temp2);
 
             bookmarkUserReference.push().setValue(obj);
 
@@ -406,16 +434,6 @@ public class ActiveListDetailsActivity extends FragmentActivity {
                 }
             });
 
-
-
-
-
         }
-
     }
-
-
-
-
-
 }

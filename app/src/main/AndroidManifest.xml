@@ -18,10 +18,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".MainActivity"
-            android:launchMode="singleInstance"
-            />
+        <activity
+            android:name=".MainActivity"
+            android:launchMode="singleInstance" />
         <activity
             android:name=".About_Us"
             android:label="About Us" />
@@ -29,22 +28,16 @@
             android:name=".admin"
             android:label="Admin Details" />
         <activity android:name=".Details" />
-
-       
-        <activity android:name=".model.ActiveListDetailsActivity"></activity>
-
-        <activity android:name=".model.UserDetails"></activity>'
-
-
-        <activity android:name=".SettingsActivity"></activity>
-
-        <activity android:name=".EmailVerification"></activity>
-
-
-        <activity android:name=".DisplayEventList"
-            android:label="Current Happenings!">
-
-        </activity>
+        <activity android:name=".model.ActiveListDetailsActivity" />
+        <activity android:name=".model.UserDetails" />
+        '
+        <activity android:name=".SettingsActivity" />
+        <activity android:name=".EmailVerification" />
+        <activity
+            android:name=".DisplayEventList"
+            android:label="Current Happenings!" />
+        <activity android:name=".BookmarkList" />
+        <activity android:name=".model.BookmarkDetails"></activity>
     </application>
 
 </manifest>

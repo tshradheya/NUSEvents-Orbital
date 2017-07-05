@@ -295,6 +295,12 @@ private boolean checkAdmin = false;
         startActivity(i);
     }
 
+    public void DisplayBookmarked(View view)
+    {
+        Intent i = new Intent(this,BookmarkList.class);
+        startActivity(i);
+    }
+
 
 }
 
