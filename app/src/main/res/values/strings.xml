@@ -5,7 +5,7 @@
     <string name="signed_out">Signed Out</string>
 
 
-    <string name="auth_failed">Authentication failed</string>
+    <string name="auth_failed">Authentication failed! Check Username and Password</string>
     <string name="emailpassword_status_fmt">Email User: %1$s (verified: %2$b)</string>
     <string name="firebase_status_fmt">Firebase User: %s</string>
 

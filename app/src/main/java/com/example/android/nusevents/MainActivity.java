@@ -68,12 +68,39 @@ private boolean checkAdmin = false;
 
 
 
-
-
+        userDatabase = FirebaseDatabase.getInstance();
+        userDatabaseReference = userDatabase.getReference().child("User");
 
 
         FirebaseUser currUser= mAuth.getCurrentUser();
         currUid=currUser.getUid();
+
+        userDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot eventsnap: dataSnapshot.getChildren())  {
+                    User user = eventsnap.getValue(User.class);
+
+                    if(currUid.equals(user.getUid())) {
+
+                        checkAdmin = user.getAdmin();
+                    }
+
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+
 
         userDatabase = FirebaseDatabase.getInstance();
         userDatabaseReference = userDatabase.getReference().child("User");
@@ -234,35 +261,6 @@ private boolean checkAdmin = false;
 
         AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
 
-        userDatabase = FirebaseDatabase.getInstance();
-        userDatabaseReference = userDatabase.getReference().child("User");
-
-
-        FirebaseUser currUser= mAuth.getCurrentUser();
-        currUid=currUser.getUid();
-
-        userDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                for (DataSnapshot eventsnap: dataSnapshot.getChildren())  {
-                    User user = eventsnap.getValue(User.class);
-
-                    if(currUid.equals(user.getUid())) {
-
-                        checkAdmin = user.getAdmin();
-                    }
-
-                }
-
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
 
 
         if (!checkAdmin) {

@@ -291,7 +291,7 @@ public class ActiveListDetailsActivity extends FragmentActivity {
     private boolean updatedetails(final String id,String name,String loc,String owner,String info,long time,String user)
     {
         DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReference("Events").child(id);
-       final DatabaseReference mdatabaseReference= FirebaseDatabase.getInstance().getReference("Bookmark").child(user);
+       final DatabaseReference mdatabaseReference= FirebaseDatabase.getInstance().getReference("Bookmark");
         final EventInfo event = new EventInfo(name,time,loc,info,owner,user,id);
 
         mdatabaseReference.addValueEventListener(new ValueEventListener() {
@@ -300,15 +300,40 @@ public class ActiveListDetailsActivity extends FragmentActivity {
 
                 for(DataSnapshot eventsnap: dataSnapshot.getChildren())
                 {
-                    EventInfo event1 = eventsnap.getValue(EventInfo.class);
-                    if(event1.getId().equals(id)) {
-                        mdatabaseReference.child(eventsnap.getKey()).setValue(event);
-                        break;
+
+                    String userPushId=eventsnap.getKey();
+
+                    final DatabaseReference userIdReference=mdatabaseReference.child(userPushId);
+
+
+                    userIdReference.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+
+                            for(DataSnapshot eventsnap: dataSnapshot.getChildren()) {
+
+                                EventInfo event1 = eventsnap.getValue(EventInfo.class);
+                                if (event1.getId().equals(id)) {
+                                    userIdReference.child(eventsnap.getKey()).setValue(event);
+                                    break;
+                                }
+                            }
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+
+
                     }
 
                 }
 
-            }
+
 
             @Override
             public void onCancelled(DatabaseError databaseError) {

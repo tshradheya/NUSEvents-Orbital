@@ -193,6 +193,8 @@ public class EmailPasswordActivity extends AppCompatActivity implements
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             Toast.makeText(EmailPasswordActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
+                            progressDialog.hide();
+                            finish();
                         }
 
 
@@ -236,6 +238,8 @@ public class EmailPasswordActivity extends AppCompatActivity implements
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
                             Toast.makeText(EmailPasswordActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
+
+                            pDialog.hide();
 
                         }
 
