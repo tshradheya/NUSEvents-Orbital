@@ -8,17 +8,22 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-public class admin extends AppCompatActivity {
 
+
+public class admin extends AppCompatActivity {
+    public static String email1 = "ronak.lakhotia999@gmail.com";
+    public static String email2="tshradheya@gmail.com";
+    public static String emailAddress="nusevent16@gmail.com";
+    public static String[] address = {email1,email2,emailAddress};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin);
-        String email1 = "ronak.lakhotia999@gmail.com";
+
         String contact1 = "+6593911558";
         String name1 = "Ronak Lakhotia";
 
-        String email2 = "tshradheya@gmail.com";
+
         String contact2 = "+6583417302";
         String name2 = "Shradheya Thakre";
         String message = "Name"+" : "+name1+"\n"+"Contact Number"+" : "+contact1+"\n"+"Email Id"+" : "+email1+"\n"+"\n";
@@ -45,11 +50,11 @@ public class admin extends AppCompatActivity {
     public void sendEmail(View view)
     {
 
-        String emailAddress="nusevent16@gmail.com";
+
 
         Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
         emailIntent.setData(Uri.parse("mailto:"));
-        emailIntent.putExtra(Intent.EXTRA_EMAIL,emailAddress);
+        emailIntent.putExtra(Intent.EXTRA_EMAIL,address);
         emailIntent.putExtra(Intent.EXTRA_CC,"tshrdheya@gmail.com");
         emailIntent.putExtra(Intent.EXTRA_CC,"ronaklakhotia999@gmail.com");
 
