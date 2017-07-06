@@ -12,8 +12,8 @@ public class EventInfo {
     public String userCreated;
     private String owner;
     private String id;
-
-
+    private String contact;
+    //private String
 
 public EventInfo()
 {
@@ -24,8 +24,9 @@ public EventInfo()
     userCreated="";
         owner="";
     id="";
+    contact="";
 }
-public EventInfo(String a,long b,String c,String d,String e,String f,String id)
+public EventInfo(String a,long b,String c,String d,String e,String f,String id,String contact)
 {
     name=a;
     time=b;
@@ -34,6 +35,7 @@ public EventInfo(String a,long b,String c,String d,String e,String f,String id)
     owner=e;
     userCreated=f;
     this.id = id;
+    this.contact=contact;
 }
 public String getName()
 {
@@ -60,6 +62,10 @@ public String getUserCreated(){return userCreated;}
     public String getId()
     {
         return id;
+    }
+    public String getContact()
+    {
+        return contact;
     }
 
 }

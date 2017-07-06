@@ -38,8 +38,8 @@ public class Details extends FragmentActivity {
     private FirebaseDatabase mFireBaseDataBase;
     private DatabaseReference mEventInfo;
     private Button mSendButton;
-    EditText nameField,organizeField,eventField,timeField,locField;
-    String name,organize,event,time,location,id;
+    EditText nameField,organizeField,eventField,timeField,locField,contactfield;
+    String name,organize,event,time,location,id,contact;
     final Boolean access=false;
 
     public static Button timeButton;
@@ -83,6 +83,9 @@ timeButton=(Button)findViewById(R.id.timepicker);
 
                 //id = mEventInfo.push().getKey();
 
+                contactfield = (EditText)findViewById(R.id.contact_details);
+                contact = contactfield.getText().toString();
+
 
                String dateString=day+"/"+month+"/"+year+" "+hour+":"+min;
 
@@ -113,7 +116,7 @@ timeButton=(Button)findViewById(R.id.timepicker);
 
                 String currUid=currUser.getUid();
 
-                EventInfo object = new EventInfo(name,eventDateLong,location,event,organize,currUid,id);
+                EventInfo object = new EventInfo(name,eventDateLong,location,event,organize,currUid,id,contact);
 
                 mypostref.setValue(object);
                 //mEventInfo.setValue(object);
@@ -122,6 +125,7 @@ timeButton=(Button)findViewById(R.id.timepicker);
                 eventField.setText("");
                 //timeField.setText("");
                 locField.setText("");
+                contactfield.setText("");
                 dateButton.setText("Enter Date");
                 timeButton.setText("Enter Time");
                 displaymessage();

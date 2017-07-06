@@ -38,6 +38,14 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:hint="Contact details"
+        android:id="@+id/contact_details"
+        android:inputType="textMultiLine"
+        />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:hint="Location of Event"
         android:id="@+id/location"
         android:inputType="textCapWords"/>

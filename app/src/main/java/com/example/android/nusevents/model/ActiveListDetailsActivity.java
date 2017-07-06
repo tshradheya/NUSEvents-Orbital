@@ -7,6 +7,7 @@ import android.app.DialogFragment;
 import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.provider.CalendarContract;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
@@ -29,6 +30,7 @@ import com.example.android.nusevents.R;
 import com.example.android.nusevents.TimePickerFragment;
 import com.example.android.nusevents.TimePickerUpdateFragment;
 import com.example.android.nusevents.User;
+import com.google.android.gms.auth.api.Auth;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -54,7 +56,7 @@ public class ActiveListDetailsActivity extends AppCompatActivity {
 
     private ListView mListView;
     private TextView mTextViewListName, mTextViewListOwner;
-    private TextView mTextViewInfo,getmTextViewTime,getmTextViewLocation;
+    private TextView mTextViewInfo,getmTextViewTime,getmTextViewLocation,getmTextViewListContact;
 
     private CheckBox mBookmark;
 
@@ -72,10 +74,13 @@ public class ActiveListDetailsActivity extends AppCompatActivity {
 
     private static long time;
     String name="",dAndT="",loc="",owner="",info="",usercreate="",id="";
-
+    public static String contact="";
+    public  static String[] address = new String[1];
 
     private FirebaseDatabase bookmarkDatabase;
     private DatabaseReference bookmarkDatabaseReference;
+
+
 
 
 
@@ -101,6 +106,7 @@ public class ActiveListDetailsActivity extends AppCompatActivity {
         mTextViewInfo = (TextView) findViewById(R.id.about_the_event);
         getmTextViewTime = (TextView) findViewById(R.id.about_time);
         getmTextViewLocation = (TextView) findViewById(R.id.about_loc_event);
+        getmTextViewListContact=(TextView)findViewById(R.id.contact_details_admin);
 
         mBookmark=(CheckBox)findViewById(R.id.checkBox);
 
@@ -156,6 +162,7 @@ public class ActiveListDetailsActivity extends AppCompatActivity {
 
 
         dAndT="";
+
         Intent i =getIntent();
         id = i.getStringExtra(DisplayEventList.event_id);
         name = i.getStringExtra(DisplayEventList.event_name);
@@ -164,6 +171,9 @@ public class ActiveListDetailsActivity extends AppCompatActivity {
         owner = i.getStringExtra(DisplayEventList.event_own);
         info = i.getStringExtra(DisplayEventList.event_info);
         usercreate = i.getStringExtra(DisplayEventList.event_userid);
+        contact = i.getStringExtra(DisplayEventList.event_contact);
+        address[0]=contact;
+
 
         FirebaseAuth Auth = FirebaseAuth.getInstance();
         FirebaseUser curr= Auth.getCurrentUser();
@@ -189,6 +199,7 @@ public class ActiveListDetailsActivity extends AppCompatActivity {
         mTextViewInfo.setText(info);
         getmTextViewLocation.setText(loc);
         getmTextViewTime.setText(dAndT);
+        getmTextViewListContact.setText(contact);
 
         final Button button = (Button)findViewById(R.id.detaillist);
 
@@ -245,12 +256,14 @@ public class ActiveListDetailsActivity extends AppCompatActivity {
         final EditText editTextinfo = (EditText)dialogview.findViewById(R.id.about_eventUpdate);
         final EditText editTextloc = (EditText)dialogview.findViewById(R.id.locationUpdate);
         final EditText editTextown = (EditText)dialogview.findViewById(R.id.organizeUpdate);
+        final EditText editcontact = (EditText)dialogview.findViewById(R.id.contactUpdate) ;
 
 
         editTextname.setText(name);
         editTextinfo.setText(info);
         editTextloc.setText(loc);
         editTextown.setText(owner);
+        editTextown.setText(contact);
 
         dateUpdate=(Button)dialogview.findViewById(R.id.datepickerUpdate);
         timeUpdate =(Button)dialogview.findViewById(R.id.timepickerUpdate);
@@ -276,6 +289,7 @@ public class ActiveListDetailsActivity extends AppCompatActivity {
                 String newloc = editTextloc.getText().toString().trim();
                 String newown = editTextown.getText().toString().trim();
                 String newinfo = editTextinfo.getText().toString().trim();
+                String newcontact = editcontact.getText().toString().trim();
 
                 String dateString=day+"/"+month+"/"+year+" "+hour+":"+min;
 
@@ -292,18 +306,18 @@ public class ActiveListDetailsActivity extends AppCompatActivity {
                 catch (ParseException e){
                 }
 
-                updatedetails(eventid,newname,newloc,newown,newinfo,eventDateLong,userid);
+                updatedetails(eventid,newname,newloc,newown,newinfo,eventDateLong,userid,newcontact);
                 alertDialog.dismiss();
 
             }
         });
 
     }
-    private boolean updatedetails(final String id,String name,String loc,String owner,String info,long time,String user)
+    private boolean updatedetails(final String id,String name,String loc,String owner,String info,long time,String user,String contact)
     {
         DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReference("Events").child(id);
        final DatabaseReference mdatabaseReference= FirebaseDatabase.getInstance().getReference("Bookmark");
-        final EventInfo event = new EventInfo(name,time,loc,info,owner,user,id);
+        final EventInfo event = new EventInfo(name,time,loc,info,owner,user,id,contact);
 
         mdatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -426,7 +440,7 @@ public class ActiveListDetailsActivity extends AppCompatActivity {
 
 
 
-            EventInfo obj=new EventInfo(name,time,loc,info,owner,usercreate,id);
+            EventInfo obj=new EventInfo(name,time,loc,info,owner,usercreate,id,contact);
             //  String temp2 = obj.getId();
            // DatabaseReference bookmarkUserReference=bookmarkDatabaseReference.child(currUid).child(temp2);
 
@@ -508,6 +522,20 @@ public class ActiveListDetailsActivity extends AppCompatActivity {
                 .putExtra(CalendarContract.Events.DESCRIPTION, info)
                 .putExtra(CalendarContract.Events.EVENT_LOCATION, loc);
         startActivity(intent);
+    }
+
+    public void sendIntent(View view)
+    {
+
+
+        Intent intent = new Intent(Intent.ACTION_SENDTO);
+        intent.setData(Uri.parse("mailto:")); // only email apps should handle this
+        intent.putExtra(Intent.EXTRA_EMAIL, address);
+
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
+
     }
 }
 
