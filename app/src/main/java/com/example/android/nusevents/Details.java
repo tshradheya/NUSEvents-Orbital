@@ -89,7 +89,7 @@ timeButton=(Button)findViewById(R.id.timepicker);
                 long eventDateLong=0;
 
                try {
-                   SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+                   SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
                    Date eventDate = sdf.parse(dateString);
                    eventDateLong=eventDate.getTime();
