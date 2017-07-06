@@ -82,6 +82,18 @@
         android:id="@+id/about_loc_event"
         android:paddingBottom="16dp"/>
 
+
+    <Button
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:id="@+id/addToCalendar"
+        android:background="@drawable/add_calendar"
+        android:layout_marginBottom="32dp"
+        android:onClick="addToCalendar"
+        android:layout_gravity="center"
+
+        />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -112,6 +124,9 @@
         />
 
     </LinearLayout>
+
+
+
 
 
 </LinearLayout>

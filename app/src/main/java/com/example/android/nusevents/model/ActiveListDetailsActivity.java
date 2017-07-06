@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.provider.CalendarContract;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -36,6 +37,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import static android.R.attr.id;
@@ -461,4 +463,19 @@ public class ActiveListDetailsActivity extends FragmentActivity {
 
         }
     }
+
+
+    public void addToCalendar(View view)
+    {
+
+        Intent intent = new Intent(Intent.ACTION_INSERT)
+                .setData(CalendarContract.Events.CONTENT_URI)
+                .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, time)
+                .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, time+10000)
+                .putExtra(CalendarContract.Events.TITLE, name)
+                .putExtra(CalendarContract.Events.DESCRIPTION, info)
+                .putExtra(CalendarContract.Events.EVENT_LOCATION, loc);
+        startActivity(intent);
+    }
 }
+
