@@ -55,8 +55,7 @@ public class admin extends AppCompatActivity {
         Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
         emailIntent.setData(Uri.parse("mailto:"));
         emailIntent.putExtra(Intent.EXTRA_EMAIL,address);
-        emailIntent.putExtra(Intent.EXTRA_CC,"tshrdheya@gmail.com");
-        emailIntent.putExtra(Intent.EXTRA_CC,"ronaklakhotia999@gmail.com");
+
 
         if(emailIntent.resolveActivity(getPackageManager())!=null) {
             startActivity(emailIntent);

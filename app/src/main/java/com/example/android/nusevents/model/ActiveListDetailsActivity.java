@@ -21,12 +21,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.nusevents.DateFinishUpdatePickerFragment;
 import com.example.android.nusevents.DatePickerFragment;
 import com.example.android.nusevents.DatePickerUpdateFragment;
 import com.example.android.nusevents.DisplayEventList;
 import com.example.android.nusevents.MainActivity;
 import com.example.android.nusevents.Notification_morning;
 import com.example.android.nusevents.R;
+import com.example.android.nusevents.TimeFinishPickerUpdateFragment;
 import com.example.android.nusevents.TimePickerFragment;
 import com.example.android.nusevents.TimePickerUpdateFragment;
 import com.example.android.nusevents.User;
@@ -48,6 +50,7 @@ import java.util.Date;
 
 import static android.R.attr.id;
 import static android.R.attr.key;
+import static android.R.id.edit;
 import static com.example.android.nusevents.Details.dateButton;
 import static com.example.android.nusevents.Details.timeButton;
 import static com.example.android.nusevents.R.id.event;
@@ -58,22 +61,31 @@ public class ActiveListDetailsActivity extends AppCompatActivity {
     private TextView mTextViewListName, mTextViewListOwner;
     private TextView mTextViewInfo,getmTextViewTime,getmTextViewLocation,getmTextViewListContact;
 
+    private TextView mEndTime;
+
     private CheckBox mBookmark;
 
     public static Button dateUpdate;
     public static Button timeUpdate;
 
+    public static Button dateUpdateFinish;
+    public static Button timeUpdateFinish;
 
-    public static String finalName="",finalLoc="";
+
 
 
     public static int year,month, day, hour,min;
 
+    public static int yearF,monthF, dayF, hourF,minF;
+
+
+
+
 
     View dialogview;
 
-    private static long time;
-    String name="",dAndT="",loc="",owner="",info="",usercreate="",id="";
+    private static long time,timeFinish;
+    String name="",dAndT="",loc="",owner="",info="",usercreate="",id="",dAndTF="";
     public static String contact="";
     public  static String[] address = new String[1];
 
@@ -107,6 +119,10 @@ public class ActiveListDetailsActivity extends AppCompatActivity {
         getmTextViewTime = (TextView) findViewById(R.id.about_time);
         getmTextViewLocation = (TextView) findViewById(R.id.about_loc_event);
         getmTextViewListContact=(TextView)findViewById(R.id.contact_details_admin);
+        mEndTime = (TextView) findViewById(R.id.about_timeEND);
+
+
+
 
         mBookmark=(CheckBox)findViewById(R.id.checkBox);
 
@@ -172,6 +188,9 @@ public class ActiveListDetailsActivity extends AppCompatActivity {
         info = i.getStringExtra(DisplayEventList.event_info);
         usercreate = i.getStringExtra(DisplayEventList.event_userid);
         contact = i.getStringExtra(DisplayEventList.event_contact);
+        timeFinish = i.getLongExtra(DisplayEventList.event_time2,0);
+
+
         address[0]=contact;
 
 
@@ -192,14 +211,26 @@ public class ActiveListDetailsActivity extends AppCompatActivity {
         }
 
 
+        try{
+            DateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            Date netDate = (new Date(timeFinish));
+            dAndTF=sdf.format(netDate);
+        }
+        catch(Exception ex){
 
-       // mTextViewListName.setText(name);
+        }
+
+
+
+
+        // mTextViewListName.setText(name);
         setTitle(name);
         mTextViewListOwner.setText(owner);
         mTextViewInfo.setText(info);
         getmTextViewLocation.setText(loc);
         getmTextViewTime.setText(dAndT);
         getmTextViewListContact.setText(contact);
+        mEndTime.setText(dAndTF);
 
         final Button button = (Button)findViewById(R.id.detaillist);
 
@@ -263,10 +294,13 @@ public class ActiveListDetailsActivity extends AppCompatActivity {
         editTextinfo.setText(info);
         editTextloc.setText(loc);
         editTextown.setText(owner);
-        editTextown.setText(contact);
+        editcontact.setText(contact);
 
         dateUpdate=(Button)dialogview.findViewById(R.id.datepickerUpdate);
         timeUpdate =(Button)dialogview.findViewById(R.id.timepickerUpdate);
+
+        dateUpdateFinish=(Button)dialogview.findViewById(R.id.datepickerfinishUpdate);
+        timeUpdateFinish =(Button)dialogview.findViewById(R.id.timepickerfinishUpdate);
 
 
 
@@ -306,18 +340,69 @@ public class ActiveListDetailsActivity extends AppCompatActivity {
                 catch (ParseException e){
                 }
 
-                updatedetails(eventid,newname,newloc,newown,newinfo,eventDateLong,userid,newcontact);
-                alertDialog.dismiss();
+
+
+                String dateStringF=dayF+"/"+monthF+"/"+yearF+" "+hourF+":"+minF;
+
+                long eventDateLongF=0;
+
+                try {
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+
+                    Date eventDate = sdf.parse(dateStringF);
+                    eventDateLongF=eventDate.getTime();
+
+                }
+
+                catch (ParseException e){
+                }
+
+
+                if (eventDateLong < System.currentTimeMillis() || eventDateLong > eventDateLongF||eventDateLong==0||eventDateLongF==0) {
+
+
+                    popUp();
+
+                } else {
+
+
+                    updatedetails(eventid, newname, newloc, newown, newinfo, eventDateLong, userid, newcontact, eventDateLongF);
+                    alertDialog.dismiss();
+                }
 
             }
         });
 
     }
-    private boolean updatedetails(final String id,String name,String loc,String owner,String info,long time,String user,String contact)
+
+
+    public void popUp(){AlertDialog.Builder myAlert1 = new AlertDialog.Builder(this);
+
+
+
+        myAlert1.setMessage("Please check if Date and Time of start and end Time are logically correct")
+                .
+
+                        setPositiveButton("OK",new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick (DialogInterface dialog,int which){
+                                dialog.dismiss();
+                            }
+                        })
+                .
+
+                        create();
+        myAlert1.show();
+
+    }
+
+
+
+    private boolean updatedetails(final String id,String name,String loc,String owner,String info,long time,String user,String contact,long endTime)
     {
         DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReference("Events").child(id);
        final DatabaseReference mdatabaseReference= FirebaseDatabase.getInstance().getReference("Bookmark");
-        final EventInfo event = new EventInfo(name,time,loc,info,owner,user,id,contact);
+        final EventInfo event = new EventInfo(name,time,loc,info,owner,user,id,contact,endTime);
 
         mdatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -421,6 +506,65 @@ public class ActiveListDetailsActivity extends AppCompatActivity {
     }
 
 
+
+    public void showDateDialogFinish(View v) {
+        DialogFragment newFragment = new DateFinishUpdatePickerFragment();
+
+        newFragment.show(getFragmentManager(),"datePicker");
+
+
+    }
+
+    public void showTimeDialogFinish(View v) {
+        DialogFragment newFragment = new TimeFinishPickerUpdateFragment();
+        newFragment.show(getFragmentManager(), "TimePicker");
+    }
+
+
+
+
+    public static void showUpdateDateFinish(int y,int m,int d)
+    {
+        yearF=y;
+        monthF=m+1;
+        dayF=d;
+
+
+        dateUpdateFinish.setText(d+"-"+monthF+"-"+y);
+    }
+
+
+    public static void showUpdateTimeFinish(int h,int m)
+    {
+
+        hourF=h;
+        minF=m;
+
+        if(m/10==0) {
+
+
+            timeUpdateFinish.setText(h + ":0" + m);
+        }
+
+        else{
+            timeUpdateFinish.setText(h + ":" + m);
+
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public void bookmarkEvent(View view){
 
         boolean checked= ((CheckBox)view).isChecked();
@@ -440,7 +584,7 @@ public class ActiveListDetailsActivity extends AppCompatActivity {
 
 
 
-            EventInfo obj=new EventInfo(name,time,loc,info,owner,usercreate,id,contact);
+            EventInfo obj=new EventInfo(name,time,loc,info,owner,usercreate,id,contact,timeFinish);
             //  String temp2 = obj.getId();
            // DatabaseReference bookmarkUserReference=bookmarkDatabaseReference.child(currUid).child(temp2);
 
@@ -456,6 +600,7 @@ public class ActiveListDetailsActivity extends AppCompatActivity {
             intent.putExtra("time",time);
             intent.putExtra("owner",owner);
             intent.putExtra("about",info);
+
 
 
 
@@ -517,7 +662,7 @@ public class ActiveListDetailsActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_INSERT)
                 .setData(CalendarContract.Events.CONTENT_URI)
                 .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, time)
-                .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, time+10000000)
+                .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, timeFinish)
                 .putExtra(CalendarContract.Events.TITLE, name)
                 .putExtra(CalendarContract.Events.DESCRIPTION, info)
                 .putExtra(CalendarContract.Events.EVENT_LOCATION, loc);

@@ -39,6 +39,8 @@ public class DisplayEventList extends AppCompatActivity {
     public static final String event_info="About";
     public static final String event_userid="lol";
     public static final String event_contact="lol1";
+    public static final String event_time2="time2";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,6 +106,8 @@ public class DisplayEventList extends AppCompatActivity {
                 i.putExtra(event_time,mevents.getTime());
                 i.putExtra(event_userid,mevents.getUserCreated());
                 i.putExtra(event_contact,mevents.getContact());
+                i.putExtra(event_time2,mevents.getFinishTime());
+
                 startActivity(i);
             }
         });

@@ -21,6 +21,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.android.nusevents.DisplayEventList.event_time2;
+
 public class BookmarkList extends AppCompatActivity {
 
 
@@ -84,6 +86,8 @@ public class BookmarkList extends AppCompatActivity {
                 i.putExtra(event_own,mevents.getOwner());
                 i.putExtra(event_time,mevents.getTime());
                 i.putExtra(event_userid,mevents.getUserCreated());
+                i.putExtra(event_time2,mevents.getFinishTime());
+
                 startActivity(i);
             }
         });

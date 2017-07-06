@@ -20,10 +20,12 @@ public class BookmarkDetails extends AppCompatActivity {
     private TextView mTextViewListName, mTextViewListOwner;
     private TextView mTextViewInfo,getmTextViewTime,getmTextViewLocation;
 
+    private TextView mEndTime;
+
     public static int year,month, day, hour,min;
 
-    long time;
-    String name="",dAndT="",loc="",owner="",info="",usercreate="",id="";
+    long time,timeFinish;
+    String name="",dAndT="",loc="",owner="",info="",usercreate="",id="",dAndTF="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +37,7 @@ public class BookmarkDetails extends AppCompatActivity {
         mTextViewInfo = (TextView) findViewById(R.id.about_the_event1);
         getmTextViewTime = (TextView) findViewById(R.id.about_time1);
         getmTextViewLocation = (TextView) findViewById(R.id.about_loc_event1);
+        mEndTime=(TextView)findViewById(R.id.about_timeEND2);
 
 
 
@@ -51,6 +54,9 @@ public class BookmarkDetails extends AppCompatActivity {
         info = i.getStringExtra(DisplayEventList.event_info);
         usercreate = i.getStringExtra(DisplayEventList.event_userid);
 
+        timeFinish = i.getLongExtra(DisplayEventList.event_time2,0);
+
+
 
         try{
             DateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
@@ -61,11 +67,23 @@ public class BookmarkDetails extends AppCompatActivity {
 
         }
 
+
+
+        try{
+            DateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            Date netDate = (new Date(timeFinish));
+            dAndTF=sdf.format(netDate);
+        }
+        catch(Exception ex){
+
+        }
+
         setTitle(name);
         mTextViewListOwner.setText(owner);
         mTextViewInfo.setText(info);
         getmTextViewLocation.setText(loc);
         getmTextViewTime.setText(dAndT);
+        mEndTime.setText(dAndTF);
     }
 
 
