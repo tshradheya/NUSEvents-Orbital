@@ -37,9 +37,9 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Change Contact Details"
+        android:hint="Change Email ID"
         android:id="@+id/contactUpdate"
-        android:inputType="textCapWords"/>
+        android:inputType="textEmailAddress"/>
 
     <Button
         android:layout_width="match_parent"
@@ -66,6 +66,34 @@
 
         />
 
+    <Button
+        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Event Finish Date"
+        android:onClick="showDateDialogFinish"
+
+        android:background="@color/authui_colorPrimaryDark"
+        android:textColor="@color/colorPrimary"
+
+        android:id="@+id/datepickerfinishUpdate"
+        android:layout_marginBottom="8dp"
+
+        />
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Event Finish Time"
+        android:onClick="showTimeDialogFinish"
+        android:id="@+id/timepickerfinishUpdate"
+        android:background="@color/authui_colorPrimaryDark"
+        android:textColor="@color/colorPrimary"
+
+        />
+
+
     <!--   <EditText
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
@@ -81,10 +109,10 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:text="SAVE"
+        android:layout_gravity="center"
 
         android:background="@drawable/submit"
-        android:layout_marginLeft="135dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="8dp"
         android:textStyle="bold" />
 
 </LinearLayout>

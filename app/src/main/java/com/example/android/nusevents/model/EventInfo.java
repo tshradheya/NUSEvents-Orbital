@@ -13,6 +13,7 @@ public class EventInfo {
     private String owner;
     private String id;
     private String contact;
+    private long finishTime;
     //private String
 
 public EventInfo()
@@ -25,8 +26,9 @@ public EventInfo()
         owner="";
     id="";
     contact="";
+    finishTime=0;
 }
-public EventInfo(String a,long b,String c,String d,String e,String f,String id,String contact)
+public EventInfo(String a,long b,String c,String d,String e,String f,String id,String contact,long z)
 {
     name=a;
     time=b;
@@ -36,6 +38,7 @@ public EventInfo(String a,long b,String c,String d,String e,String f,String id,S
     userCreated=f;
     this.id = id;
     this.contact=contact;
+    finishTime=z;
 }
 public String getName()
 {
@@ -66,6 +69,10 @@ public String getUserCreated(){return userCreated;}
     public String getContact()
     {
         return contact;
+    }
+
+    public long getFinishTime(){
+        return finishTime;
     }
 
 }

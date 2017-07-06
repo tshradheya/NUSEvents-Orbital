@@ -11,7 +11,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">>
+    android:padding="16dp">
     
     
     
@@ -56,7 +56,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="DATE AND TIME"
+        android:text="Event Start Time"
         android:textStyle="bold"
         android:textSize="25sp"
         android:textColor="#000000"
@@ -75,7 +75,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TIME BY WHICH EVENT ENDS"
+        android:text="Event Ends At"
         android:textStyle="bold"
         android:textSize="25sp"
         android:textColor="#000000"
@@ -114,7 +114,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/contact_admin"
-        android:text="CONTACT DETAILS OF ORGANIZER"
+        android:text="Contact detail of Organizer"
         android:textStyle="bold"
         android:textColor="#000000"
         android:textSize="25sp"
@@ -131,16 +131,18 @@
         android:paddingBottom="16dp"/>
 
     <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="ENQUIRE ABOUT THE EVENT"
-        android:background="#ffffff"
-        android:textSize="25sp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:text="ENQUIRE"
+        android:background="@drawable/enquire"
+        android:textSize="8sp"
         android:textStyle="bold"
         android:id="@+id/know_more"
         android:onClick="sendIntent"
         android:layout_gravity="center"
         android:layout_marginBottom="32dp"
+        android:layout_marginTop="16dp"
+
 
         />
 

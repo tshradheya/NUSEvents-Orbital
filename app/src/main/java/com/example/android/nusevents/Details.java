@@ -33,21 +33,23 @@ import static android.R.attr.y;
 public class Details extends FragmentActivity {
 
 
-
-
     private FirebaseDatabase mFireBaseDataBase;
     private DatabaseReference mEventInfo;
     private Button mSendButton;
-    EditText nameField,organizeField,eventField,timeField,locField,contactfield;
-    String name,organize,event,time,location,id,contact;
-    final Boolean access=false;
+    EditText nameField, organizeField, eventField, timeField, locField, contactfield;
+    String name, organize, event, time, location, id, contact;
+    final Boolean access = false;
 
     public static Button timeButton;
     public static Button dateButton;
 
-    public static int year,month, day, hour,min;
+    public static int year, month, day, hour, min;
+
+    public static int yearF, monthF, dayF, hourF, minF;
 
 
+    public static Button timeButtonFinish;
+    public static Button dateButtonFinish;
 
 
     @Override
@@ -55,105 +57,158 @@ public class Details extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
-        mFireBaseDataBase=FirebaseDatabase.getInstance();
-        mEventInfo=mFireBaseDataBase.getReference().child("Events");
+        mFireBaseDataBase = FirebaseDatabase.getInstance();
+        mEventInfo = mFireBaseDataBase.getReference().child("Events");
         mSendButton = (Button) findViewById(R.id.sendButton);
 
-        dateButton=(Button)findViewById(R.id.datepicker);
-timeButton=(Button)findViewById(R.id.timepicker);
+        dateButton = (Button) findViewById(R.id.datepicker);
+        timeButton = (Button) findViewById(R.id.timepicker);
+
+
+        dateButtonFinish = (Button) findViewById(R.id.datepickerfinish);
+        timeButtonFinish = (Button) findViewById(R.id.timepickerfinish);
 
         mSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                nameField = (EditText)findViewById(R.id.event_name);
+                nameField = (EditText) findViewById(R.id.event_name);
                 name = nameField.getText().toString();
 
-                organizeField = (EditText)findViewById(R.id.organize);
+                organizeField = (EditText) findViewById(R.id.organize);
                 organize = organizeField.getText().toString();
 
-                eventField = (EditText)findViewById(R.id.about_event);
+                eventField = (EditText) findViewById(R.id.about_event);
                 event = eventField.getText().toString();
 
                 //timeField = (EditText)findViewById(R.id.time_event);
                 //time = timeField.getText().toString();
 
-                locField = (EditText)findViewById(R.id.location);
+                locField = (EditText) findViewById(R.id.location);
                 location = locField.getText().toString();
 
                 //id = mEventInfo.push().getKey();
 
-                contactfield = (EditText)findViewById(R.id.contact_details);
+                contactfield = (EditText) findViewById(R.id.contact_details);
                 contact = contactfield.getText().toString();
 
 
-               String dateString=day+"/"+month+"/"+year+" "+hour+":"+min;
+                String dateString = day + "/" + month + "/" + year + " " + hour + ":" + min;
 
-                long eventDateLong=0;
+                long eventDateLong = 0;
 
-               try {
-                   SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+                try {
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
-                   Date eventDate = sdf.parse(dateString);
-                   eventDateLong=eventDate.getTime();
+                    Date eventDate = sdf.parse(dateString);
+                    eventDateLong = eventDate.getTime();
 
 
+                } catch (ParseException e) {
 
-               }
+                }
 
-               catch (ParseException e){
 
-               }
+                String dateStringF = dayF + "/" + monthF + "/" + yearF + " " + hourF + ":" + minF;
+
+                long eventDateLongF = 0;
+
+                try {
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+
+                    Date eventDate = sdf.parse(dateStringF);
+                    eventDateLongF = eventDate.getTime();
+
+
+                } catch (ParseException e) {
+
+                }
 
                 FirebaseAuth mAuth = FirebaseAuth.getInstance();
-                FirebaseUser currUser= mAuth.getCurrentUser();
+                FirebaseUser currUser = mAuth.getCurrentUser();
 
 
                 DatabaseReference mypostref = mEventInfo.push();
 
-                id=mypostref.getKey();
+                id = mypostref.getKey();
 
 
-                String currUid=currUser.getUid();
+                String currUid = currUser.getUid();
 
-                EventInfo object = new EventInfo(name,eventDateLong,location,event,organize,currUid,id,contact);
+                EventInfo object = new EventInfo(name, eventDateLong, location, event, organize, currUid, id, contact, eventDateLongF);
 
-                mypostref.setValue(object);
-                //mEventInfo.setValue(object);
-                nameField.setText("");
-                organizeField.setText("");
-                eventField.setText("");
-                //timeField.setText("");
-                locField.setText("");
-                contactfield.setText("");
-                dateButton.setText("Enter Date");
-                timeButton.setText("Enter Time");
-                displaymessage();
+                if (eventDateLong < System.currentTimeMillis() || eventDateLong > eventDateLongF||eventDateLong==0||eventDateLongF==0) {
+
+
+                    popUp();
+
+                } else {
+
+
+                    mypostref.setValue(object);
+                    //mEventInfo.setValue(object);
+                    nameField.setText("");
+                    organizeField.setText("");
+                    eventField.setText("");
+                    //timeField.setText("");
+                    locField.setText("");
+                    contactfield.setText("");
+                    dateButton.setText("Enter Start Date");
+                    timeButton.setText("Enter Start Time");
+                    dateButtonFinish.setText("Enter Finish Date");
+                    timeButtonFinish.setText("Enter Finish Time");
+
+
+                    displaymessage();
+
+                }
 
 
             }
         });
 
 
-
-
     }
-    public  void displaymessage()
-    {
+
+    public void displaymessage() {
         AlertDialog.Builder myAlert1 = new AlertDialog.Builder(this);
 
 
-
-        myAlert1.setMessage("Your request has been submitted.Thank You!")
+        myAlert1.setMessage("Your event has been added .Thank You!")
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
+                        finish();
                     }
                 })
                 .create();
         myAlert1.show();
+
+
+
     }
+
+
+    public void popUp(){AlertDialog.Builder myAlert1 = new AlertDialog.Builder(this);
+
+
+
+                    myAlert1.setMessage("Please check if Date and Time of start and end Time are logically correct")
+                            .
+
+    setPositiveButton("OK",new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick (DialogInterface dialog,int which){
+            dialog.dismiss();
+        }
+    })
+            .
+
+    create();
+                    myAlert1.show();
+
+}
 
 
     public void showDatePickerDialog(View v) {
@@ -192,6 +247,46 @@ timeButton=(Button)findViewById(R.id.timepicker);
 
         else{
             timeButton.setText(h + ":" + m);
+
+        }
+    }
+
+    public void showDateFinishPickerDialog(View v) {
+        DialogFragment newFragment = new DateFinishPickerFragment();
+
+        newFragment.show(getFragmentManager(),"DatePicker");
+
+
+    }
+
+    public static void showFinishDate(int y,int m,int d)
+    {
+        yearF=y;
+        monthF=m+1;
+        dayF=d;
+
+
+        dateButtonFinish.setText(d+"-"+monthF+"-"+y);
+    }
+
+    public void showTimeFinishPickerDialog(View v) {
+        DialogFragment newFragment = new TimeFinishPickerFragment();
+        newFragment.show(getFragmentManager(), "timePicker");
+    }
+    public static void showFinishTime(int h,int m)
+    {
+
+        hourF=h;
+        minF=m;
+
+        if(minF/10==0) {
+
+
+            timeButtonFinish.setText(h + ":0" + m);
+        }
+
+        else{
+            timeButtonFinish.setText(h + ":" + m);
 
         }
     }
