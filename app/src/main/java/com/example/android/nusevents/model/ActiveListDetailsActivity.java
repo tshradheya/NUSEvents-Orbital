@@ -1,7 +1,10 @@
 package com.example.android.nusevents.model;
 
+import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DialogFragment;
+import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.provider.CalendarContract;
@@ -21,6 +24,7 @@ import com.example.android.nusevents.DatePickerFragment;
 import com.example.android.nusevents.DatePickerUpdateFragment;
 import com.example.android.nusevents.DisplayEventList;
 import com.example.android.nusevents.MainActivity;
+import com.example.android.nusevents.Notification_morning;
 import com.example.android.nusevents.R;
 import com.example.android.nusevents.TimePickerFragment;
 import com.example.android.nusevents.TimePickerUpdateFragment;
@@ -46,7 +50,7 @@ import static com.example.android.nusevents.Details.dateButton;
 import static com.example.android.nusevents.Details.timeButton;
 import static com.example.android.nusevents.R.id.event;
 
-public class ActiveListDetailsActivity extends FragmentActivity {
+public class ActiveListDetailsActivity extends AppCompatActivity {
 
     private ListView mListView;
     private TextView mTextViewListName, mTextViewListOwner;
@@ -58,12 +62,15 @@ public class ActiveListDetailsActivity extends FragmentActivity {
     public static Button timeUpdate;
 
 
+    public static String finalName="",finalLoc="";
+
+
     public static int year,month, day, hour,min;
 
 
     View dialogview;
 
-    long time;
+    private static long time;
     String name="",dAndT="",loc="",owner="",info="",usercreate="",id="";
 
 
@@ -82,6 +89,8 @@ public class ActiveListDetailsActivity extends FragmentActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.event_list);
+
+
 
         //dateUpdate=(Button)dialogview.findViewById(R.id.datepickerUpdate);
         //timeUpdate =(Button)dialogview.findViewById(R.id.timepickerUpdate);
@@ -164,7 +173,7 @@ public class ActiveListDetailsActivity extends FragmentActivity {
 
 
         try{
-            DateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+            DateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
             Date netDate = (new Date(time));
             dAndT=sdf.format(netDate);
         }
@@ -273,7 +282,7 @@ public class ActiveListDetailsActivity extends FragmentActivity {
                 long eventDateLong=0;
 
                 try {
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
                     Date eventDate = sdf.parse(dateString);
                     eventDateLong=eventDate.getTime();
@@ -418,14 +427,37 @@ public class ActiveListDetailsActivity extends FragmentActivity {
 
 
             EventInfo obj=new EventInfo(name,time,loc,info,owner,usercreate,id);
-          //  String temp2 = obj.getId();
+            //  String temp2 = obj.getId();
            // DatabaseReference bookmarkUserReference=bookmarkDatabaseReference.child(currUid).child(temp2);
 
             bookmarkUserReference.push().setValue(obj);
 
 
-        }
 
+            Intent intent=new Intent(this,Notification_morning.class);
+
+            intent.putExtra("name",name);
+            intent.putExtra("loc",loc);
+            intent.putExtra("id",id);
+            intent.putExtra("time",time);
+            intent.putExtra("owner",owner);
+            intent.putExtra("about",info);
+
+
+
+
+
+            AlarmManager manager=(AlarmManager)getSystemService(Activity.ALARM_SERVICE);
+            PendingIntent pendingIntent=PendingIntent.getService(this,
+                    (int)System.currentTimeMillis(),intent, 0);
+
+
+
+
+            manager.setExact(AlarmManager.RTC_WAKEUP,time-1800000,pendingIntent);
+
+
+        }
         else{
 
             ((CheckBox)view).setChecked(false);
@@ -471,7 +503,7 @@ public class ActiveListDetailsActivity extends FragmentActivity {
         Intent intent = new Intent(Intent.ACTION_INSERT)
                 .setData(CalendarContract.Events.CONTENT_URI)
                 .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, time)
-                .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, time+10000)
+                .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, time+10000000)
                 .putExtra(CalendarContract.Events.TITLE, name)
                 .putExtra(CalendarContract.Events.DESCRIPTION, info)
                 .putExtra(CalendarContract.Events.EVENT_LOCATION, loc);

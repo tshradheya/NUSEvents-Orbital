@@ -14,7 +14,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class BookmarkDetails extends FragmentActivity {
+public class BookmarkDetails extends AppCompatActivity {
 
     private ListView mListView;
     private TextView mTextViewListName, mTextViewListOwner;
@@ -30,10 +30,15 @@ public class BookmarkDetails extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bookmark_list);
 
+
         mTextViewListOwner = (TextView) findViewById(R.id.organize_by1);
         mTextViewInfo = (TextView) findViewById(R.id.about_the_event1);
         getmTextViewTime = (TextView) findViewById(R.id.about_time1);
         getmTextViewLocation = (TextView) findViewById(R.id.about_loc_event1);
+
+
+
+
 
 
         dAndT="";
@@ -48,7 +53,7 @@ public class BookmarkDetails extends FragmentActivity {
 
 
         try{
-            DateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+            DateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
             Date netDate = (new Date(time));
             dAndT=sdf.format(netDate);
         }
@@ -62,6 +67,8 @@ public class BookmarkDetails extends FragmentActivity {
         getmTextViewLocation.setText(loc);
         getmTextViewTime.setText(dAndT);
     }
+
+
 
 
 }
