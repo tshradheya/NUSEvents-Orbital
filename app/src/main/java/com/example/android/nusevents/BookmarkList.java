@@ -21,6 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.android.nusevents.DisplayEventList.event_contact;
 import static com.example.android.nusevents.DisplayEventList.event_time2;
 
 public class BookmarkList extends AppCompatActivity {
@@ -33,8 +34,10 @@ public class BookmarkList extends AppCompatActivity {
     public static final String event_own="owner";
     public static final String event_loc="location";
     public static final String event_time="time";
+    public static final String event_time2="time";
     public static final String event_info="About";
     public static final String event_userid="lol";
+    public static final String event_contact1="lolol";
 
     DatabaseReference databaseReferenceEvents;
     @Override
@@ -87,6 +90,7 @@ public class BookmarkList extends AppCompatActivity {
                 i.putExtra(event_time,mevents.getTime());
                 i.putExtra(event_userid,mevents.getUserCreated());
                 i.putExtra(event_time2,mevents.getFinishTime());
+                i.putExtra(event_contact1,mevents.getContact());
 
                 startActivity(i);
             }
