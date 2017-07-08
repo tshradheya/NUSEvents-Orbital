@@ -34,7 +34,7 @@ public class BookmarkList extends AppCompatActivity {
     public static final String event_own="owner";
     public static final String event_loc="location";
     public static final String event_time="time";
-    public static final String event_time2="time";
+    public static final String event_time2="time2";
     public static final String event_info="About";
     public static final String event_userid="lol";
     public static final String event_contact1="lolol";

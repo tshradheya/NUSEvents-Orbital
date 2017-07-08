@@ -37,7 +37,7 @@ public class Details extends FragmentActivity {
     private DatabaseReference mEventInfo;
     private Button mSendButton;
     EditText nameField, organizeField, eventField, timeField, locField, contactfield;
-    String name, organize, event, time, location, id, contact;
+    String name, organize, event, time, location, id, contact,date;
     final Boolean access = false;
 
     public static Button timeButton;
@@ -94,6 +94,7 @@ public class Details extends FragmentActivity {
 
 
                 String dateString = day + "/" + month + "/" + year + " " + hour + ":" + min;
+                date=day + "/" + month + "/" + year;
 
                 long eventDateLong = 0;
 
@@ -135,7 +136,7 @@ public class Details extends FragmentActivity {
 
                 String currUid = currUser.getUid();
 
-                EventInfo object = new EventInfo(name, eventDateLong, location, event, organize, currUid, id, contact, eventDateLongF);
+                EventInfo object = new EventInfo(name, eventDateLong, location, event, organize, currUid, id, contact, eventDateLongF,date);
 
                 if (eventDateLong < System.currentTimeMillis() || eventDateLong > eventDateLongF||eventDateLong==0||eventDateLongF==0) {
 
