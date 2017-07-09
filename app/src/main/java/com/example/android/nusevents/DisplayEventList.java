@@ -1,11 +1,17 @@
 package com.example.android.nusevents;
 
 import android.app.AlertDialog;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -25,12 +31,15 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DisplayEventList extends AppCompatActivity {
+public class DisplayEventList extends AppCompatActivity implements SearchView.OnQueryTextListener{
 
     private DatabaseReference mEventInfo;
     private FirebaseDatabase mFireBaseDataBase;
     List<EventInfo> eventlist;
     ListView listViewEvents;
+
+    EventsList adapter;
+
     public static final String event_name="EVENT NAME";
     public static final String event_id="id";
     public static final String event_own="owner";
@@ -147,7 +156,7 @@ public class DisplayEventList extends AppCompatActivity {
                     }
                 }
 
-                EventsList adapter = new EventsList(DisplayEventList.this,eventlist);
+                adapter = new EventsList(DisplayEventList.this,eventlist);
                 listViewEvents.setAdapter(adapter);
             }
 
@@ -162,6 +171,39 @@ public class DisplayEventList extends AppCompatActivity {
 
 
     }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.search_menu, menu);
+
+        SearchManager searchManager = (SearchManager)
+                getSystemService(Context.SEARCH_SERVICE);
+        MenuItem searchMenuItem = menu.findItem(R.id.search);
+        SearchView searchView = (SearchView) searchMenuItem.getActionView();
+
+        searchView.setSearchableInfo(searchManager.
+                getSearchableInfo(getComponentName()));
+        searchView.setSubmitButtonEnabled(true);
+        searchView.setOnQueryTextListener(this);
+
+        return true;
+    }
+
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        adapter.getFilter().filter(newText);
+
+        return true;
+    }
+
 
 
 

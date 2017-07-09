@@ -2,16 +2,25 @@ package com.example.android.nusevents.model;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.provider.CalendarContract;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.android.nusevents.BookmarkList;
 import com.example.android.nusevents.DisplayEventList;
 import com.example.android.nusevents.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -106,6 +115,73 @@ public class BookmarkDetails extends AppCompatActivity {
         }
 
     }
+
+
+    public void unBookmark(final View view) {
+
+        boolean checked = ((CheckBox) view).isChecked();
+
+        if(checked==false)
+        {
+            ((CheckBox)view).setChecked(false);
+
+            FirebaseAuth mAuth=FirebaseAuth.getInstance();
+            FirebaseUser currUser=mAuth.getCurrentUser();
+
+            String currUid=currUser.getUid();
+
+            FirebaseDatabase bookmarkDatabase= FirebaseDatabase.getInstance();
+
+            DatabaseReference bookmarkDatabaseReference=bookmarkDatabase.getReference().child("Bookmark");;
+
+
+            final DatabaseReference bookmarkUserReference=bookmarkDatabaseReference.child(currUid);
+
+
+            bookmarkUserReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    for (DataSnapshot eventsnap: dataSnapshot.getChildren())  {
+
+                        EventInfo obj=eventsnap.getValue(EventInfo.class);
+
+
+                        if(obj.getId().equals(id)) {
+                            bookmarkUserReference.child(eventsnap.getKey()).removeValue();
+                        }
+
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+
+        finish();
+
+
+    }
+
+
+    public void addCalendar(View view)
+    {
+
+        Intent intent = new Intent(Intent.ACTION_INSERT)
+                .setData(CalendarContract.Events.CONTENT_URI)
+                .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, time)
+                .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, timeFinish)
+                .putExtra(CalendarContract.Events.TITLE, name)
+                .putExtra(CalendarContract.Events.DESCRIPTION, info)
+                .putExtra(CalendarContract.Events.EVENT_LOCATION, loc);
+        startActivity(intent);
+    }
+
+
 
 
 
