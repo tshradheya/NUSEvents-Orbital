@@ -16,7 +16,8 @@
         android:textStyle="bold"
         android:id="@+id/nameText"
         android:textColor="#000000"
-        android:paddingBottom="16dp"/>
+        android:paddingBottom="16dp"
+        />
 
     <EditText
 
@@ -43,18 +44,14 @@
         android:textColor="#000000"
         android:paddingBottom="16dp"/>
 
+
     <EditText
-
         android:id="@+id/display_username"
-
         android:layout_width="match_parent"
-
         android:layout_height="wrap_content"
-
         android:hint="Enter Username"
-
-        android:inputType="textPersonName" />
-
+        android:inputType="textPersonName"
+        />
 
     <Button
         android:layout_width="48dp"
@@ -63,11 +60,7 @@
         android:background="@drawable/tick"
         android:layout_marginTop="64dp"
         android:layout_marginLeft="156dp"
-
         android:onClick="save"
-
         />
-
-
 
 </LinearLayout>
