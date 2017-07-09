@@ -32,6 +32,7 @@ import com.example.android.nusevents.TimeFinishPickerUpdateFragment;
 import com.example.android.nusevents.TimePickerFragment;
 import com.example.android.nusevents.TimePickerUpdateFragment;
 import com.example.android.nusevents.User;
+import com.example.android.nusevents.admin;
 import com.google.android.gms.auth.api.Auth;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -50,6 +51,7 @@ import java.util.Date;
 
 import static android.R.attr.id;
 import static android.R.attr.key;
+import static android.R.attr.taskAffinity;
 import static android.R.id.edit;
 import static com.example.android.nusevents.Details.dateButton;
 import static com.example.android.nusevents.Details.timeButton;
@@ -68,8 +70,15 @@ public class ActiveListDetailsActivity extends AppCompatActivity {
     public static Button dateUpdate;
     public static Button timeUpdate;
 
-    public static Button dateUpdateFinish;
+    public static Button dateUpdateFinish,delete;
     public static Button timeUpdateFinish;
+    public  int flag=-1;
+    public static boolean check;
+    public String list="";
+
+
+    private DatabaseReference mEventInfo;
+    private FirebaseDatabase mFireBaseDataBase;
 
 
 
@@ -86,7 +95,7 @@ public class ActiveListDetailsActivity extends AppCompatActivity {
 
     private static long time,timeFinish;
     String name="",dAndT="",loc="",owner="",info="",usercreate="",id="",dAndTF="";
-    public static String contact="";
+    public static String contact="",date="";
     public  static String[] address = new String[1];
 
     private FirebaseDatabase bookmarkDatabase;
@@ -106,6 +115,10 @@ public class ActiveListDetailsActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.event_list);
+
+        mFireBaseDataBase=FirebaseDatabase.getInstance();
+        mEventInfo=mFireBaseDataBase.getReference().child("Events");
+
 
 
 
@@ -189,6 +202,7 @@ public class ActiveListDetailsActivity extends AppCompatActivity {
         usercreate = i.getStringExtra(DisplayEventList.event_userid);
         contact = i.getStringExtra(DisplayEventList.event_contact);
         timeFinish = i.getLongExtra(DisplayEventList.event_time2,0);
+        date=i.getStringExtra(DisplayEventList.date);
 
 
         address[0]=contact;
@@ -302,13 +316,70 @@ public class ActiveListDetailsActivity extends AppCompatActivity {
         dateUpdateFinish=(Button)dialogview.findViewById(R.id.datepickerfinishUpdate);
         timeUpdateFinish =(Button)dialogview.findViewById(R.id.timepickerfinishUpdate);
 
+        delete=(Button)dialogview.findViewById(R.id.delete_event);
+
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                mEventInfo.child(eventid).removeValue();
+                Toast.makeText(getApplicationContext(),"Event has been Deleted!",Toast.LENGTH_LONG).show();
+                finish();
+                final DatabaseReference mdatabaseReference= FirebaseDatabase.getInstance().getReference("Bookmark");
+
+
+                mdatabaseReference.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        for(DataSnapshot eventsnap: dataSnapshot.getChildren())
+                        {
+
+                            String userPushId=eventsnap.getKey();
+
+                            final DatabaseReference userIdReference=mdatabaseReference.child(userPushId);
+
+
+                            userIdReference.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                    for(DataSnapshot eventsnap: dataSnapshot.getChildren()) {
+
+                                        EventInfo event1 = eventsnap.getValue(EventInfo.class);
+                                        if (event1.getId().equals(id)) {
+                                            userIdReference.child(eventsnap.getKey()).removeValue();
+                                            break;
+                                        }
+                                    }
+
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+
+
+
+                        }
+
+                    }
+
+
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
 
 
 
 
-
-
-        //time and date to be done
+            }
+        });
 
         final Button button = (Button)dialogview.findViewById(R.id.sendButtonUpdate);
         dialog.setTitle("Update Details of the Event");
@@ -326,6 +397,7 @@ public class ActiveListDetailsActivity extends AppCompatActivity {
                 String newcontact = editcontact.getText().toString().trim();
 
                 String dateString=day+"/"+month+"/"+year+" "+hour+":"+min;
+                String newdate=day+"/"+month+"/"+year;
 
                 long eventDateLong=0;
 
@@ -342,7 +414,7 @@ public class ActiveListDetailsActivity extends AppCompatActivity {
 
 
 
-                String dateStringF=dayF+"/"+monthF+"/"+yearF+" "+hourF+":"+minF;
+                String dateStringF=dayF+"/"+monthF+"/"+yearF+" "+(hour)+":"+minF;
 
                 long eventDateLongF=0;
 
@@ -366,7 +438,7 @@ public class ActiveListDetailsActivity extends AppCompatActivity {
                 } else {
 
 
-                    updatedetails(eventid, newname, newloc, newown, newinfo, eventDateLong, userid, newcontact, eventDateLongF);
+                    updatedetails(eventid, newname, newloc, newown, newinfo, eventDateLong, userid, newcontact, eventDateLongF,newdate);
                     alertDialog.dismiss();
                 }
 
@@ -398,11 +470,11 @@ public class ActiveListDetailsActivity extends AppCompatActivity {
 
 
 
-    private boolean updatedetails(final String id,String name,String loc,String owner,String info,long time,String user,String contact,long endTime)
+    private boolean updatedetails(final String id,String name,String loc,String owner,String info,long time,String user,String contact,long endTime,String newdate)
     {
         DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReference("Events").child(id);
        final DatabaseReference mdatabaseReference= FirebaseDatabase.getInstance().getReference("Bookmark");
-        final EventInfo event = new EventInfo(name,time,loc,info,owner,user,id,contact,endTime);
+        final EventInfo event = new EventInfo(name,time,loc,info,owner,user,id,contact,endTime,newdate);
 
         mdatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -565,55 +637,130 @@ public class ActiveListDetailsActivity extends AppCompatActivity {
 
 
 
-    public void bookmarkEvent(View view){
+    public void bookmarkEvent(final View view){
 
         boolean checked= ((CheckBox)view).isChecked();
 
 
-        if(checked)
-        {
 
-            ((CheckBox)view).setChecked(true);
+        if(checked) {
 
-            FirebaseAuth mAuth=FirebaseAuth.getInstance();
-            FirebaseUser currUser=mAuth.getCurrentUser();
+             check=true;
+            ((CheckBox) view).setChecked(true);
 
-            String currUid=currUser.getUid();
+            FirebaseAuth mAuth = FirebaseAuth.getInstance();
+            FirebaseUser currUser = mAuth.getCurrentUser();
 
-            DatabaseReference bookmarkUserReference=bookmarkDatabaseReference.child(currUid);
+            String currUid = currUser.getUid();
 
+          final  DatabaseReference bookmarkUserReference = bookmarkDatabaseReference.child(currUid);
 
+            flag = 0;
+           list="";
 
-            EventInfo obj=new EventInfo(name,time,loc,info,owner,usercreate,id,contact,timeFinish);
-            //  String temp2 = obj.getId();
-           // DatabaseReference bookmarkUserReference=bookmarkDatabaseReference.child(currUid).child(temp2);
+           final EventInfo obj = new EventInfo(name, time, loc, info, owner, usercreate, id, contact, timeFinish,date);
 
-            bookmarkUserReference.push().setValue(obj);
-
-
-
-            Intent intent=new Intent(this,Notification_morning.class);
-
-            intent.putExtra("name",name);
-            intent.putExtra("loc",loc);
-            intent.putExtra("id",id);
-            intent.putExtra("time",time);
-            intent.putExtra("owner",owner);
-            intent.putExtra("about",info);
+            check=true;
+            final AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
 
 
 
 
+            bookmarkUserReference.addListenerForSingleValueEvent(new ValueEventListener() {
+
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    String dummy="";
+
+                    for (DataSnapshot eventsnap: dataSnapshot.getChildren())  {
+
+                        EventInfo event=eventsnap.getValue(EventInfo.class);
 
 
-            AlarmManager manager=(AlarmManager)getSystemService(Activity.ALARM_SERVICE);
-            PendingIntent pendingIntent=PendingIntent.getService(this,
-                    (int)System.currentTimeMillis(),intent, 0);
+                        if(event.getDate().equals(date) ) {
+
+                            flag++;
+                            list=list+"\n"+flag+". "+event.getName();
+                            check=false;
+                            dummy=event.getDate();
+
+                            //break;
+
+                        }
+
+                }
+
+                    if (check==false) {
+
+                        myAlert.setMessage("You have bookmarked the following events taking place on the same date.Please review your timings before you proceed!"+"\n"+list)
+                                .setNegativeButton("Go Back",null)
+                                .setPositiveButton("Add the Event", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
 
 
+                                        ((CheckBox) view).setChecked(true);
+                                        bookmarkUserReference.push().setValue(obj);
 
 
-            manager.setExact(AlarmManager.RTC_WAKEUP,time-1800000,pendingIntent);
+                                        Intent intent = new Intent(getApplicationContext(), Notification_morning.class);
+
+                                        intent.putExtra("name", name);
+                                        intent.putExtra("loc", loc);
+                                        intent.putExtra("id", id);
+                                        intent.putExtra("time", time);
+                                        intent.putExtra("owner", owner);
+                                        intent.putExtra("about", info);
+
+
+                                        AlarmManager manager = (AlarmManager) getSystemService(Activity.ALARM_SERVICE);
+                                        PendingIntent pendingIntent = PendingIntent.getService(getApplicationContext(),
+                                                (int) System.currentTimeMillis(), intent, 0);
+
+
+                                        manager.setExact(AlarmManager.RTC_WAKEUP, time - 1800000, pendingIntent);
+
+                                    }
+                                })
+                                .create();
+                        myAlert.show();
+
+                    }
+                    else
+
+                    {
+                        bookmarkUserReference.push().setValue(obj);
+
+
+                        Intent intent = new Intent(getApplicationContext(), Notification_morning.class);
+
+                        intent.putExtra("name", name);
+                        intent.putExtra("loc", loc);
+                        intent.putExtra("id", id);
+                        intent.putExtra("time", time);
+                        intent.putExtra("owner", owner);
+                        intent.putExtra("about", info);
+
+
+                        AlarmManager manager = (AlarmManager) getSystemService(Activity.ALARM_SERVICE);
+                        PendingIntent pendingIntent = PendingIntent.getService(getApplicationContext(),
+                                (int) System.currentTimeMillis(), intent, 0);
+
+
+                        manager.setExact(AlarmManager.RTC_WAKEUP, time - 1800000, pendingIntent);
+
+
+                    }
+
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
 
 
         }
