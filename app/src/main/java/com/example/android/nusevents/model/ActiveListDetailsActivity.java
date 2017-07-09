@@ -693,7 +693,17 @@ public class ActiveListDetailsActivity extends AppCompatActivity {
                     if (check==false) {
 
                         myAlert.setMessage("You have bookmarked the following events taking place on the same date.Please review your timings before you proceed!"+"\n"+list)
-                                .setNegativeButton("Go Back",null)
+                                .setNegativeButton("Go Back",new DialogInterface.OnClickListener(){
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                        ((CheckBox) view).setChecked(false);
+
+
+                                    }
+                                    }
+
+                                )
                                 .setPositiveButton("Add the Event", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {

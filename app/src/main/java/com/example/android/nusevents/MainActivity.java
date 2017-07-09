@@ -71,6 +71,7 @@ private boolean checkAdmin = false;
         userDatabase = FirebaseDatabase.getInstance();
         userDatabaseReference = userDatabase.getReference().child("User");
 
+              FirebaseAuth mAuth=FirebaseAuth.getInstance();
 
         FirebaseUser currUser= mAuth.getCurrentUser();
         currUid=currUser.getUid();

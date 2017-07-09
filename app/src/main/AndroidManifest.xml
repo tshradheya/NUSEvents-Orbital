@@ -38,7 +38,15 @@
 
         <activity
             android:name=".DisplayEventList"
-            android:label="Current Happenings!" />
+            android:label="Current Happenings!" >
+
+
+        <meta-data
+            android:name="android.app.searchable"
+            android:resource="@xml/searchable">
+        </meta-data>
+
+        </activity>
 
 
         <activity android:name=".BookmarkList" />

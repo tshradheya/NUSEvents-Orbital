@@ -7,10 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Filter;
 import android.widget.TextView;
 
 import com.example.android.nusevents.model.EventInfo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,12 +24,24 @@ public class EventsList extends ArrayAdapter<EventInfo> {
     private Activity context;
     private List<EventInfo> EventList;
 
+    private FriendFilter friendFilter;
+
+
+    private List<EventInfo> filteredList;
+
+
     public EventsList(Activity context,List<EventInfo> EventList)
 
     {
         super(context,R.layout.events_display,EventList);
         this.context=context;
         this.EventList=EventList;
+
+        this.filteredList=EventList;
+
+
+        getFilter();
+
     }
 
     @NonNull
@@ -40,9 +54,79 @@ public class EventsList extends ArrayAdapter<EventInfo> {
         TextView textViewName = (TextView)listViewItem.findViewById(R.id.event);
        // return super.getView(position, convertView, parent);
 
-        EventInfo events = EventList.get(position);
 
-        textViewName.setText(events.getName());
-        return listViewItem;
+
+        if(position<filteredList.size()) {
+
+
+            EventInfo events = filteredList.get(position);
+
+            textViewName.setText(events.getName());
+            return listViewItem;
+        }
+        else
+        {
+            listViewItem.setVisibility(View.GONE);
+            return listViewItem;
+        }
+
+
     }
+
+
+    @Override
+    public Filter getFilter() {
+        if (friendFilter == null) {
+            friendFilter = new FriendFilter();
+        }
+
+        return friendFilter;
+    }
+
+
+    /**
+     * Custom filter for friend list
+     * Filter content in friend list according to the search text
+     */
+    private class FriendFilter extends Filter {
+
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            FilterResults filterResults = new FilterResults();
+            if (constraint!=null && constraint.length()>0) {
+                ArrayList<EventInfo> tempList = new ArrayList<EventInfo>();
+
+                // search content in friend list
+                for (EventInfo obj : EventList) {
+                    if (obj.getName().toLowerCase().contains(constraint.toString().toLowerCase())) {
+                        tempList.add(obj);
+                    }
+                }
+
+                filterResults.count = tempList.size();
+                filterResults.values = tempList;
+            } else {
+                filterResults.count = EventList.size();
+                filterResults.values = EventList;
+            }
+
+            return filterResults;
+        }
+
+        /**
+         * Notify about filtered list to ui
+         * @param constraint text
+         * @param results filtered result
+         */
+        @SuppressWarnings("unchecked")
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            filteredList = (List<EventInfo>) results.values;
+            notifyDataSetChanged();
+        }
+    }
+
+
+
+
 }
