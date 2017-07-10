@@ -10,10 +10,15 @@ import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.TextView;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import com.example.android.nusevents.model.EventInfo;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 /**
  * Created by ronaklakhotia on 19/06/17.
@@ -52,16 +57,29 @@ public class EventsList extends ArrayAdapter<EventInfo> {
 
         View listViewItem = inflater.inflate(R.layout.events_display,null,true);
         TextView textViewName = (TextView)listViewItem.findViewById(R.id.event);
+        TextView textViewLoc = (TextView)listViewItem.findViewById(R.id.eventloc);
+        TextView textViewDate = (TextView)listViewItem.findViewById(R.id.eventdat);
+        TextView textViewTime = (TextView)listViewItem.findViewById(R.id.eventtime);
+
        // return super.getView(position, convertView, parent);
 
+        DateFormat sdf = new SimpleDateFormat("HH:mm");
 
-
+        String time="";
         if(position<filteredList.size()) {
 
 
             EventInfo events = filteredList.get(position);
+          //  Date eventDate = sdf.parse(events.getTime());
+            Date netDate = (new Date(events.getTime()));
+            time = sdf.format(netDate);
 
             textViewName.setText(events.getName());
+            textViewLoc.setText(events.getLocation());
+            textViewDate.setText(events.getDate());
+            textViewTime.setText(time);
+
+
             return listViewItem;
         }
         else

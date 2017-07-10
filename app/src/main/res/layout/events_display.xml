@@ -1,20 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
 
 
-    <TextView
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+        >
+
+    <LinearLayout
+    android:orientation="vertical"
+        android:layout_width="match_parent"
+          android:layout_height="match_parent">
+
+
+
+        <TextView
+
+
+            android:textAllCaps="true"
         android:id="@+id/event"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="20dp"
+        android:padding="2dp"
         android:textStyle="bold"
-        android:textSize="20sp"
+        android:textSize="17sp"
+            android:layout_gravity="center"
         android:textColor="@color/colorPrimaryDark"
         android:textAlignment="center"
         />
 
 
-</LinearLayout>
+
+
+
+        <TextView
+
+            android:textAllCaps="true"
+
+            android:id="@+id/eventloc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="2dp"
+            android:textStyle="bold"
+            android:textSize="12sp"
+            android:textColor="@color/colorPrimaryDark"
+            android:textAlignment="center"
+            />
+
+
+
+
+            <TextView
+
+
+                android:textAllCaps="true"
+                android:id="@+id/eventdat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="2dp"
+                android:textStyle="bold"
+                android:textSize="12sp"
+                android:textColor="@color/colorPrimaryDark"
+                android:textAlignment="center"
+                />
+
+
+        <TextView
+
+
+            android:textAllCaps="true"
+            android:id="@+id/eventtime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="2dp"
+            android:textStyle="bold"
+            android:textSize="12sp"
+            android:textColor="@color/colorPrimaryDark"
+            android:textAlignment="center"
+            />
+
+
+
+
+
+    </LinearLayout>
+
+</RelativeLayout>
