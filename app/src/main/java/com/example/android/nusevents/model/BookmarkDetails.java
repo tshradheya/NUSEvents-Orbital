@@ -6,9 +6,12 @@ import android.provider.CalendarContract;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ListView;
+import android.widget.ShareActionProvider;
 import android.widget.TextView;
 
 import com.example.android.nusevents.BookmarkList;
@@ -28,6 +31,9 @@ import java.util.Date;
 
 public class BookmarkDetails extends AppCompatActivity {
 
+
+
+    private ShareActionProvider mShareActionProvider;
     private ListView mListView;
     private TextView mTextViewListName, mTextViewListOwner,getmTextViewContact;
     private TextView mTextViewInfo,getmTextViewTime,getmTextViewLocation;
@@ -182,6 +188,39 @@ public class BookmarkDetails extends AppCompatActivity {
     }
 
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate menu resource file.
+        getMenuInflater().inflate(R.menu.share_menu, menu);
+
+        // Locate MenuItem with ShareActionProvider
+        MenuItem item = menu.findItem(R.id.menu_item_share);
+
+        // Fetch and store ShareActionProvider
+       // mShareActionProvider = (ShareActionProvider) item.getActionProvider();
+
+        // Return true to display menu
+        return true;
+    }
+
+
+
+    @Override
+    public boolean onOptionsItemSelected (MenuItem item){
+        if(item.getItemId()==R.id.menu_item_share)
+        {
+            Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+            sharingIntent.setType("text/plain");
+            String shareBody = "Hey guys, I am attending the " +name+" event on "+dAndT+" . Join me at "+loc ;
+            //sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Join me at "+loc);
+            sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+            startActivity(Intent.createChooser(sharingIntent, "Share via"));
+        }
+
+
+        return true;
+
+    }
 
 
 
