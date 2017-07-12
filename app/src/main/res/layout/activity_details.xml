@@ -50,7 +50,21 @@
         android:id="@+id/location"
         android:inputType="textCapWords"/>
 
-        <Button
+    <ImageButton
+        android:id="@+id/photoPickerButton"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@android:drawable/ic_menu_gallery"
+        android:contentDescription="Add Event Poster"
+        android:clickable="true"
+
+        />
+
+
+    <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Event Start Date"

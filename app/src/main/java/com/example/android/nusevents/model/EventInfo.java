@@ -15,6 +15,7 @@ public class EventInfo {
     private String contact;
     private long finishTime;
     private String date;
+    private String photoUri;
     //private String
 
 public EventInfo()
@@ -30,7 +31,7 @@ public EventInfo()
     finishTime=0;
     date="";
 }
-public EventInfo(String a,long b,String c,String d,String e,String f,String id,String contact,long z,String dd)
+public EventInfo(String a,long b,String c,String d,String e,String f,String id,String contact,long z,String dd,String u)
 {
     name=a;
     time=b;
@@ -42,6 +43,7 @@ public EventInfo(String a,long b,String c,String d,String e,String f,String id,S
     this.contact=contact;
     finishTime=z;
     date=dd;
+    photoUri=u;
 }
 public String getName()
 {
@@ -80,6 +82,10 @@ public String getUserCreated(){return userCreated;}
     public String getDate()
     {
         return date;
+    }
+
+    public String getPhotoUri(){
+        return photoUri;
     }
 
 }

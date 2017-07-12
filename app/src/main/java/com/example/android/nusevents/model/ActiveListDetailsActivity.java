@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,9 +54,12 @@ import static android.R.attr.id;
 import static android.R.attr.key;
 import static android.R.attr.taskAffinity;
 import static android.R.id.edit;
+import static android.R.id.message;
 import static com.example.android.nusevents.Details.dateButton;
 import static com.example.android.nusevents.Details.timeButton;
 import static com.example.android.nusevents.R.id.event;
+import com.bumptech.glide.Glide;
+
 
 public class ActiveListDetailsActivity extends AppCompatActivity {
 
@@ -75,6 +79,8 @@ public class ActiveListDetailsActivity extends AppCompatActivity {
     public  int flag=-1;
     public static boolean check;
     public String list="";
+
+    public String poster="";
 
 
     private DatabaseReference mEventInfo;
@@ -115,6 +121,11 @@ public class ActiveListDetailsActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.event_list);
+
+        ImageView photoImageView = (ImageView) findViewById(R.id.photoImageView);
+
+
+
 
         mFireBaseDataBase=FirebaseDatabase.getInstance();
         mEventInfo=mFireBaseDataBase.getReference().child("Events");
@@ -203,6 +214,7 @@ public class ActiveListDetailsActivity extends AppCompatActivity {
         contact = i.getStringExtra(DisplayEventList.event_contact);
         timeFinish = i.getLongExtra(DisplayEventList.event_time2,0);
         date=i.getStringExtra(DisplayEventList.date);
+        poster=i.getStringExtra("image");
 
 
         address[0]=contact;
@@ -235,9 +247,15 @@ public class ActiveListDetailsActivity extends AppCompatActivity {
         }
 
 
-
+if(poster.equals("")){
+    photoImageView.setVisibility(View.GONE);
+}
 
         // mTextViewListName.setText(name);
+        Glide.with(photoImageView.getContext())
+                .load(poster)
+                .into(photoImageView);
+
         setTitle(name);
         mTextViewListOwner.setText(owner);
         mTextViewInfo.setText(info);
@@ -438,7 +456,7 @@ public class ActiveListDetailsActivity extends AppCompatActivity {
                 } else {
 
 
-                    updatedetails(eventid, newname, newloc, newown, newinfo, eventDateLong, userid, newcontact, eventDateLongF,newdate);
+                    updatedetails(eventid, newname, newloc, newown, newinfo, eventDateLong, userid, newcontact, eventDateLongF,newdate,poster);
                     alertDialog.dismiss();
                 }
 
@@ -470,11 +488,11 @@ public class ActiveListDetailsActivity extends AppCompatActivity {
 
 
 
-    private boolean updatedetails(final String id,String name,String loc,String owner,String info,long time,String user,String contact,long endTime,String newdate)
+    private boolean updatedetails(final String id,String name,String loc,String owner,String info,long time,String user,String contact,long endTime,String newdate,String poster)
     {
         DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReference("Events").child(id);
        final DatabaseReference mdatabaseReference= FirebaseDatabase.getInstance().getReference("Bookmark");
-        final EventInfo event = new EventInfo(name,time,loc,info,owner,user,id,contact,endTime,newdate);
+        final EventInfo event = new EventInfo(name,time,loc,info,owner,user,id,contact,endTime,newdate,poster);
 
         mdatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -658,7 +676,7 @@ public class ActiveListDetailsActivity extends AppCompatActivity {
             flag = 0;
            list="";
 
-           final EventInfo obj = new EventInfo(name, time, loc, info, owner, usercreate, id, contact, timeFinish,date);
+           final EventInfo obj = new EventInfo(name, time, loc, info, owner, usercreate, id, contact, timeFinish,date,poster);
 
             check=true;
             final AlertDialog.Builder myAlert = new AlertDialog.Builder(this);

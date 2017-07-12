@@ -118,6 +118,7 @@ public class DisplayEventList extends AppCompatActivity implements SearchView.On
                 i.putExtra(event_contact,mevents.getContact());
                 i.putExtra(event_time2,mevents.getFinishTime());
                 i.putExtra(date,mevents.getDate());
+                i.putExtra("image",mevents.getPhotoUri());
 
                 startActivity(i);
             }
