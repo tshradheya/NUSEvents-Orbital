@@ -15,5 +15,10 @@
         android:title="About Us"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/feedback"
+        android:title="Give us a feedback!"
+        app:showAsAction="never" />
+
 
 </menu>

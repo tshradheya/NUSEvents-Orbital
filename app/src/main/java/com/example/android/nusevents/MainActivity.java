@@ -4,6 +4,7 @@ import android.content.Intent;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -254,6 +255,13 @@ private boolean checkAdmin = false;
                 startActivity(intent);
 
                 return true;
+            }
+            if(item.getItemId()==R.id.feedback)
+            {
+                String url = "https://docs.google.com/forms/d/e/1FAIpQLSec1KkwovKhUJ4XzB-uQx7agIGJXh6_RJSloSulDq2jmXAO2g/viewform?usp=sf_link#responses";
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
             }
             return true;
         }
