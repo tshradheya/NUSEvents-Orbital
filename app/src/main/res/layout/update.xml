@@ -108,13 +108,12 @@
 
            -->
     <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Delete this Event"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center"
 
         android:id="@+id/delete_event"
-        android:background="@color/authui_colorPrimaryDark"
-        android:textColor="@color/colorPrimary"
+        android:background="@drawable/delete"
         android:layout_marginBottom="8dp"
 
         />
