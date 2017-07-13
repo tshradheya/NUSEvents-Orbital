@@ -152,7 +152,9 @@
         android:textColor="#000000"
         android:textSize="25sp"
         android:id="@+id/about_location_event"
-        android:paddingBottom="16dp"/>
+        android:paddingBottom="16dp"
+        android:onClick="locationShow"
+        />
 
 
 
