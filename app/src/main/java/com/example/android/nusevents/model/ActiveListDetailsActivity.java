@@ -57,6 +57,7 @@ import static android.R.id.edit;
 import static android.R.id.message;
 import static com.example.android.nusevents.Details.dateButton;
 import static com.example.android.nusevents.Details.timeButton;
+import static com.example.android.nusevents.EmailPasswordActivity.mAuth;
 import static com.example.android.nusevents.R.id.event;
 import com.bumptech.glide.Glide;
 
@@ -65,7 +66,8 @@ public class ActiveListDetailsActivity extends AppCompatActivity {
 
     private ListView mListView;
     private TextView mTextViewListName, mTextViewListOwner;
-    private TextView mTextViewInfo,getmTextViewTime,getmTextViewLocation,getmTextViewListContact;
+    private TextView mTextViewInfo,getmTextViewTime,getmTextViewLocation,getmTextViewListContact,getmTextViewNumber;
+
 
     private TextView mEndTime;
 
@@ -103,17 +105,19 @@ public class ActiveListDetailsActivity extends AppCompatActivity {
     String name="",dAndT="",loc="",owner="",info="",usercreate="",id="",dAndTF="";
     public static String contact="",date="";
     public  static String[] address = new String[1];
+   // public static int count=0;
 
     private FirebaseDatabase bookmarkDatabase;
     private DatabaseReference bookmarkDatabaseReference;
 
-
+    public  String count;
 
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
 
 
 
@@ -133,73 +137,13 @@ public class ActiveListDetailsActivity extends AppCompatActivity {
 
 
 
-        //dateUpdate=(Button)dialogview.findViewById(R.id.datepickerUpdate);
-        //timeUpdate =(Button)dialogview.findViewById(R.id.timepickerUpdate);
-
-        //mListView = (ListView) findViewById(R.id.main_list);
-        //mTextViewListName = (TextView) findViewById(R.id.about);
         mTextViewListOwner = (TextView) findViewById(R.id.organize_by);
         mTextViewInfo = (TextView) findViewById(R.id.about_the_event);
         getmTextViewTime = (TextView) findViewById(R.id.about_time);
         getmTextViewLocation = (TextView) findViewById(R.id.about_loc_event);
         getmTextViewListContact=(TextView)findViewById(R.id.contact_details_admin);
         mEndTime = (TextView) findViewById(R.id.about_timeEND);
-
-
-
-
-        mBookmark=(CheckBox)findViewById(R.id.checkBox);
-
-        bookmarkDatabase=FirebaseDatabase.getInstance();
-        bookmarkDatabaseReference=bookmarkDatabase.getReference().child("Bookmark");
-
-        FirebaseAuth mAuth=FirebaseAuth.getInstance();
-        FirebaseUser currUser=mAuth.getCurrentUser();
-
-        String currid=currUser.getUid();
-
-
-        DatabaseReference bookmarkUserReference=bookmarkDatabaseReference.child(currid);
-
-        if(bookmarkUserReference!=null) {
-
-
-            bookmarkUserReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-
-                    for (DataSnapshot eventsnap : dataSnapshot.getChildren()) {
-
-                        EventInfo obj=eventsnap.getValue(EventInfo.class);
-
-                        String temp=obj.getId();
-
-                        if(temp.equals(id))
-                        {
-                            mBookmark.setChecked(true);
-                        }
-
-                    }
-
-
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-        }
-
-        else
-        {
-            mBookmark.setChecked(false);
-        }
-
-
-
-
-
+        getmTextViewNumber=(TextView)findViewById(R.id.number_event);
 
         dAndT="";
 
@@ -215,6 +159,76 @@ public class ActiveListDetailsActivity extends AppCompatActivity {
         timeFinish = i.getLongExtra(DisplayEventList.event_time2,0);
         date=i.getStringExtra(DisplayEventList.date);
         poster=i.getStringExtra("image");
+        count=i.getStringExtra(DisplayEventList.event_count);
+
+
+
+
+
+
+        mBookmark=(CheckBox)findViewById(R.id.checkBox);
+
+        bookmarkDatabase=FirebaseDatabase.getInstance();
+        bookmarkDatabaseReference=bookmarkDatabase.getReference().child("Bookmark");
+
+        FirebaseAuth mAuth=FirebaseAuth.getInstance();
+        FirebaseUser currUser=mAuth.getCurrentUser();
+
+        String currid=currUser.getUid();
+
+
+        final DatabaseReference bookmarkUserReference=bookmarkDatabaseReference.child(currid);
+
+        if(bookmarkUserReference!=null) {
+
+
+
+
+
+            bookmarkUserReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    for (DataSnapshot eventsnap : dataSnapshot.getChildren()) {
+
+                        EventInfo obj=eventsnap.getValue(EventInfo.class);
+
+                        String temp=obj.getId();
+
+
+
+
+                        if(temp.equals(id))
+                        {
+
+                            mBookmark.setChecked(true);
+                        }
+
+
+                    }
+
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+
+        else
+        {
+
+            mBookmark.setChecked(false);
+        }
+
+
+
+
+
+
+
 
 
         address[0]=contact;
@@ -270,6 +284,9 @@ if(poster.equals("")){
                 .load(poster)
                 .into(photoImageView);
 
+
+
+
         setTitle(name);
         mTextViewListOwner.setText(name+"\nOrganized by "+owner);
         mTextViewInfo.setText(info);
@@ -277,6 +294,7 @@ if(poster.equals("")){
         getmTextViewTime.setText(dAndT);
         getmTextViewListContact.setText(contact);
         mEndTime.setText(dAndTF);
+        getmTextViewNumber.setText(count);
 
         final Button button = (Button)findViewById(R.id.detaillist);
 
@@ -315,6 +333,9 @@ if(poster.equals("")){
         });
     }
 
+
+
+
     private void showUpdateDialog(final String eventid,  final String userid)
 
     {
@@ -327,14 +348,13 @@ if(poster.equals("")){
 
         dialog.setView(dialogview);
 
-
+        final AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
 
         final EditText editTextname = (EditText)dialogview.findViewById(R.id.event_nameUpdate);
         final EditText editTextinfo = (EditText)dialogview.findViewById(R.id.about_eventUpdate);
         final EditText editTextloc = (EditText)dialogview.findViewById(R.id.locationUpdate);
         final EditText editTextown = (EditText)dialogview.findViewById(R.id.organizeUpdate);
         final EditText editcontact = (EditText)dialogview.findViewById(R.id.contactUpdate) ;
-
 
         editTextname.setText(name);
         editTextinfo.setText(info);
@@ -354,58 +374,80 @@ if(poster.equals("")){
             @Override
             public void onClick(View v) {
 
-                mEventInfo.child(eventid).removeValue();
-                Toast.makeText(getApplicationContext(),"Event has been Deleted!",Toast.LENGTH_LONG).show();
-                finish();
-                final DatabaseReference mdatabaseReference= FirebaseDatabase.getInstance().getReference("Bookmark");
+
+                myAlert.setMessage("Are you sure you want to delete the Event?")
+                        .setNegativeButton("No",null)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                               mEventInfo.child(eventid).removeValue();
+                                Toast.makeText(getApplicationContext(),"Event has been Deleted!",Toast.LENGTH_LONG).show();
+                                finish();
+                                final DatabaseReference mdatabaseReference= FirebaseDatabase.getInstance().getReference("Bookmark");
 
 
-                mdatabaseReference.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                mdatabaseReference.addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
 
-                        for(DataSnapshot eventsnap: dataSnapshot.getChildren())
-                        {
+                                        for(DataSnapshot eventsnap: dataSnapshot.getChildren())
+                                        {
 
-                            String userPushId=eventsnap.getKey();
+                                            String userPushId=eventsnap.getKey();
 
-                            final DatabaseReference userIdReference=mdatabaseReference.child(userPushId);
+                                            final DatabaseReference userIdReference=mdatabaseReference.child(userPushId);
 
 
-                            userIdReference.addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                            userIdReference.addValueEventListener(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(DataSnapshot dataSnapshot) {
 
-                                    for(DataSnapshot eventsnap: dataSnapshot.getChildren()) {
+                                                    for(DataSnapshot eventsnap: dataSnapshot.getChildren()) {
 
-                                        EventInfo event1 = eventsnap.getValue(EventInfo.class);
-                                        if (event1.getId().equals(id)) {
-                                            userIdReference.child(eventsnap.getKey()).removeValue();
-                                            break;
+                                                        EventInfo event1 = eventsnap.getValue(EventInfo.class);
+                                                        if (event1.getId().equals(id)) {
+
+
+
+                                                            userIdReference.child(eventsnap.getKey()).removeValue();
+                                                            break;
+                                                        }
+                                                    }
+
+                                                }
+
+                                                @Override
+                                                public void onCancelled(DatabaseError databaseError) {
+
+                                                }
+                                            });
+
+
+
                                         }
+
                                     }
 
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-
-                                }
-                            });
 
 
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
 
-                        }
-
-                    }
+                                    }
+                                });
 
 
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                                dialog.dismiss();
 
-                    }
-                });
+
+
+                            }
+                        })
+                        .create();
+                myAlert.show();
+
 
 
 
@@ -470,7 +512,7 @@ if(poster.equals("")){
                 } else {
 
 
-                    updatedetails(eventid, newname, newloc, newown, newinfo, eventDateLong, userid, newcontact, eventDateLongF,newdate,poster);
+                    updatedetails(eventid, newname, newloc, newown, newinfo, eventDateLong, userid, newcontact, eventDateLongF,newdate,poster,count);
                     alertDialog.dismiss();
                 }
 
@@ -502,11 +544,11 @@ if(poster.equals("")){
 
 
 
-    private boolean updatedetails(final String id,String name,String loc,String owner,String info,long time,String user,String contact,long endTime,String newdate,String poster)
+    private boolean updatedetails(final String id,String name,String loc,String owner,String info,long time,String user,String contact,long endTime,String newdate,String poster,String count)
     {
         DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReference("Events").child(id);
        final DatabaseReference mdatabaseReference= FirebaseDatabase.getInstance().getReference("Bookmark");
-        final EventInfo event = new EventInfo(name,time,loc,info,owner,user,id,contact,endTime,newdate,poster);
+        final EventInfo event = new EventInfo(name,time,loc,info,owner,user,id,contact,endTime,newdate,poster,count);
 
         mdatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -672,6 +714,7 @@ if(poster.equals("")){
     public void bookmarkEvent(final View view){
 
         boolean checked= ((CheckBox)view).isChecked();
+        final DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReference("Events").child(id);
 
 
 
@@ -679,6 +722,8 @@ if(poster.equals("")){
 
              check=true;
             ((CheckBox) view).setChecked(true);
+
+
 
             FirebaseAuth mAuth = FirebaseAuth.getInstance();
             FirebaseUser currUser = mAuth.getCurrentUser();
@@ -690,10 +735,11 @@ if(poster.equals("")){
             flag = 0;
            list="";
 
-           final EventInfo obj = new EventInfo(name, time, loc, info, owner, usercreate, id, contact, timeFinish,date,poster);
+           final EventInfo obj = new EventInfo(name, time, loc, info, owner, usercreate, id, contact, timeFinish,date,poster,count);
 
             check=true;
             final AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
+            final AlertDialog.Builder myAlert1 = new AlertDialog.Builder(this);
 
 
 
@@ -740,9 +786,16 @@ if(poster.equals("")){
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
 
+                                        int r=Integer.valueOf(count);
+                                        r++;
+                                        count=""+r;
+                                        final EventInfo obj1 = new EventInfo(name, time, loc, info, owner, usercreate, id, contact, timeFinish,date,poster,count);
 
                                         ((CheckBox) view).setChecked(true);
-                                        bookmarkUserReference.push().setValue(obj);
+                                        bookmarkUserReference.push().setValue(obj1);
+                                        databaseReference.setValue(obj1);
+
+                                        getmTextViewNumber.setText(count);
 
 
                                         Intent intent = new Intent(getApplicationContext(), Notification_morning.class);
@@ -771,7 +824,30 @@ if(poster.equals("")){
                     else
 
                     {
-                        bookmarkUserReference.push().setValue(obj);
+                        int r=Integer.valueOf(count);
+                        r++;
+                        count=""+r;
+                        final EventInfo obj1 = new EventInfo(name, time, loc, info, owner, usercreate, id, contact, timeFinish,date,poster,count);
+
+                        ((CheckBox) view).setChecked(true);
+                        bookmarkUserReference.push().setValue(obj1);
+                        databaseReference.setValue(obj1);
+
+                        getmTextViewNumber.setText(count);
+
+                        myAlert1.setMessage("Event has been added to your list of Bookmarked events ")
+                                .setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+
+
+
+                                    }
+                                })
+                                .create();
+                        myAlert1.show();
+
 
 
                         Intent intent = new Intent(getApplicationContext(), Notification_morning.class);
@@ -808,7 +884,20 @@ if(poster.equals("")){
         }
         else{
 
-            ((CheckBox)view).setChecked(false);
+            int r=Integer.valueOf(count);
+            r--;
+            count=""+r;
+            final EventInfo obj1 = new EventInfo(name, time, loc, info, owner, usercreate, id, contact, timeFinish,date,poster,count);
+
+            ((CheckBox) view).setChecked(false);
+
+           // bookmarkUserReference.push().setValue(obj1);
+
+            databaseReference.setValue(obj1);
+
+            getmTextViewNumber.setText(count);
+
+
 
             FirebaseAuth mAuth=FirebaseAuth.getInstance();
             FirebaseUser currUser=mAuth.getCurrentUser();

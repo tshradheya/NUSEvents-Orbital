@@ -50,6 +50,7 @@ public class DisplayEventList extends AppCompatActivity implements SearchView.On
     public static final String event_contact="lol1";
     public static final String event_time2="time2";
     public static final String date="date1";
+    public static final String event_count="count";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,6 +120,7 @@ public class DisplayEventList extends AppCompatActivity implements SearchView.On
                 i.putExtra(event_time2,mevents.getFinishTime());
                 i.putExtra(date,mevents.getDate());
                 i.putExtra("image",mevents.getPhotoUri());
+                i.putExtra(event_count,mevents.getCount());
 
                 startActivity(i);
             }

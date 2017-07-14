@@ -36,7 +36,7 @@ public class BookmarkDetails extends AppCompatActivity {
     private ShareActionProvider mShareActionProvider;
     private ListView mListView;
     private TextView mTextViewListName, mTextViewListOwner,getmTextViewContact;
-    private TextView mTextViewInfo,getmTextViewTime,getmTextViewLocation;
+    private TextView mTextViewInfo,getmTextViewTime,getmTextViewLocation,getmTextViewListNum;
 
     private TextView mEndTime;
 
@@ -44,7 +44,7 @@ public class BookmarkDetails extends AppCompatActivity {
     public  static String[] address = new String[1];
 
     long time,timeFinish;
-    String name="",dAndT="",loc="",owner="",info="",usercreate="",id="",dAndTF="";
+    String name="",dAndT="",loc="",owner="",info="",usercreate="",id="",dAndTF="",count="",poster="",date="";
     public static String contact="";
 
     @Override
@@ -59,6 +59,7 @@ public class BookmarkDetails extends AppCompatActivity {
         getmTextViewLocation = (TextView) findViewById(R.id.about_loc_event1);
         mEndTime=(TextView)findViewById(R.id.about_timeEND2);
         getmTextViewContact=(TextView)findViewById(R.id.contact_details_admin1);
+        getmTextViewListNum=(TextView)findViewById(R.id.number_event1);
 
 
 
@@ -76,6 +77,10 @@ public class BookmarkDetails extends AppCompatActivity {
         usercreate = i.getStringExtra(BookmarkList.event_userid);
         contact=i.getStringExtra(BookmarkList.event_contact1);
         timeFinish = i.getLongExtra(BookmarkList.event_time2,0);
+        count=i.getStringExtra(BookmarkList.event_num);
+        date=i.getStringExtra(BookmarkList.date1);
+        poster=i.getStringExtra("image");
+
         address[0]=contact;
 
 
@@ -107,6 +112,7 @@ public class BookmarkDetails extends AppCompatActivity {
         getmTextViewTime.setText(dAndT);
         getmTextViewContact.setText(contact);
         mEndTime.setText(dAndTF);
+        getmTextViewListNum.setText(count);
     }
     public void sendIntent(View view)
     {
@@ -126,6 +132,7 @@ public class BookmarkDetails extends AppCompatActivity {
     public void unBookmark(final View view) {
 
         boolean checked = ((CheckBox) view).isChecked();
+        final DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReference("Events").child(id);
 
         if(checked==false)
         {
@@ -135,6 +142,7 @@ public class BookmarkDetails extends AppCompatActivity {
             FirebaseUser currUser=mAuth.getCurrentUser();
 
             String currUid=currUser.getUid();
+
 
             FirebaseDatabase bookmarkDatabase= FirebaseDatabase.getInstance();
 
@@ -154,7 +162,14 @@ public class BookmarkDetails extends AppCompatActivity {
 
 
                         if(obj.getId().equals(id)) {
+
+                            int r=Integer.valueOf(obj.getCount());
+                            r--;
+                            count=""+r;
+                            final EventInfo obj1 = new EventInfo(name, time, loc, info, owner, usercreate, id, contact, timeFinish,date,poster,count);
                             bookmarkUserReference.child(eventsnap.getKey()).removeValue();
+                            databaseReference.setValue(obj1);
+
                         }
 
                     }

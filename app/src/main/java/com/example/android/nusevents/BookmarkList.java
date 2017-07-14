@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.android.nusevents.DisplayEventList.event_contact;
+import static com.example.android.nusevents.DisplayEventList.event_count;
 import static com.example.android.nusevents.DisplayEventList.event_time2;
 
 public class BookmarkList extends AppCompatActivity {
@@ -38,6 +39,8 @@ public class BookmarkList extends AppCompatActivity {
     public static final String event_info="About";
     public static final String event_userid="lol";
     public static final String event_contact1="lolol";
+    public static final String event_num="num";
+    public static final String date1="date11";
 
     DatabaseReference databaseReferenceEvents;
     @Override
@@ -91,6 +94,10 @@ public class BookmarkList extends AppCompatActivity {
                 i.putExtra(event_userid,mevents.getUserCreated());
                 i.putExtra(event_time2,mevents.getFinishTime());
                 i.putExtra(event_contact1,mevents.getContact());
+                i.putExtra(event_num,mevents.getCount());
+                i.putExtra(date1,mevents.getDate());
+                i.putExtra("image",mevents.getPhotoUri());
+
 
                 startActivity(i);
             }
