@@ -14,9 +14,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,8 +37,10 @@ import com.google.firebase.storage.UploadTask;
 //import static com.example.android.nusevents.MainActivity.displaymessage;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import static android.R.attr.data;
 import static android.R.attr.elegantTextHeight;
@@ -57,8 +62,11 @@ public class Details extends FragmentActivity {
     private FirebaseDatabase mFireBaseDataBase;
     private DatabaseReference mEventInfo;
     private Button mSendButton;
-    EditText nameField, organizeField, eventField, timeField, locField, contactfield;
+    EditText nameField, organizeField, eventField, timeField, locField, contactfield,linkAddress;
     String name, organize, event, time, location, id, contact,date,count;
+
+    String link="";
+    boolean free;
 
     private static final int RC_PHOTO_PICKER = 2;
 
@@ -80,6 +88,8 @@ public class Details extends FragmentActivity {
     public static Button timeButtonFinish;
     public static Button dateButtonFinish;
 
+   private Spinner sp1;
+
 
     private FirebaseStorage mFirebaseStorage;
     private StorageReference mChatPhotosStorageReference;
@@ -89,6 +99,50 @@ public class Details extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
+
+        sp1 = (Spinner) findViewById(R.id.spinner);
+        linkAddress=(EditText)findViewById(R.id.bookTicket);
+
+
+
+
+        final List<String> list = new ArrayList<String>();
+        list.add("Free");
+        list.add("Paid");
+
+
+        ArrayAdapter<String> adp1 = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, list);
+        adp1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sp1.setAdapter(adp1);
+
+
+        sp1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            @Override
+            public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id) {
+                // TODO Auto-generated method stub
+
+                if(list.get(position).equals("Free")){
+                    free=true;
+                    link="";
+                    linkAddress.setVisibility(View.GONE);
+
+                }
+                else
+                {
+                    free=false;
+                    linkAddress.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+                // TODO Auto-generated method stub
+            }
+        });
+
+
 
         verifyStoragePermissions(this);
 
@@ -143,6 +197,7 @@ public class Details extends FragmentActivity {
                 location = locField.getText().toString();
 
 
+                link=linkAddress.getText().toString();
 
 
                 //id = mEventInfo.push().getKey();
@@ -196,7 +251,7 @@ public class Details extends FragmentActivity {
 
                 String currUid = currUser.getUid();
 
-                EventInfo object = new EventInfo(name, eventDateLong, location, event, organize, currUid, id, contact, eventDateLongF,date,pic_uri,count);
+                EventInfo object = new EventInfo(name, eventDateLong, location, event, organize, currUid, id, contact, eventDateLongF,date,pic_uri,count,free,link);
 
                 if (eventDateLong < System.currentTimeMillis() || eventDateLong > eventDateLongF||eventDateLong==0||eventDateLongF==0) {
 
@@ -211,6 +266,7 @@ public class Details extends FragmentActivity {
                     nameField.setText("");
                     organizeField.setText("");
                     eventField.setText("");
+                    linkAddress.setText("");
                     //timeField.setText("");
                     locField.setText("");
                     contactfield.setText("");

@@ -1,14 +1,18 @@
 package com.example.android.nusevents.model;
 
 import android.content.Intent;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
+import android.os.Parcelable;
 import android.provider.CalendarContract;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.ShareActionProvider;
@@ -25,27 +29,34 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import static android.R.id.message;
 
 public class BookmarkDetails extends AppCompatActivity {
 
 
-
     private ShareActionProvider mShareActionProvider;
     private ListView mListView;
-    private TextView mTextViewListName, mTextViewListOwner,getmTextViewContact;
-    private TextView mTextViewInfo,getmTextViewTime,getmTextViewLocation,getmTextViewListNum;
+    private TextView mTextViewListName, mTextViewListOwner, getmTextViewContact;
+    private TextView mTextViewInfo, getmTextViewTime, getmTextViewLocation, getmTextViewListNum;
 
     private TextView mEndTime;
 
-    public static int year,month, day, hour,min;
-    public  static String[] address = new String[1];
+    public static int year, month, day, hour, min;
+    public static String[] address = new String[1];
 
-    long time,timeFinish;
-    String name="",dAndT="",loc="",owner="",info="",usercreate="",id="",dAndTF="",count="",poster="",date="";
-    public static String contact="";
+    long time, timeFinish;
+    String name = "", dAndT = "", loc = "", owner = "", info = "", usercreate = "", id = "", dAndTF = "", count = "", poster = "", date = "";
+    public static String contact = "";
+
+    String link = "";
+    boolean free;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,53 +68,80 @@ public class BookmarkDetails extends AppCompatActivity {
         mTextViewInfo = (TextView) findViewById(R.id.about_the_event1);
         getmTextViewTime = (TextView) findViewById(R.id.about_time1);
         getmTextViewLocation = (TextView) findViewById(R.id.about_loc_event1);
-        mEndTime=(TextView)findViewById(R.id.about_timeEND2);
-        getmTextViewContact=(TextView)findViewById(R.id.contact_details_admin1);
-        getmTextViewListNum=(TextView)findViewById(R.id.number_event1);
+        mEndTime = (TextView) findViewById(R.id.about_timeEND2);
+        getmTextViewContact = (TextView) findViewById(R.id.contact_details_admin1);
+        getmTextViewListNum = (TextView) findViewById(R.id.number_event1);
 
 
-
-
-
-
-        dAndT="";
-        Intent i =getIntent();
+        dAndT = "";
+        Intent i = getIntent();
         id = i.getStringExtra(BookmarkList.event_id);
         name = i.getStringExtra(BookmarkList.event_name);
-        time = i.getLongExtra(BookmarkList.event_time,0);
+        time = i.getLongExtra(BookmarkList.event_time, 0);
         loc = i.getStringExtra(BookmarkList.event_loc);
         owner = i.getStringExtra(BookmarkList.event_own);
         info = i.getStringExtra(BookmarkList.event_info);
         usercreate = i.getStringExtra(BookmarkList.event_userid);
-        contact=i.getStringExtra(BookmarkList.event_contact1);
-        timeFinish = i.getLongExtra(BookmarkList.event_time2,0);
-        count=i.getStringExtra(BookmarkList.event_num);
-        date=i.getStringExtra(BookmarkList.date1);
-        poster=i.getStringExtra("image");
+        contact = i.getStringExtra(BookmarkList.event_contact1);
+        timeFinish = i.getLongExtra(BookmarkList.event_time2, 0);
+        count = i.getStringExtra(BookmarkList.event_num);
+        date = i.getStringExtra(BookmarkList.date1);
+        poster = i.getStringExtra("image");
+        free = i.getBooleanExtra("check1", false);
+        link = i.getStringExtra("check2");
 
-        address[0]=contact;
+
+        address[0] = contact;
 
 
-
-        try{
+        try {
             DateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
             Date netDate = (new Date(time));
-            dAndT=sdf.format(netDate);
-        }
-        catch(Exception ex){
+            dAndT = sdf.format(netDate);
+        } catch (Exception ex) {
 
         }
 
 
-
-        try{
+        try {
             DateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
             Date netDate = (new Date(timeFinish));
-            dAndTF=sdf.format(netDate);
-        }
-        catch(Exception ex){
+            dAndTF = sdf.format(netDate);
+        } catch (Exception ex) {
 
         }
+
+        Button bookT = (Button) findViewById(R.id.free1);
+
+        if (free == true) {
+            bookT.setClickable(false);
+        } else {
+            bookT.setClickable(true);
+            bookT.setText("Buy Tickets");
+        }
+
+
+        bookT.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                if (!free) {
+
+
+                    // Code here executes on main thread after user presses button
+                    String url = "https://";
+
+                    if (link.contains("https://")) {
+                        url = "";
+                    }
+                    url = url + link;
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse(url));
+                    startActivity(i);
+                }
+
+            }
+        });
+
 
         setTitle(name);
         mTextViewListOwner.setText(owner);
@@ -114,8 +152,8 @@ public class BookmarkDetails extends AppCompatActivity {
         mEndTime.setText(dAndTF);
         getmTextViewListNum.setText(count);
     }
-    public void sendIntent(View view)
-    {
+
+    public void sendIntent(View view) {
 
 
         Intent intent = new Intent(Intent.ACTION_SENDTO);
@@ -132,41 +170,41 @@ public class BookmarkDetails extends AppCompatActivity {
     public void unBookmark(final View view) {
 
         boolean checked = ((CheckBox) view).isChecked();
-        final DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReference("Events").child(id);
+        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Events").child(id);
 
-        if(checked==false)
-        {
-            ((CheckBox)view).setChecked(false);
+        if (checked == false) {
+            ((CheckBox) view).setChecked(false);
 
-            FirebaseAuth mAuth=FirebaseAuth.getInstance();
-            FirebaseUser currUser=mAuth.getCurrentUser();
+            FirebaseAuth mAuth = FirebaseAuth.getInstance();
+            FirebaseUser currUser = mAuth.getCurrentUser();
 
-            String currUid=currUser.getUid();
-
-
-            FirebaseDatabase bookmarkDatabase= FirebaseDatabase.getInstance();
-
-            DatabaseReference bookmarkDatabaseReference=bookmarkDatabase.getReference().child("Bookmark");;
+            String currUid = currUser.getUid();
 
 
-            final DatabaseReference bookmarkUserReference=bookmarkDatabaseReference.child(currUid);
+            FirebaseDatabase bookmarkDatabase = FirebaseDatabase.getInstance();
+
+            DatabaseReference bookmarkDatabaseReference = bookmarkDatabase.getReference().child("Bookmark");
+            ;
+
+
+            final DatabaseReference bookmarkUserReference = bookmarkDatabaseReference.child(currUid);
 
 
             bookmarkUserReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
-                    for (DataSnapshot eventsnap: dataSnapshot.getChildren())  {
+                    for (DataSnapshot eventsnap : dataSnapshot.getChildren()) {
 
-                        EventInfo obj=eventsnap.getValue(EventInfo.class);
+                        EventInfo obj = eventsnap.getValue(EventInfo.class);
 
 
-                        if(obj.getId().equals(id)) {
+                        if (obj.getId().equals(id)) {
 
-                            int r=Integer.valueOf(obj.getCount());
+                            int r = Integer.valueOf(obj.getCount());
                             r--;
-                            count=""+r;
-                            final EventInfo obj1 = new EventInfo(name, time, loc, info, owner, usercreate, id, contact, timeFinish,date,poster,count);
+                            count = "" + r;
+                            final EventInfo obj1 = new EventInfo(name, time, loc, info, owner, usercreate, id, contact, timeFinish, date, poster, count, free, link);
                             bookmarkUserReference.child(eventsnap.getKey()).removeValue();
                             databaseReference.setValue(obj1);
 
@@ -189,8 +227,7 @@ public class BookmarkDetails extends AppCompatActivity {
     }
 
 
-    public void addCalendar(View view)
-    {
+    public void addCalendar(View view) {
 
         Intent intent = new Intent(Intent.ACTION_INSERT)
                 .setData(CalendarContract.Events.CONTENT_URI)
@@ -212,32 +249,79 @@ public class BookmarkDetails extends AppCompatActivity {
         MenuItem item = menu.findItem(R.id.menu_item_share);
 
         // Fetch and store ShareActionProvider
-       // mShareActionProvider = (ShareActionProvider) item.getActionProvider();
+        // mShareActionProvider = (ShareActionProvider) item.getActionProvider();
 
         // Return true to display menu
         return true;
     }
 
 
-
     @Override
-    public boolean onOptionsItemSelected (MenuItem item){
-        if(item.getItemId()==R.id.menu_item_share)
-        {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_item_share) {
+            Uri uri = Uri.parse(poster);
+
             Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
             sharingIntent.setType("text/plain");
-            String shareBody = "Hey guys, I am attending the " +name+" event on "+dAndT+" . Join me at "+loc ;
+            String shareBody = "Hey guys, I am attending the " + name + " event on " + dAndT + " . Join me at " + loc;
             //sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Join me at "+loc);
             sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
-            startActivity(Intent.createChooser(sharingIntent, "Share via"));
-        }
 
+            startActivity(Intent.createChooser(sharingIntent, "Share via"));
+
+
+
+        /*   String nameApp="facebook";
+            String message = "Hey guys, I am attending the " +name+" event on "+dAndT+" . Join me at "+loc ;
+            String imagePath=poster;
+
+
+            try {
+                List<Intent> targetedShareIntents = new ArrayList<Intent>();
+                Intent share = new Intent(android.content.Intent.ACTION_SEND);
+                share.setType("image/jpeg");
+                List<ResolveInfo> resInfo = getPackageManager()
+                        .queryIntentActivities(share, 0);
+                if (!resInfo.isEmpty()) {
+                    for (ResolveInfo info : resInfo) {
+                        Intent targetedShare = new Intent(
+                                android.content.Intent.ACTION_SEND);
+                        targetedShare.setType("image/jpeg"); // put here your mime
+                        // type
+                        if (info.activityInfo.packageName.toLowerCase().contains(
+                                nameApp)
+                                || info.activityInfo.name.toLowerCase().contains(
+                                nameApp)) {
+                            targetedShare.putExtra(Intent.EXTRA_SUBJECT,
+                                    "Sample Photo");
+                            targetedShare.putExtra(Intent.EXTRA_TEXT, message);
+                            targetedShare.putExtra(Intent.EXTRA_STREAM,
+                                    Uri.fromFile(new File(imagePath)));
+                            targetedShare.setPackage(info.activityInfo.packageName);
+                            targetedShareIntents.add(targetedShare);
+                        }
+                    }
+                    Intent chooserIntent = Intent.createChooser(
+                            targetedShareIntents.remove(0), "Select app to share");
+                    chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS,
+                            targetedShareIntents.toArray(new Parcelable[] {}));
+                    startActivity(chooserIntent);
+                }
+            } catch (Exception e) {
+                Log.v("VM",
+                        "Exception while sending image on" + nameApp + " "
+                                + e.getMessage());
+            }
+        }
+        */
+
+        }
 
         return true;
 
     }
 
 
-
-
 }
+
+

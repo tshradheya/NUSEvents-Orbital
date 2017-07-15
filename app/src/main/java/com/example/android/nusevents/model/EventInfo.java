@@ -17,6 +17,8 @@ public class EventInfo {
     private String date;
     private String photoUri;
     private String count;
+    private boolean free;
+    private String link;
     //private String
 
 public EventInfo()
@@ -32,8 +34,10 @@ public EventInfo()
     finishTime=0;
     date="";
     count="0";
+    free=true;
+    link="";
 }
-public EventInfo(String a,long b,String c,String d,String e,String f,String id,String contact,long z,String dd,String u,String count)
+public EventInfo(String a,long b,String c,String d,String e,String f,String id,String contact,long z,String dd,String u,String count,boolean free,String link)
 {
     name=a;
     time=b;
@@ -47,6 +51,9 @@ public EventInfo(String a,long b,String c,String d,String e,String f,String id,S
     date=dd;
     photoUri=u;
     this.count=count;
+    this.free=free;
+    this.link=link;
+
 }
 public String getName()
 {
@@ -92,4 +99,11 @@ public String getUserCreated(){return userCreated;}
     }
     public String getCount(){return count;}
 
+    public String getLink() {
+        return link;
+    }
+
+    public boolean getFree() {
+        return free;
+    }
 }
