@@ -847,7 +847,7 @@ if(poster.equals("")){
                         intent.putExtra("id", id);
                         intent.putExtra("time", time);
                         intent.putExtra("owner", owner);
-                        intent.putExtra("about", info);
+                        intent.putExtra("about", info );
 
 
                         AlarmManager manager = (AlarmManager) getSystemService(Activity.ALARM_SERVICE);
