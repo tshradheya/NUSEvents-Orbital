@@ -9,16 +9,20 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.CalendarContract;
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,8 +51,10 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import static android.R.attr.id;
 import static android.R.attr.key;
@@ -88,7 +94,8 @@ public class ActiveListDetailsActivity extends AppCompatActivity {
     private DatabaseReference mEventInfo;
     private FirebaseDatabase mFireBaseDataBase;
 
-
+String link="";
+    boolean free;
 
 
     public static int year,month, day, hour,min;
@@ -160,7 +167,8 @@ public class ActiveListDetailsActivity extends AppCompatActivity {
         date=i.getStringExtra(DisplayEventList.date);
         poster=i.getStringExtra("image");
         count=i.getStringExtra(DisplayEventList.event_count);
-
+        free=i.getBooleanExtra("check1",false);
+        link=i.getStringExtra("check2");
 
 
 
@@ -296,6 +304,39 @@ if(poster.equals("")){
         mEndTime.setText(dAndTF);
         getmTextViewNumber.setText(count);
 
+        Button bookT=(Button)findViewById(R.id.free);
+
+        if(free==true){
+            bookT.setClickable(false);
+        }
+        else
+        {
+            bookT.setClickable(true);
+            bookT.setText("Buy Tickets");
+        }
+
+
+        bookT.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Code here executes on main thread after user presses button
+
+                if(!free) {
+                    String url = "https://";
+
+                    if(link.contains("https://")){
+                        url="";
+                    }
+                        url = url + link;
+
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse(url));
+                    startActivity(i);
+                }
+
+            }
+        });
+
+
         final Button button = (Button)findViewById(R.id.detaillist);
 
         if(usercreate.equals(currUid))
@@ -355,6 +396,47 @@ if(poster.equals("")){
         final EditText editTextloc = (EditText)dialogview.findViewById(R.id.locationUpdate);
         final EditText editTextown = (EditText)dialogview.findViewById(R.id.organizeUpdate);
         final EditText editcontact = (EditText)dialogview.findViewById(R.id.contactUpdate) ;
+
+        final Spinner sp1=(Spinner) dialogview.findViewById(R.id.spinner1);
+        final EditText editLink = (EditText)dialogview.findViewById(R.id.bookTicket1) ;
+
+
+        final List<String> list = new ArrayList<String>();
+        list.add("Free");
+        list.add("Paid");
+
+
+        ArrayAdapter<String> adp1 = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, list);
+        adp1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sp1.setAdapter(adp1);
+
+
+        sp1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            @Override
+            public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id) {
+                // TODO Auto-generated method stub
+
+                if(list.get(position).equals("Free")){
+                    free=true;
+                    link="";
+                    editLink.setVisibility(View.GONE);
+
+                }
+                else
+                {
+                    free=false;
+                    editLink.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+                // TODO Auto-generated method stub
+            }
+        });
+
 
         editTextname.setText(name);
         editTextinfo.setText(info);
@@ -548,7 +630,7 @@ if(poster.equals("")){
     {
         DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReference("Events").child(id);
        final DatabaseReference mdatabaseReference= FirebaseDatabase.getInstance().getReference("Bookmark");
-        final EventInfo event = new EventInfo(name,time,loc,info,owner,user,id,contact,endTime,newdate,poster,count);
+        final EventInfo event = new EventInfo(name,time,loc,info,owner,user,id,contact,endTime,newdate,poster,count,free,link);
 
         mdatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -735,7 +817,7 @@ if(poster.equals("")){
             flag = 0;
            list="";
 
-           final EventInfo obj = new EventInfo(name, time, loc, info, owner, usercreate, id, contact, timeFinish,date,poster,count);
+           final EventInfo obj = new EventInfo(name, time, loc, info, owner, usercreate, id, contact, timeFinish,date,poster,count,free,link);
 
             check=true;
             final AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
@@ -789,7 +871,7 @@ if(poster.equals("")){
                                         int r=Integer.valueOf(count);
                                         r++;
                                         count=""+r;
-                                        final EventInfo obj1 = new EventInfo(name, time, loc, info, owner, usercreate, id, contact, timeFinish,date,poster,count);
+                                        final EventInfo obj1 = new EventInfo(name, time, loc, info, owner, usercreate, id, contact, timeFinish,date,poster,count,free,link);
 
                                         ((CheckBox) view).setChecked(true);
                                         bookmarkUserReference.push().setValue(obj1);
@@ -827,7 +909,7 @@ if(poster.equals("")){
                         int r=Integer.valueOf(count);
                         r++;
                         count=""+r;
-                        final EventInfo obj1 = new EventInfo(name, time, loc, info, owner, usercreate, id, contact, timeFinish,date,poster,count);
+                        final EventInfo obj1 = new EventInfo(name, time, loc, info, owner, usercreate, id, contact, timeFinish,date,poster,count,free,link);
 
                         ((CheckBox) view).setChecked(true);
                         bookmarkUserReference.push().setValue(obj1);
@@ -877,7 +959,7 @@ if(poster.equals("")){
             int r=Integer.valueOf(count);
             r--;
             count=""+r;
-            final EventInfo obj1 = new EventInfo(name, time, loc, info, owner, usercreate, id, contact, timeFinish,date,poster,count);
+            final EventInfo obj1 = new EventInfo(name, time, loc, info, owner, usercreate, id, contact, timeFinish,date,poster,count,free,link);
 
             ((CheckBox) view).setChecked(false);
 
