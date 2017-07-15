@@ -834,19 +834,9 @@ if(poster.equals("")){
                         databaseReference.setValue(obj1);
 
                         getmTextViewNumber.setText(count);
-
-                        myAlert1.setMessage("Event has been added to your list of Bookmarked events ")
-                                .setPositiveButton("Continue", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
+                        Toast.makeText(getApplicationContext(),"Event has been added to your list of Bookmarked Events!",Toast.LENGTH_LONG).show();
 
 
-
-                                    }
-                                })
-                                .create();
-                        myAlert1.show();
 
 
 
@@ -857,7 +847,7 @@ if(poster.equals("")){
                         intent.putExtra("id", id);
                         intent.putExtra("time", time);
                         intent.putExtra("owner", owner);
-                        intent.putExtra("about", info);
+                        intent.putExtra("about", info );
 
 
                         AlarmManager manager = (AlarmManager) getSystemService(Activity.ALARM_SERVICE);
