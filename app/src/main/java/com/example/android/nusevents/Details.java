@@ -211,6 +211,25 @@ public class Details extends FragmentActivity {
                 String dateString = day + "/" + month + "/" + year + " " + hour + ":" + min;
                 date=day + "/" + month + "/" + year;
 
+
+                if(day/10==0)
+                {
+                    date="0"+day + "/" + month + "/" + year;
+
+                }
+
+                if (month/10==0)
+                {
+                    date=day + "/0" + month + "/" + year;
+
+                }
+
+                if(day/10==0&&month/10==0){
+                    date="0"+day + "/0" + month + "/" + year;
+
+                }
+
+
                 long eventDateLong = 0;
 
                 try {

@@ -458,7 +458,12 @@ if(poster.equals("")){
 
 
                 myAlert.setMessage("Are you sure you want to delete the Event?")
-                        .setNegativeButton("No",null)
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                               dialog.dismiss();
+                            }
+                        })
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -554,6 +559,24 @@ if(poster.equals("")){
 
                 String dateString=day+"/"+month+"/"+year+" "+hour+":"+min;
                 String newdate=day+"/"+month+"/"+year;
+
+
+                if(day/10==0)
+                {
+                    newdate="0"+day + "/" + month + "/" + year;
+
+                }
+
+                if (month/10==0)
+                {
+                    newdate=day + "/0" + month + "/" + year;
+
+                }
+
+                if(day/10==0&&month/10==0){
+                    newdate="0"+day + "/0" + month + "/" + year;
+
+                }
 
                 long eventDateLong=0;
 

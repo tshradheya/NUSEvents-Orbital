@@ -5,9 +5,11 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -31,6 +34,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.android.nusevents.R.id.free;
+
 public class DisplayEventList extends AppCompatActivity implements SearchView.OnQueryTextListener{
 
     private DatabaseReference mEventInfo;
@@ -39,6 +44,8 @@ public class DisplayEventList extends AppCompatActivity implements SearchView.On
     ListView listViewEvents;
 
     EventsList adapter;
+
+    String tempDate="";
 
     public static final String event_name="EVENT NAME";
     public static final String event_id="id";
@@ -56,6 +63,8 @@ public class DisplayEventList extends AppCompatActivity implements SearchView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_event_list);
+
+
 
 
         mFireBaseDataBase=FirebaseDatabase.getInstance();
@@ -128,6 +137,7 @@ public class DisplayEventList extends AppCompatActivity implements SearchView.On
             }
         });
 
+        listViewEvents.setEmptyView( findViewById( R.id.empty_list_view ) );
 
 
     }
@@ -192,6 +202,222 @@ public class DisplayEventList extends AppCompatActivity implements SearchView.On
                 getSearchableInfo(getComponentName()));
         searchView.setSubmitButtonEnabled(true);
         searchView.setOnQueryTextListener(this);
+
+        return true;
+    }
+
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.filter) {
+
+
+            LayoutInflater layoutInflater = getLayoutInflater();
+
+
+           View dialogview = layoutInflater.inflate(R.layout.activity_filter,null);
+            final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            dialog.setView(dialogview);
+
+            dialog.setTitle("Filter the List of Events");
+            final AlertDialog alertDialog = dialog.create();
+            alertDialog.show();
+
+
+            CalendarView cView=(CalendarView)dialogview.findViewById(R.id.simpleCalendarView);
+            Button freeButton=(Button)dialogview.findViewById(free);
+            Button paidButton=(Button)dialogview.findViewById(R.id.paid);
+
+
+            cView.setMinDate(System.currentTimeMillis());
+            cView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+                @Override
+                public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
+
+
+                    month+=1;
+                    tempDate=dayOfMonth+"/"+month+"/"+year;
+
+
+                    if(dayOfMonth/10==0)
+                    {
+                        tempDate="0"+dayOfMonth + "/" + month + "/" + year;
+
+                    }
+
+                    if (month/10==0)
+                    {
+                        tempDate=dayOfMonth + "/0" + month + "/" + year;
+
+                    }
+
+                    if(dayOfMonth/10==0&&month/10==0){
+                        tempDate="0"+dayOfMonth + "/0" + month + "/" + year;
+
+                    }
+
+
+                    mEventInfo.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+
+                            eventlist.clear();
+                            for (DataSnapshot eventsnap: dataSnapshot.getChildren()){
+
+
+                                EventInfo event = eventsnap.getValue(EventInfo.class);
+                                if(event.getDate().equals(tempDate)){
+                                    eventlist.add(event);
+                                }
+                            }
+
+                            for(int i=0;i<eventlist.size();i++)
+                            {
+                                for(int j=1;j<eventlist.size();j++)
+                                {
+                                    if(eventlist.get(j-1).getTime()>eventlist.get(j).getTime())
+                                    {
+                                        EventInfo temp=eventlist.get(j-1);
+                                        eventlist.set(j-1,eventlist.get(j));
+                                        eventlist.set(j,temp);
+
+                                    }
+                                }
+                            }
+
+                            adapter = new EventsList(DisplayEventList.this,eventlist);
+                            listViewEvents.setAdapter(adapter);
+                            alertDialog.dismiss();
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+
+
+                    });
+
+                }
+            });
+
+
+
+            freeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    mEventInfo.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+
+                            eventlist.clear();
+                            for (DataSnapshot eventsnap: dataSnapshot.getChildren()){
+
+
+                                EventInfo event = eventsnap.getValue(EventInfo.class);
+                                if(event.getFree()){
+                                    eventlist.add(event);
+                                }
+                            }
+
+                            for(int i=0;i<eventlist.size();i++)
+                            {
+                                for(int j=1;j<eventlist.size();j++)
+                                {
+                                    if(eventlist.get(j-1).getTime()>eventlist.get(j).getTime())
+                                    {
+                                        EventInfo temp=eventlist.get(j-1);
+                                        eventlist.set(j-1,eventlist.get(j));
+                                        eventlist.set(j,temp);
+
+                                    }
+                                }
+                            }
+
+                            adapter = new EventsList(DisplayEventList.this,eventlist);
+                            listViewEvents.setAdapter(adapter);
+                            alertDialog.dismiss();
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+
+
+                    });
+
+
+                }
+
+            });
+
+            paidButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    mEventInfo.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+
+                            eventlist.clear();
+                            for (DataSnapshot eventsnap: dataSnapshot.getChildren()){
+
+
+                                EventInfo event = eventsnap.getValue(EventInfo.class);
+                                if(!event.getFree()){
+                                    eventlist.add(event);
+                                }
+                            }
+
+                            for(int i=0;i<eventlist.size();i++)
+                            {
+                                for(int j=1;j<eventlist.size();j++)
+                                {
+                                    if(eventlist.get(j-1).getTime()>eventlist.get(j).getTime())
+                                    {
+                                        EventInfo temp=eventlist.get(j-1);
+                                        eventlist.set(j-1,eventlist.get(j));
+                                        eventlist.set(j,temp);
+
+                                    }
+                                }
+                            }
+
+                            adapter = new EventsList(DisplayEventList.this,eventlist);
+                            listViewEvents.setAdapter(adapter);
+                            alertDialog.dismiss();
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+
+
+                    });
+
+
+                }
+
+            });
+
+
+
+
+            return true;
+        }
+
+
+
+
 
         return true;
     }
