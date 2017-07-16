@@ -100,6 +100,9 @@ public class BookmarkList extends AppCompatActivity {
                 i.putExtra("check1",mevents.getFree());
                 i.putExtra("check2",mevents.getLink());
 
+                i.putExtra("goodie",mevents.getGoodie());
+                i.putExtra("snacks",mevents.getSnacks());
+
                 startActivity(i);
             }
         });

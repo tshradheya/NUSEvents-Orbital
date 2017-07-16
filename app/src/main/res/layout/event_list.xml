@@ -121,8 +121,87 @@ android:layout_marginLeft="32dp"
 android:layout_gravity="center"
         android:background="@color/authui_colorPrimaryDark"
         android:text="FREE"
-        android:textSize="16dp"
+        android:textSize="20sp"
+        android:layout_marginTop="8dp"
         />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp">
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:gravity="center"
+            android:id="@+id/goodieFull"
+
+            >
+
+
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="start"
+            android:id="@+id/goodieImage"
+
+            />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/goodieText"
+                android:text="Goodie Bags"
+                android:textAlignment="center"
+                android:textColor="#000000"
+                android:textSize="20sp"
+                android:layout_toRightOf="@+id/goodieImage"
+                />
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/snacksFull"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:gravity="center"
+>
+
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="start"
+                android:id="@+id/snacksImage"
+
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/snacksText"
+                android:text="Free Snacks"
+                android:textAlignment="center"
+                android:textColor="#000000"
+                android:textSize="20sp"
+                android:layout_toRightOf="@+id/snacksImage"
+                />
+
+
+        </RelativeLayout>
+
+
+
+
+
+
+    </LinearLayout>
 
 
 

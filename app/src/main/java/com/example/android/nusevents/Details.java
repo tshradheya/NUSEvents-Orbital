@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
@@ -57,13 +58,15 @@ public class Details extends FragmentActivity {
             android.Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
 
-
+    private CheckBox goodieCheck,snacksCheck;
 
     private FirebaseDatabase mFireBaseDataBase;
     private DatabaseReference mEventInfo;
     private Button mSendButton;
     EditText nameField, organizeField, eventField, timeField, locField, contactfield,linkAddress;
     String name, organize, event, time, location, id, contact,date,count;
+
+    boolean goodie,snacks;
 
     String link="";
     boolean free;
@@ -103,6 +106,41 @@ public class Details extends FragmentActivity {
         sp1 = (Spinner) findViewById(R.id.spinner);
         linkAddress=(EditText)findViewById(R.id.bookTicket);
 
+        goodieCheck=(CheckBox)findViewById(R.id.goodieBox);
+        snacksCheck=(CheckBox)findViewById(R.id.snacksBox);
+
+
+        goodieCheck.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(goodieCheck.isChecked()){
+                    goodie=true;
+
+                }
+                else
+                {
+                    goodie=false;
+                }
+
+            }
+        });
+
+        snacksCheck.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(snacksCheck.isChecked()){
+                    snacks=true;
+
+                }
+                else
+                {
+                    snacks=false;
+                }
+
+            }
+        });
 
 
 
@@ -270,7 +308,7 @@ public class Details extends FragmentActivity {
 
                 String currUid = currUser.getUid();
 
-                EventInfo object = new EventInfo(name, eventDateLong, location, event, organize, currUid, id, contact, eventDateLongF,date,pic_uri,count,free,link);
+                EventInfo object = new EventInfo(name, eventDateLong, location, event, organize, currUid, id, contact, eventDateLongF,date,pic_uri,count,free,link,goodie,snacks);
 
                 if (eventDateLong < System.currentTimeMillis() || eventDateLong > eventDateLongF||eventDateLong==0||eventDateLongF==0) {
 
@@ -294,6 +332,8 @@ public class Details extends FragmentActivity {
                     dateButtonFinish.setText("Enter Finish Date");
                     timeButtonFinish.setText("Enter Finish Time");
 
+                    goodieCheck.setChecked(false);
+snacksCheck.setChecked(false);
 
                     displaymessage();
 

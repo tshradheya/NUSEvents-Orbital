@@ -19,7 +19,12 @@ public class EventInfo {
     private String count;
     private boolean free;
     private String link;
+    private boolean goodie;
+    private boolean snacks;
+
+
     //private String
+
 
 public EventInfo()
 {
@@ -36,8 +41,12 @@ public EventInfo()
     count="0";
     free=true;
     link="";
+    goodie=false;
+    snacks=false;
+
+
 }
-public EventInfo(String a,long b,String c,String d,String e,String f,String id,String contact,long z,String dd,String u,String count,boolean free,String link)
+public EventInfo(String a,long b,String c,String d,String e,String f,String id,String contact,long z,String dd,String u,String count,boolean free,String link,boolean goodie,boolean snacks)
 {
     name=a;
     time=b;
@@ -53,6 +62,9 @@ public EventInfo(String a,long b,String c,String d,String e,String f,String id,S
     this.count=count;
     this.free=free;
     this.link=link;
+
+    this.goodie=goodie;
+    this.snacks=snacks;
 
 }
 public String getName()
@@ -106,4 +118,14 @@ public String getUserCreated(){return userCreated;}
     public boolean getFree() {
         return free;
     }
+
+
+    public boolean getGoodie(){
+        return goodie;
+
+    }
+    public boolean getSnacks(){
+        return snacks;
+    }
+
 }

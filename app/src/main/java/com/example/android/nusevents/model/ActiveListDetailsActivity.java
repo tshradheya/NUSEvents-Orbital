@@ -22,6 +22,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -103,7 +104,7 @@ String link="";
     public static int yearF,monthF, dayF, hourF,minF;
 
 
-
+    public boolean goodie,snacks;
 
 
     View dialogview;
@@ -170,6 +171,10 @@ String link="";
         free=i.getBooleanExtra("check1",false);
         link=i.getStringExtra("check2");
 
+        goodie=i.getBooleanExtra("goodie",false);
+        snacks=i.getBooleanExtra("snacks",false);
+
+
 
 
 
@@ -202,8 +207,6 @@ String link="";
                         EventInfo obj=eventsnap.getValue(EventInfo.class);
 
                         String temp=obj.getId();
-
-
 
 
                         if(temp.equals(id))
@@ -292,6 +295,32 @@ if(poster.equals("")){
                 .load(poster)
                 .into(photoImageView);
 
+
+        ImageView goodieShow=(ImageView)findViewById(R.id.goodieImage);
+        ImageView snacksShow=(ImageView)findViewById(R.id.snacksImage);
+
+        RelativeLayout goodieRL=(RelativeLayout)findViewById(R.id.goodieFull);
+        RelativeLayout snacksRL=(RelativeLayout)findViewById(R.id.snacksFull);
+
+
+        if(!goodie) {
+
+            goodieRL.setVisibility(View.GONE);
+        }
+
+        if(goodie){
+            goodieShow.setImageResource(R.drawable.correct);
+
+        }
+
+
+        if(snacks)
+        {
+            snacksShow.setImageResource(R.drawable.correct);
+        }
+        if(!snacks) {
+            snacksRL.setVisibility(View.GONE);
+        }
 
 
 
@@ -400,6 +429,17 @@ if(poster.equals("")){
         final Spinner sp1=(Spinner) dialogview.findViewById(R.id.spinner1);
         final EditText editLink = (EditText)dialogview.findViewById(R.id.bookTicket1) ;
 
+        final CheckBox goodieCheck=(CheckBox)dialogview.findViewById(R.id.goodieBox1);
+        final CheckBox snacksCheck=(CheckBox)dialogview.findViewById(R.id.snacksBox1);
+
+        if(goodie){
+            goodieCheck.setChecked(true);
+        }
+
+        if(snacks){
+            snacksCheck.setChecked(true);
+        }
+
 
         final List<String> list = new ArrayList<String>();
         list.add("Free");
@@ -434,6 +474,38 @@ if(poster.equals("")){
             @Override
             public void onNothingSelected(AdapterView<?> arg0) {
                 // TODO Auto-generated method stub
+            }
+        });
+
+        goodieCheck.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(goodieCheck.isChecked()){
+                    goodie=true;
+
+                }
+                else
+                {
+                    goodie=false;
+                }
+
+            }
+        });
+
+        snacksCheck.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(snacksCheck.isChecked()){
+                    snacks=true;
+
+                }
+                else
+                {
+                    snacks=false;
+                }
+
             }
         });
 
@@ -609,6 +681,9 @@ if(poster.equals("")){
                 }
 
 
+
+
+
                 if (eventDateLong < System.currentTimeMillis() || eventDateLong > eventDateLongF||eventDateLong==0||eventDateLongF==0) {
 
 
@@ -653,7 +728,7 @@ if(poster.equals("")){
     {
         DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReference("Events").child(id);
        final DatabaseReference mdatabaseReference= FirebaseDatabase.getInstance().getReference("Bookmark");
-        final EventInfo event = new EventInfo(name,time,loc,info,owner,user,id,contact,endTime,newdate,poster,count,free,link);
+        final EventInfo event = new EventInfo(name,time,loc,info,owner,user,id,contact,endTime,newdate,poster,count,free,link,goodie,snacks);
 
         mdatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -840,7 +915,7 @@ if(poster.equals("")){
             flag = 0;
            list="";
 
-           final EventInfo obj = new EventInfo(name, time, loc, info, owner, usercreate, id, contact, timeFinish,date,poster,count,free,link);
+           final EventInfo obj = new EventInfo(name, time, loc, info, owner, usercreate, id, contact, timeFinish,date,poster,count,free,link,goodie,snacks);
 
             check=true;
             final AlertDialog.Builder myAlert = new AlertDialog.Builder(this);
@@ -894,7 +969,7 @@ if(poster.equals("")){
                                         int r=Integer.valueOf(count);
                                         r++;
                                         count=""+r;
-                                        final EventInfo obj1 = new EventInfo(name, time, loc, info, owner, usercreate, id, contact, timeFinish,date,poster,count,free,link);
+                                        final EventInfo obj1 = new EventInfo(name, time, loc, info, owner, usercreate, id, contact, timeFinish,date,poster,count,free,link,goodie,snacks);
 
                                         ((CheckBox) view).setChecked(true);
                                         bookmarkUserReference.push().setValue(obj1);
@@ -932,7 +1007,7 @@ if(poster.equals("")){
                         int r=Integer.valueOf(count);
                         r++;
                         count=""+r;
-                        final EventInfo obj1 = new EventInfo(name, time, loc, info, owner, usercreate, id, contact, timeFinish,date,poster,count,free,link);
+                        final EventInfo obj1 = new EventInfo(name, time, loc, info, owner, usercreate, id, contact, timeFinish,date,poster,count,free,link,goodie,snacks);
 
                         ((CheckBox) view).setChecked(true);
                         bookmarkUserReference.push().setValue(obj1);
@@ -982,7 +1057,7 @@ if(poster.equals("")){
             int r=Integer.valueOf(count);
             r--;
             count=""+r;
-            final EventInfo obj1 = new EventInfo(name, time, loc, info, owner, usercreate, id, contact, timeFinish,date,poster,count,free,link);
+            final EventInfo obj1 = new EventInfo(name, time, loc, info, owner, usercreate, id, contact, timeFinish,date,poster,count,free,link,goodie,snacks);
 
             ((CheckBox) view).setChecked(false);
 
