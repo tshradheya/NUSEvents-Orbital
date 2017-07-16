@@ -135,6 +135,8 @@ public class DisplayEventList extends AppCompatActivity implements SearchView.On
                 i.putExtra(event_count,mevents.getCount());
                 i.putExtra("check1",mevents.getFree());
                 i.putExtra("check2",mevents.getLink());
+                i.putExtra("goodie",mevents.getGoodie());
+                i.putExtra("snacks",mevents.getSnacks());
 
                 startActivity(i);
             }

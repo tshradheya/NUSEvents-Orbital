@@ -58,6 +58,8 @@ public class BookmarkDetails extends AppCompatActivity {
     String link = "";
     boolean free;
 
+    boolean goodie,snacks;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,7 +91,8 @@ public class BookmarkDetails extends AppCompatActivity {
         poster = i.getStringExtra("image");
         free = i.getBooleanExtra("check1", false);
         link = i.getStringExtra("check2");
-
+        goodie=i.getBooleanExtra("goodie",false);
+        snacks=i.getBooleanExtra("snacks",false);
 
         address[0] = contact;
 
@@ -204,7 +207,7 @@ public class BookmarkDetails extends AppCompatActivity {
                             int r = Integer.valueOf(obj.getCount());
                             r--;
                             count = "" + r;
-                            final EventInfo obj1 = new EventInfo(name, time, loc, info, owner, usercreate, id, contact, timeFinish, date, poster, count, free, link);
+                            final EventInfo obj1 = new EventInfo(name, time, loc, info, owner, usercreate, id, contact, timeFinish, date, poster, count, free, link,goodie,snacks);
                             bookmarkUserReference.child(eventsnap.getKey()).removeValue();
                             databaseReference.setValue(obj1);
 
