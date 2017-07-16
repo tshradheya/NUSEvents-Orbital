@@ -1010,7 +1010,6 @@ if(poster.equals("")){
 
                         EventInfo obj=eventsnap.getValue(EventInfo.class);
 
-
                         if(obj.getId().equals(id)) {
                             bookmarkUserReference.child(eventsnap.getKey()).removeValue();
                         }

@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -42,6 +43,8 @@ public class DisplayEventList extends AppCompatActivity implements SearchView.On
     private FirebaseDatabase mFireBaseDataBase;
     List<EventInfo> eventlist;
     ListView listViewEvents;
+
+    List<EventInfo> filterList;
 
     EventsList adapter;
 
@@ -213,6 +216,10 @@ public class DisplayEventList extends AppCompatActivity implements SearchView.On
         int id = item.getItemId();
         if (id == R.id.filter) {
 
+            filterList=new ArrayList<>();
+
+            filterList.clear();
+
 
             LayoutInflater layoutInflater = getLayoutInflater();
 
@@ -228,8 +235,8 @@ public class DisplayEventList extends AppCompatActivity implements SearchView.On
 
 
             CalendarView cView=(CalendarView)dialogview.findViewById(R.id.simpleCalendarView);
-            Button freeButton=(Button)dialogview.findViewById(free);
-            Button paidButton=(Button)dialogview.findViewById(R.id.paid);
+            final CheckBox freeButton=(CheckBox) dialogview.findViewById(R.id.free);
+            final CheckBox paidButton=(CheckBox) dialogview.findViewById(R.id.paid);
 
 
             cView.setMinDate(System.currentTimeMillis());
@@ -261,34 +268,35 @@ public class DisplayEventList extends AppCompatActivity implements SearchView.On
 
 
                     mEventInfo.addValueEventListener(new ValueEventListener() {
+
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
+                            filterList.clear();
 
-                            eventlist.clear();
                             for (DataSnapshot eventsnap: dataSnapshot.getChildren()){
 
 
                                 EventInfo event = eventsnap.getValue(EventInfo.class);
                                 if(event.getDate().equals(tempDate)){
-                                    eventlist.add(event);
+                                    filterList.add(event);
                                 }
                             }
 
-                            for(int i=0;i<eventlist.size();i++)
+                            for(int i=0;i<filterList.size();i++)
                             {
-                                for(int j=1;j<eventlist.size();j++)
+                                for(int j=1;j<filterList.size();j++)
                                 {
-                                    if(eventlist.get(j-1).getTime()>eventlist.get(j).getTime())
+                                    if(filterList.get(j-1).getTime()>filterList.get(j).getTime())
                                     {
-                                        EventInfo temp=eventlist.get(j-1);
-                                        eventlist.set(j-1,eventlist.get(j));
-                                        eventlist.set(j,temp);
+                                        EventInfo temp=filterList.get(j-1);
+                                        filterList.set(j-1,filterList.get(j));
+                                        filterList.set(j,temp);
 
                                     }
                                 }
                             }
 
-                            adapter = new EventsList(DisplayEventList.this,eventlist);
+                            adapter = new EventsList(DisplayEventList.this,filterList);
                             listViewEvents.setAdapter(adapter);
                             alertDialog.dismiss();
 
@@ -304,6 +312,7 @@ public class DisplayEventList extends AppCompatActivity implements SearchView.On
 
                 }
             });
+
 
 
 
@@ -311,109 +320,146 @@ public class DisplayEventList extends AppCompatActivity implements SearchView.On
                 @Override
                 public void onClick(View v) {
 
-                    mEventInfo.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
 
-                            eventlist.clear();
-                            for (DataSnapshot eventsnap: dataSnapshot.getChildren()){
+                    if(freeButton.isChecked()) {
+
+                        mEventInfo.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                for (DataSnapshot eventsnap : dataSnapshot.getChildren()) {
 
 
-                                EventInfo event = eventsnap.getValue(EventInfo.class);
-                                if(event.getFree()){
-                                    eventlist.add(event);
-                                }
-                            }
-
-                            for(int i=0;i<eventlist.size();i++)
-                            {
-                                for(int j=1;j<eventlist.size();j++)
-                                {
-                                    if(eventlist.get(j-1).getTime()>eventlist.get(j).getTime())
-                                    {
-                                        EventInfo temp=eventlist.get(j-1);
-                                        eventlist.set(j-1,eventlist.get(j));
-                                        eventlist.set(j,temp);
-
+                                    EventInfo event = eventsnap.getValue(EventInfo.class);
+                                    if (event.getFree()) {
+                                        filterList.add(event);
                                     }
                                 }
+
+                                for (int i = 0; i < filterList.size(); i++) {
+                                    for (int j = 1; j < filterList.size(); j++) {
+                                        if (filterList.get(j - 1).getTime() > filterList.get(j).getTime()) {
+                                            EventInfo temp = filterList.get(j - 1);
+                                            filterList.set(j - 1, filterList.get(j));
+                                            filterList.set(j, temp);
+
+                                        }
+                                    }
+                                }
+
+                                adapter = new EventsList(DisplayEventList.this, filterList);
+                                listViewEvents.setAdapter(adapter);
+
                             }
 
-                            adapter = new EventsList(DisplayEventList.this,eventlist);
-                            listViewEvents.setAdapter(adapter);
-                            alertDialog.dismiss();
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
 
+                            }
+
+
+                        });
+                    }
+                    else {
+
+                        for (int i = 0; i < filterList.size(); i++) {
+                            if(filterList.get(i).getFree()==true)
+                            {
+                                filterList.remove(i);
+                            }
                         }
+                        adapter = new EventsList(DisplayEventList.this, filterList);
+                        listViewEvents.setAdapter(adapter);
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-
-
-                    });
+                    }
 
 
                 }
 
             });
+
 
             paidButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    mEventInfo.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
 
-                            eventlist.clear();
-                            for (DataSnapshot eventsnap: dataSnapshot.getChildren()){
+                    if(paidButton.isChecked()) {
+
+                        mEventInfo.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                for (DataSnapshot eventsnap : dataSnapshot.getChildren()) {
 
 
-                                EventInfo event = eventsnap.getValue(EventInfo.class);
-                                if(!event.getFree()){
-                                    eventlist.add(event);
-                                }
-                            }
-
-                            for(int i=0;i<eventlist.size();i++)
-                            {
-                                for(int j=1;j<eventlist.size();j++)
-                                {
-                                    if(eventlist.get(j-1).getTime()>eventlist.get(j).getTime())
-                                    {
-                                        EventInfo temp=eventlist.get(j-1);
-                                        eventlist.set(j-1,eventlist.get(j));
-                                        eventlist.set(j,temp);
-
+                                    EventInfo event = eventsnap.getValue(EventInfo.class);
+                                    if (!event.getFree()) {
+                                        filterList.add(event);
                                     }
                                 }
+
+                                for (int i = 0; i < filterList.size(); i++) {
+                                    for (int j = 1; j < filterList.size(); j++) {
+                                        if (filterList.get(j - 1).getTime() > filterList.get(j).getTime()) {
+                                            EventInfo temp = filterList.get(j - 1);
+                                            filterList.set(j - 1, filterList.get(j));
+                                            filterList.set(j, temp);
+
+                                        }
+                                    }
+                                }
+
+                                adapter = new EventsList(DisplayEventList.this, filterList);
+                                listViewEvents.setAdapter(adapter);
+
                             }
 
-                            adapter = new EventsList(DisplayEventList.this,eventlist);
-                            listViewEvents.setAdapter(adapter);
-                            alertDialog.dismiss();
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
 
+                            }
+
+
+                        });
+                    }
+                    else {
+
+                        for (int i = 0; i < filterList.size(); i++) {
+                            if(filterList.get(i).getFree()==false)
+                            {
+                                filterList.remove(i);
+                            }
                         }
+                        adapter = new EventsList(DisplayEventList.this, filterList);
+                        listViewEvents.setAdapter(adapter);
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-
-
-                    });
+                    }
 
 
                 }
 
             });
+            Button show=(Button)dialogview.findViewById(R.id.show);
 
+            show.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(!freeButton.isChecked()&&!paidButton.isChecked()){
+                        filterList=eventlist;
+                    }
+
+                    adapter = new EventsList(DisplayEventList.this, filterList);
+                    listViewEvents.setAdapter(adapter);
+                    alertDialog.dismiss();
+                }
+            });
 
 
 
             return true;
         }
+
 
 
 

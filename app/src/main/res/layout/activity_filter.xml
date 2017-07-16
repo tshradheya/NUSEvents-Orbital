@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,29 +17,43 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:firstDayOfWeek="2"
+        android:layout_marginBottom="64dp"
         />
 
-    <Button
+
+    <CheckBox
+
+        android:layout_marginStart="32dp"
         android:id="@+id/free"
-        android:layout_marginTop="16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:background="@color/authui_colorPrimaryDark"
         android:text="Free"
+        android:layout_marginBottom="16dp"
+
+
         />
+
+    <CheckBox
+
+        android:layout_marginStart="32dp"
+        android:id="@+id/paid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Paid"
+
+
+        />
+
 
     <Button
-        android:id="@+id/paid"
-        android:layout_marginTop="16dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/show"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:text="View"
+        android:background="@drawable/filter"
         android:layout_gravity="center"
-        android:text="Paid"
-        android:background="@color/authui_colorPrimaryDark"
-
+        android:layout_marginTop="32dp"
         />
-
-
 
 </LinearLayout>
+    </ScrollView>
