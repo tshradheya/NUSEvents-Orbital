@@ -6,5 +6,17 @@
     <ListView
         android:id="@+id/list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+
+        />
+    <TextView
+        android:id="@+id/empty_list_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No Events Found!"
+        android:layout_gravity="center"
+        android:paddingTop="128dp"
+        android:textSize="32sp"
+        android:textColor="@color/authui_colorPrimaryDark"
+        android:visibility="gone" />
 </LinearLayout>

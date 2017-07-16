@@ -66,6 +66,9 @@ public class EventsList extends ArrayAdapter<EventInfo> {
         DateFormat sdf = new SimpleDateFormat("HH:mm");
 
         String time="";
+
+
+
         if(position<filteredList.size()) {
 
 
@@ -73,7 +76,6 @@ public class EventsList extends ArrayAdapter<EventInfo> {
           //  Date eventDate = sdf.parse(events.getTime());
             Date netDate = (new Date(events.getTime()));
             time = sdf.format(netDate);
-
             textViewName.setText(events.getName());
             textViewLoc.setText(events.getLocation());
             textViewDate.setText(events.getDate());
@@ -84,6 +86,7 @@ public class EventsList extends ArrayAdapter<EventInfo> {
         }
         else
         {
+
             listViewItem.setVisibility(View.GONE);
             return listViewItem;
         }
