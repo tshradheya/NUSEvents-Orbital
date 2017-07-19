@@ -14,10 +14,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.ShareActionProvider;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.android.nusevents.BookmarkList;
 import com.example.android.nusevents.DisplayEventList;
 import com.example.android.nusevents.R;
@@ -37,6 +40,8 @@ import java.util.Date;
 import java.util.List;
 
 import static android.R.id.message;
+import com.bumptech.glide.Glide;
+import static com.example.android.nusevents.R.id.photoImageView;
 
 public class BookmarkDetails extends AppCompatActivity {
 
@@ -47,6 +52,7 @@ public class BookmarkDetails extends AppCompatActivity {
     private TextView mTextViewInfo, getmTextViewTime, getmTextViewLocation, getmTextViewListNum;
 
     private TextView mEndTime;
+
 
     public static int year, month, day, hour, min;
     public static String[] address = new String[1];
@@ -65,12 +71,14 @@ public class BookmarkDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bookmark_list);
 
+        ImageView photoImageView = (ImageView) findViewById(R.id.photoImageView1);
+
 
         mTextViewListOwner = (TextView) findViewById(R.id.organize_by1);
         mTextViewInfo = (TextView) findViewById(R.id.about_the_event1);
         getmTextViewTime = (TextView) findViewById(R.id.about_time1);
         getmTextViewLocation = (TextView) findViewById(R.id.about_loc_event1);
-        mEndTime = (TextView) findViewById(R.id.about_timeEND2);
+        mEndTime = (TextView) findViewById(R.id.about_timeEND1);
         getmTextViewContact = (TextView) findViewById(R.id.contact_details_admin1);
         getmTextViewListNum = (TextView) findViewById(R.id.number_event1);
 
@@ -88,7 +96,7 @@ public class BookmarkDetails extends AppCompatActivity {
         timeFinish = i.getLongExtra(BookmarkList.event_time2, 0);
         count = i.getStringExtra(BookmarkList.event_num);
         date = i.getStringExtra(BookmarkList.date1);
-        poster = i.getStringExtra("image");
+        poster = i.getStringExtra("image1");
         free = i.getBooleanExtra("check1", false);
         link = i.getStringExtra("check2");
         goodie=i.getBooleanExtra("goodie",false);
@@ -124,6 +132,8 @@ public class BookmarkDetails extends AppCompatActivity {
         }
 
 
+
+
         bookT.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
@@ -144,6 +154,45 @@ public class BookmarkDetails extends AppCompatActivity {
 
             }
         });
+
+
+
+        if(poster.equals("")){
+            photoImageView.setVisibility(View.GONE);
+        }
+
+        // mTextViewListName.setText(name);
+        Glide.with(photoImageView.getContext())
+                .load(poster)
+                .into(photoImageView);
+
+
+        ImageView goodieShow=(ImageView)findViewById(R.id.goodieImage1);
+        ImageView snacksShow=(ImageView)findViewById(R.id.snacksImage1);
+
+        RelativeLayout goodieRL=(RelativeLayout)findViewById(R.id.goodieFull1);
+        RelativeLayout snacksRL=(RelativeLayout)findViewById(R.id.snacksFull1);
+
+
+        if(!goodie) {
+
+            goodieRL.setVisibility(View.GONE);
+        }
+
+        if(goodie){
+            goodieShow.setImageResource(R.drawable.correct);
+
+        }
+
+
+        if(snacks)
+        {
+            snacksShow.setImageResource(R.drawable.correct);
+        }
+        if(!snacks) {
+            snacksRL.setVisibility(View.GONE);
+        }
+
 
 
         setTitle(name);

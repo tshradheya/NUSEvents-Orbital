@@ -96,7 +96,7 @@ public class BookmarkList extends AppCompatActivity {
                 i.putExtra(event_contact1,mevents.getContact());
                 i.putExtra(event_num,mevents.getCount());
                 i.putExtra(date1,mevents.getDate());
-                i.putExtra("image",mevents.getPhotoUri());
+                i.putExtra("image1",mevents.getPhotoUri());
                 i.putExtra("check1",mevents.getFree());
                 i.putExtra("check2",mevents.getLink());
 
