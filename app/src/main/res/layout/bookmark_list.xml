@@ -281,7 +281,7 @@
                 android:textSize="25sp"
                 android:id="@+id/about_location_event1"
                 android:paddingBottom="16dp"
-                android:onClick="locationShow"
+                android:onClick="locationShow1"
                 />
 
 

@@ -373,6 +373,17 @@ public class BookmarkDetails extends AppCompatActivity {
 
     }
 
+    public void locationShow1(View view){
+
+        Uri location=Uri.parse("https://www.google.com/maps/search/?api=1&query="+Uri.encode(loc));
+
+        Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                location);
+
+        startActivity(intent);
+
+    }
+
 
 }
 
