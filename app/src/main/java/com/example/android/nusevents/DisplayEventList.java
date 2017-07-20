@@ -35,6 +35,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.android.nusevents.R.id.event;
 import static com.example.android.nusevents.R.id.free;
 
 public class DisplayEventList extends AppCompatActivity implements SearchView.OnQueryTextListener{
@@ -240,6 +241,12 @@ public class DisplayEventList extends AppCompatActivity implements SearchView.On
             final CheckBox freeButton=(CheckBox) dialogview.findViewById(R.id.free);
             final CheckBox paidButton=(CheckBox) dialogview.findViewById(R.id.paid);
 
+            final CheckBox goodieButton=(CheckBox) dialogview.findViewById(R.id.goodie);
+            final CheckBox snacksButton=(CheckBox) dialogview.findViewById(R.id.snacks);
+
+
+
+
 
             cView.setMinDate(System.currentTimeMillis());
             cView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
@@ -317,13 +324,12 @@ public class DisplayEventList extends AppCompatActivity implements SearchView.On
 
 
 
-
-            freeButton.setOnClickListener(new View.OnClickListener() {
+     /*      goodieButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
 
-                    if(freeButton.isChecked()) {
+                    if(goodieButton.isChecked()) {
 
                         mEventInfo.addValueEventListener(new ValueEventListener() {
                             @Override
@@ -331,9 +337,18 @@ public class DisplayEventList extends AppCompatActivity implements SearchView.On
 
                                 for (DataSnapshot eventsnap : dataSnapshot.getChildren()) {
 
-
+                                    boolean isPresent=false;
                                     EventInfo event = eventsnap.getValue(EventInfo.class);
-                                    if (event.getFree()) {
+                                    for(int i=0;i<filterList.size();i++){
+                                        if(filterList.get(i).getId().equals(event.getId()))
+                                        {
+                                            isPresent=true;
+                                            break;
+                                        }
+                                    }
+
+                                    if (event.getGoodie()&&!isPresent) {
+
                                         filterList.add(event);
                                     }
                                 }
@@ -380,6 +395,23 @@ public class DisplayEventList extends AppCompatActivity implements SearchView.On
 
             });
 
+            */
+
+
+
+            freeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+
+                    if(freeButton.isChecked()) {
+                        paidButton.setChecked(false);
+                    }
+                    }
+
+
+            });
+
 
             paidButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -387,69 +419,155 @@ public class DisplayEventList extends AppCompatActivity implements SearchView.On
 
 
                     if(paidButton.isChecked()) {
-
-                        mEventInfo.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                                for (DataSnapshot eventsnap : dataSnapshot.getChildren()) {
-
-
-                                    EventInfo event = eventsnap.getValue(EventInfo.class);
-                                    if (!event.getFree()) {
-                                        filterList.add(event);
-                                    }
-                                }
-
-                                for (int i = 0; i < filterList.size(); i++) {
-                                    for (int j = 1; j < filterList.size(); j++) {
-                                        if (filterList.get(j - 1).getTime() > filterList.get(j).getTime()) {
-                                            EventInfo temp = filterList.get(j - 1);
-                                            filterList.set(j - 1, filterList.get(j));
-                                            filterList.set(j, temp);
-
-                                        }
-                                    }
-                                }
-
-                                adapter = new EventsList(DisplayEventList.this, filterList);
-                                listViewEvents.setAdapter(adapter);
-
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-
-                            }
-
-
-                        });
+                        freeButton.setChecked(false);
                     }
-                    else {
 
-                        for (int i = 0; i < filterList.size(); i++) {
-                            if(filterList.get(i).getFree()==false)
-                            {
-                                filterList.remove(i);
-                            }
-                        }
-                        adapter = new EventsList(DisplayEventList.this, filterList);
-                        listViewEvents.setAdapter(adapter);
 
-                    }
 
 
                 }
 
             });
+
             Button show=(Button)dialogview.findViewById(R.id.show);
 
             show.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(!freeButton.isChecked()&&!paidButton.isChecked()){
+
+                    filterList.clear();
+
+                    boolean f=false,p=false,g=false,s=false;
+
+                    if(goodieButton.isChecked())
+                    {
+                        g=true;
+
+                    }
+
+                    if(snacksButton.isChecked()){
+                        s=true;
+                    }
+
+                    if(paidButton.isChecked()){
+                        p=true;
+                    }
+
+                    if(freeButton.isChecked()){
+                        f=true;
+                    }
+
+
+                    final boolean finalG = g;
+                    final boolean finalS = s;
+                    final boolean finalF = f;
+                    final boolean finalP = p;
+                    mEventInfo.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+
+                            List<EventInfo> temp= new ArrayList<EventInfo>();
+
+                            for (DataSnapshot eventsnap : dataSnapshot.getChildren()) {
+
+
+                                EventInfo event = eventsnap.getValue(EventInfo.class);
+
+                                temp.add(event);
+
+
+                            }
+
+                            List<EventInfo> temp1=new ArrayList<EventInfo>();
+boolean happenedG=false;
+                            for(int i=0;i<temp.size();i++){
+                                if(finalG&&temp.get(i).getGoodie()){
+                                    temp1.add(temp.get(i));
+                                    happenedG=true;
+                                }
+                            }
+
+                            List<EventInfo> temp2=new ArrayList<EventInfo>();
+
+                            if(happenedG==false){
+                                temp1=temp;
+                            }
+
+                            boolean happenedS=false;
+
+                            for(int i=0;i<temp1.size();i++){
+                                if(finalS&&temp1.get(i).getSnacks()){
+                                    temp2.add(temp1.get(i));
+                                    happenedS=true;
+                                }
+                            }
+
+
+                            List<EventInfo> temp3 = new ArrayList<EventInfo>();
+
+                            if (happenedS==false){
+                                temp2=temp1;
+
+                            }
+
+
+                            if(finalF) {
+
+                                for (int i = 0; i < temp2.size(); i++) {
+                                    if (finalF && temp2.get(i).getFree()) {
+                                        temp3.add(temp2.get(i));
+                                    }
+                                }
+                            }
+
+                            else
+                            {
+                                for (int i = 0; i < temp2.size(); i++) {
+                                    if (finalP && !temp2.get(i).getFree()) {
+                                        temp3.add(temp2.get(i));
+                                    }
+                                }
+                            }
+
+                            if(!finalF&&!finalP){
+                                temp3=temp2;
+                            }
+
+
+
+filterList=temp3;
+
+
+
+
+                            for (int i = 0; i < filterList.size(); i++) {
+                                for (int j = 1; j < filterList.size(); j++) {
+                                    if (filterList.get(j - 1).getTime() > filterList.get(j).getTime()) {
+                                        EventInfo temp9 = filterList.get(j - 1);
+                                        filterList.set(j - 1, filterList.get(j));
+                                        filterList.set(j, temp9);
+
+                                    }
+                                }
+                            }
+
+                            adapter = new EventsList(DisplayEventList.this, filterList);
+                            listViewEvents.setAdapter(adapter);
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+
+
+                    });
+
+                    if(!g&&!f&&!s&&!p){
                         filterList=eventlist;
                     }
+
 
                     adapter = new EventsList(DisplayEventList.this, filterList);
                     listViewEvents.setAdapter(adapter);
