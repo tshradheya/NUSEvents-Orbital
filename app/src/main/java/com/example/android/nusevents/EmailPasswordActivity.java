@@ -177,6 +177,8 @@ public class EmailPasswordActivity extends AppCompatActivity implements
 
                             FirebaseUser user = mAuth.getCurrentUser();
 
+                            sendEmailVerification();
+
                             Intent i= new Intent(EmailPasswordActivity.this, UserDetails.class);
                             startActivity(i);
 
