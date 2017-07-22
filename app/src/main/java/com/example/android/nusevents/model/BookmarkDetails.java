@@ -151,9 +151,9 @@ public class BookmarkDetails extends AppCompatActivity {
 
 
                     // Code here executes on main thread after user presses button
-                    String url = "https://";
+                    String url = "http://";
 
-                    if (link.contains("https://")) {
+                    if (link.contains("http://")) {
                         url = "";
                     }
                     url = url + link;

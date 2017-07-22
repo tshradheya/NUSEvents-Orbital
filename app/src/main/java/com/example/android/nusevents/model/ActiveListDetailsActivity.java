@@ -350,9 +350,9 @@ if(poster.equals("")){
                 // Code here executes on main thread after user presses button
 
                 if(!free) {
-                    String url = "https://";
+                    String url = "http://";
 
-                    if(link.contains("https://")){
+                    if(link.contains("http://")){
                         url="";
                     }
                         url = url + link;
