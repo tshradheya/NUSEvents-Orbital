@@ -35,6 +35,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.media.CamcorderProfile.get;
 import static com.example.android.nusevents.R.id.event;
 import static com.example.android.nusevents.R.id.free;
 
@@ -42,7 +43,7 @@ public class DisplayEventList extends AppCompatActivity implements SearchView.On
 
     private DatabaseReference mEventInfo;
     private FirebaseDatabase mFireBaseDataBase;
-    List<EventInfo> eventlist;
+    List<EventInfo> eventlist, overallList;
     ListView listViewEvents;
 
     List<EventInfo> filterList;
@@ -68,11 +69,15 @@ public class DisplayEventList extends AppCompatActivity implements SearchView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_event_list);
 
-
+overallList=new ArrayList<EventInfo>();
 
 
         mFireBaseDataBase=FirebaseDatabase.getInstance();
         mEventInfo=mFireBaseDataBase.getReference().child("Events");
+
+        listViewEvents = (ListView) findViewById(R.id.list);
+        eventlist = new ArrayList<>();
+
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser currUser= mAuth.getCurrentUser();
@@ -103,6 +108,44 @@ public class DisplayEventList extends AppCompatActivity implements SearchView.On
             }
         });
 
+        mEventInfo.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                eventlist.clear();
+                for (DataSnapshot eventsnap: dataSnapshot.getChildren()){
+
+
+                    EventInfo event = eventsnap.getValue(EventInfo.class);
+                    eventlist.add(event);
+                }
+
+                for(int i=0;i<eventlist.size();i++)
+                {
+                    for(int j=1;j<eventlist.size();j++)
+                    {
+                        if(eventlist.get(j-1).getTime()>eventlist.get(j).getTime())
+                        {
+                            EventInfo temp=eventlist.get(j-1);
+                            eventlist.set(j-1,eventlist.get(j));
+                            eventlist.set(j,temp);
+
+                        }
+                    }
+                }
+
+                adapter = new EventsList(DisplayEventList.this,eventlist);
+                listViewEvents.setAdapter(adapter);
+                overallList=eventlist;
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+
+
+        });
 
 
 
@@ -111,14 +154,13 @@ public class DisplayEventList extends AppCompatActivity implements SearchView.On
 
 
 
-        listViewEvents = (ListView) findViewById(R.id.list);
-        eventlist = new ArrayList<>();
+
 
 
         listViewEvents.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                EventInfo mevents = eventlist.get(position);
+                EventInfo mevents = (EventInfo)parent.getItemAtPosition(position);
 
 
                 Intent i = new Intent(getApplicationContext(),ActiveListDetailsActivity.class);
@@ -151,43 +193,7 @@ public class DisplayEventList extends AppCompatActivity implements SearchView.On
     @Override
     protected void onStart() {
         super.onStart();
-        mEventInfo.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
 
-                eventlist.clear();
-                for (DataSnapshot eventsnap: dataSnapshot.getChildren()){
-
-
-                    EventInfo event = eventsnap.getValue(EventInfo.class);
-                    eventlist.add(event);
-                }
-
-                for(int i=0;i<eventlist.size();i++)
-                {
-                    for(int j=1;j<eventlist.size();j++)
-                    {
-                        if(eventlist.get(j-1).getTime()>eventlist.get(j).getTime())
-                        {
-                            EventInfo temp=eventlist.get(j-1);
-                            eventlist.set(j-1,eventlist.get(j));
-                            eventlist.set(j,temp);
-
-                        }
-                    }
-                }
-
-                adapter = new EventsList(DisplayEventList.this,eventlist);
-                listViewEvents.setAdapter(adapter);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-
-
-        });
         //display();
 
 
@@ -307,6 +313,7 @@ public class DisplayEventList extends AppCompatActivity implements SearchView.On
 
                             adapter = new EventsList(DisplayEventList.this,filterList);
                             listViewEvents.setAdapter(adapter);
+                            overallList=filterList;
                             alertDialog.dismiss();
 
                         }
@@ -568,6 +575,7 @@ filterList=temp3;
                         filterList=eventlist;
                     }
 
+                    overallList=filterList;
 
                     adapter = new EventsList(DisplayEventList.this, filterList);
                     listViewEvents.setAdapter(adapter);
@@ -596,7 +604,10 @@ filterList=temp3;
 
     @Override
     public boolean onQueryTextChange(String newText) {
+
+
         adapter.getFilter().filter(newText);
+
 
         return true;
     }

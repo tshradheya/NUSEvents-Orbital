@@ -55,11 +55,11 @@ public class EventsList extends ArrayAdapter<EventInfo> {
 
         LayoutInflater inflater=context.getLayoutInflater();
 
-        View listViewItem = inflater.inflate(R.layout.events_display,null,true);
-        TextView textViewName = (TextView)listViewItem.findViewById(R.id.event);
-        TextView textViewLoc = (TextView)listViewItem.findViewById(R.id.eventloc);
-        TextView textViewDate = (TextView)listViewItem.findViewById(R.id.eventdat);
-        TextView textViewTime = (TextView)listViewItem.findViewById(R.id.eventtime);
+        View listView = inflater.inflate(R.layout.events_display,null,true);
+        TextView textViewName = (TextView)listView.findViewById(R.id.event);
+        TextView textViewLoc = (TextView)listView.findViewById(R.id.eventloc);
+        TextView textViewDate = (TextView)listView.findViewById(R.id.eventdat);
+        TextView textViewTime = (TextView)listView.findViewById(R.id.eventtime);
 
        // return super.getView(position, convertView, parent);
 
@@ -69,7 +69,8 @@ public class EventsList extends ArrayAdapter<EventInfo> {
 
 
 
-        if(position<filteredList.size()) {
+
+    if(position<filteredList.size()) {
 
 
             EventInfo events = filteredList.get(position);
@@ -82,14 +83,16 @@ public class EventsList extends ArrayAdapter<EventInfo> {
             textViewTime.setText(time);
 
 
-            return listViewItem;
+            return listView;
         }
         else
         {
 
-            listViewItem.setVisibility(View.GONE);
-            return listViewItem;
+            listView.setVisibility(View.GONE);
+            return listView;
         }
+
+
 
 
     }
