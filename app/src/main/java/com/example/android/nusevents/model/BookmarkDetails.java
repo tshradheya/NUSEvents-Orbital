@@ -113,6 +113,11 @@ public class BookmarkDetails extends AppCompatActivity {
 
         }
 
+        String t1=dAndT.substring(0,10);
+        String t2=dAndT.substring(11);
+
+        dAndT=t1+"\n"+t2;
+
 
         try {
             DateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
@@ -121,6 +126,11 @@ public class BookmarkDetails extends AppCompatActivity {
         } catch (Exception ex) {
 
         }
+
+        String t3=dAndTF.substring(0,10);
+        String t4=dAndTF.substring(11);
+
+        dAndTF=t1+"\n"+t2;
 
         Button bookT = (Button) findViewById(R.id.free1);
 
@@ -196,7 +206,7 @@ public class BookmarkDetails extends AppCompatActivity {
 
 
         setTitle(name);
-        mTextViewListOwner.setText(owner);
+        mTextViewListOwner.setText(name+"\nOrganized by "+owner);
         mTextViewInfo.setText(info);
         getmTextViewLocation.setText(loc);
         getmTextViewTime.setText(dAndT);
