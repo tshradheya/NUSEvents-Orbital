@@ -13,6 +13,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -516,6 +517,10 @@ if(poster.equals("")){
         editTextown.setText(owner);
         editcontact.setText(contact);
 
+        final long[] eventDateLong = {time};
+
+        final long[] eventDateLongF = {timeFinish};
+
         dateUpdate=(Button)dialogview.findViewById(R.id.datepickerUpdate);
         timeUpdate =(Button)dialogview.findViewById(R.id.timepickerUpdate);
 
@@ -614,6 +619,7 @@ if(poster.equals("")){
             }
         });
 
+
         final Button button = (Button)dialogview.findViewById(R.id.sendButtonUpdate);
         dialog.setTitle("Update Details of the Event");
         final AlertDialog alertDialog = dialog.create();
@@ -628,6 +634,8 @@ if(poster.equals("")){
                 String newown = editTextown.getText().toString().trim();
                 String newinfo = editTextinfo.getText().toString().trim();
                 String newcontact = editcontact.getText().toString().trim();
+
+
 
                 String dateString=day+"/"+month+"/"+year+" "+hour+":"+min;
                 String newdate=day+"/"+month+"/"+year;
@@ -650,13 +658,13 @@ if(poster.equals("")){
 
                 }
 
-                long eventDateLong=0;
+                eventDateLong[0] =time;
 
                 try {
                     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
                     Date eventDate = sdf.parse(dateString);
-                    eventDateLong=eventDate.getTime();
+                    eventDateLong[0] =eventDate.getTime();
 
                 }
 
@@ -667,32 +675,40 @@ if(poster.equals("")){
 
                 String dateStringF=dayF+"/"+monthF+"/"+yearF+" "+(hour)+":"+minF;
 
-                long eventDateLongF=0;
+                eventDateLongF[0] =timeFinish;
 
                 try {
                     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
                     Date eventDate = sdf.parse(dateStringF);
-                    eventDateLongF=eventDate.getTime();
+                    eventDateLongF[0] =eventDate.getTime();
 
                 }
 
                 catch (ParseException e){
                 }
 
+                if(eventDateLong[0] ==0){
+                    eventDateLong[0] =time;
+                }
+
+                if(eventDateLongF[0] ==0){
+                    eventDateLongF[0] =timeFinish;
+                }
 
 
 
+                if (eventDateLong[0] < System.currentTimeMillis() || eventDateLong[0] > eventDateLongF[0] || eventDateLong[0] ==0|| eventDateLongF[0] ==0) {
 
-                if (eventDateLong < System.currentTimeMillis() || eventDateLong > eventDateLongF||eventDateLong==0||eventDateLongF==0) {
-
+Log.v("check1",String.valueOf(eventDateLong[0]));
+                    Log.v("check1",String.valueOf(eventDateLongF[0]));
 
                     popUp();
 
                 } else {
 
 
-                    updatedetails(eventid, newname, newloc, newown, newinfo, eventDateLong, userid, newcontact, eventDateLongF,newdate,poster,count);
+                    updatedetails(eventid, newname, newloc, newown, newinfo, eventDateLong[0], userid, newcontact, eventDateLongF[0],newdate,poster,count);
                     alertDialog.dismiss();
                 }
 
