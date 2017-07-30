@@ -161,9 +161,9 @@ public class EmailPasswordActivity extends AppCompatActivity implements
 
         //showProgressDialog();
 
-        if(password.length()<8)
+        if(password.length()<9)
         {
-            Toast.makeText(EmailPasswordActivity.this, "Password must be atleast 8 characters long.",
+            Toast.makeText(EmailPasswordActivity.this, "Password must be atleast 9 characters long.",
                     Toast.LENGTH_LONG).show();
             mPasswordField.setText("");
             return;
