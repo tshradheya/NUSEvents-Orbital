@@ -27,24 +27,9 @@
         />
 
 
-    <!--<TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="ORGANIZED BY"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        android:id="@+id/organize"
-        android:textColor="#000000"
-        android:paddingBottom="16dp"
 
-        android:paddingLeft="16dp"
-        />
--->
     <TextView
         android:textAlignment="center"
-
-
-
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/organize_by"
@@ -53,6 +38,7 @@
         android:textColor="#0277BD"
         android:paddingBottom="16dp"
         />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -76,17 +62,19 @@
         android:textStyle="normal"
         android:paddingBottom="16dp"
         />
-<LinearLayout
+
+    <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
     android:padding="8dp"
     >
+
+
     <TextView
         android:layout_marginLeft="8dp"
         android:text="Number of Bookmarks"
         android:textStyle="bold"
-
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/number"
@@ -118,7 +106,7 @@ android:layout_marginLeft="32dp"
         android:id="@+id/free"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-android:layout_gravity="center"
+        android:layout_gravity="center"
         android:background="@color/authui_colorPrimaryDark"
         android:text="FREE"
         android:textSize="20sp"
@@ -131,6 +119,7 @@ android:layout_gravity="center"
         android:orientation="horizontal"
         android:layout_height="wrap_content"
         android:layout_margin="16dp">
+
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_weight="1"

@@ -61,7 +61,7 @@ public class EventsList extends ArrayAdapter<EventInfo> {
         TextView textViewDate = (TextView)listView.findViewById(R.id.eventdat);
         TextView textViewTime = (TextView)listView.findViewById(R.id.eventtime);
 
-       // return super.getView(position, convertView, parent);
+
 
         DateFormat sdf = new SimpleDateFormat("HH:mm");
 
@@ -74,7 +74,7 @@ public class EventsList extends ArrayAdapter<EventInfo> {
 
 
             EventInfo events = filteredList.get(position);
-          //  Date eventDate = sdf.parse(events.getTime());
+
             Date netDate = (new Date(events.getTime()));
             time = sdf.format(netDate);
             textViewName.setText(events.getName());
@@ -91,9 +91,6 @@ public class EventsList extends ArrayAdapter<EventInfo> {
             listView.setVisibility(View.GONE);
             return listView;
         }
-
-
-
 
     }
 

@@ -8,11 +8,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.util.List;
 
 import static com.example.android.nusevents.EmailPasswordActivity.mAuth;
 
@@ -20,7 +23,7 @@ import static com.example.android.nusevents.EmailPasswordActivity.mAuth;
  * Created by Admin on 22-Jun-17.
  */
 
-public class EmailVerification extends AppCompatActivity {
+public class EmailVerification extends AppCompatActivity  {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

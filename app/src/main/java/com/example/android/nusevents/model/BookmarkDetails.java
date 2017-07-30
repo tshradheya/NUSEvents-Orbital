@@ -119,6 +119,10 @@ public class BookmarkDetails extends AppCompatActivity {
         dAndT=t1+"\n"+t2;
 
 
+
+
+
+
         try {
             DateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
             Date netDate = (new Date(timeFinish));
@@ -129,6 +133,8 @@ public class BookmarkDetails extends AppCompatActivity {
 
         String t3=dAndTF.substring(0,10);
         String t4=dAndTF.substring(11);
+
+
 
         dAndTF=t1+"\n"+t2;
 
@@ -396,5 +402,3 @@ public class BookmarkDetails extends AppCompatActivity {
 
 
 }
-
-

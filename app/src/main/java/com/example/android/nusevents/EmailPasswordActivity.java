@@ -161,6 +161,14 @@ public class EmailPasswordActivity extends AppCompatActivity implements
 
         //showProgressDialog();
 
+        if(password.length()<8)
+        {
+            Toast.makeText(EmailPasswordActivity.this, "Password must be atleast 8 characters long.",
+                    Toast.LENGTH_LONG).show();
+            mPasswordField.setText("");
+            return;
+        }
+
         progressDialog.setMessage("Please Wait ...");
         progressDialog.show();
 
@@ -196,6 +204,7 @@ public class EmailPasswordActivity extends AppCompatActivity implements
                             Toast.makeText(EmailPasswordActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                             progressDialog.hide();
+
                             finish();
                         }
 
@@ -238,8 +247,10 @@ public class EmailPasswordActivity extends AppCompatActivity implements
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(EmailPasswordActivity.this, "Authentication failed.",
+                            Toast.makeText(EmailPasswordActivity.this, "Authentication failed,Incorrect password or Email Id.",
                                     Toast.LENGTH_SHORT).show();
+                            mEmailField.setText("");
+                            mPasswordField.setText("");
 
                             pDialog.hide();
 
