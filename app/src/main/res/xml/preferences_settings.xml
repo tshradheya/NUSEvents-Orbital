@@ -31,12 +31,16 @@
                 />
         </Preference>
         <Preference
-            android:title="Reset Password"  >
+            android:title="Change Password"
+            >
 
 
 
             <intent android:action="android.intent.action.VIEW"
-                android:data="mailto:nusevent16@gmail.com"/>
+                android:targetPackage="com.example.android.nusevents"
+                android:targetClass="com.example.android.nusevents.Change"
+
+                />
 
                 />
         </Preference>
